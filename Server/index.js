@@ -81,6 +81,8 @@ Grade.init({
     },
     //inherit userID
     //inherit courseID
+    // testimg got
+    
     urgency:{
         type: Sequelize.DataTypes.TINYINT
     },
