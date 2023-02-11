@@ -11,6 +11,10 @@ import { IconsComponent } from '../../icons/icons.component';
 import { MapsComponent } from '../../maps/maps.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
+import { LoginComponent } from 'app/login/login.component';
+import { StudentDashboardComponent } from 'app/student-dashboard/student-dashboard.component';
+import { DetailedViewComponent } from 'app/detailed-view/detailed-view.component';
+
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatRippleModule} from '@angular/material/core';
@@ -40,6 +44,9 @@ import {MatSelectModule} from '@angular/material/select';
     MapsComponent,
     NotificationsComponent,
     UpgradeComponent,
+    LoginComponent,
+    StudentDashboardComponent,
+    DetailedViewComponent,
   ]
 })
 
