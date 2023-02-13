@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class LoginComponent implements OnInit {
   username : string = "";
   password : string = "";
-  show : boolean = false;
+  valid_login : boolean = false;
 
   constructor() { }
 
@@ -20,9 +20,10 @@ export class LoginComponent implements OnInit {
   }
 
   clear(){
+    //clears username and password fields
     this.username ="";
     this.password = "";
-    this.show = true;
+    this.valid_login = false;
   }
 
   ngOnInit(): void {

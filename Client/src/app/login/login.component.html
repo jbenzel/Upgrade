@@ -8,12 +8,13 @@
           [(ngModel)] ="username">
         </mat-form-field>
       <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>Password</mat-label>
-      <input matInput placeholder="Enter your password" value="" name="password" 
-      type="password" [(ngModel)]= "password">
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="Enter your password" value="" name="password" 
+        type="password" [(ngModel)]= "password">
       </mat-form-field>
       <button mat-raised-button color="primary" (click)="submit()">Submit</button>
-      <span *ngIf="show"> 
+      <span *ngIf="valid_login"> 
+        <!--this is for future rerouting upon valid login-->
         <button mat-button color="accent">Login success !!</button>
       </span>
       </form>
