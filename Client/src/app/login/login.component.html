@@ -1,23 +1,35 @@
 <div class="main-content">
     <div class="container-fluid">
-      <h5>*Login title goes here*</h5>
-      <form class="example-form">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>SHSU Email</mat-label>
-          <input matInput placeholder="Enter your name" name="usename"
-          [(ngModel)] ="username">
-        </mat-form-field>
-      <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Password</mat-label>
-        <input matInput placeholder="Enter your password" value="" name="password" 
-        type="password" [(ngModel)]= "password">
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="submit()">Submit</button>
-      <span *ngIf="valid_login"> 
-        <!--this is for future rerouting upon valid login-->
-        <button mat-button color="accent">Login success !!</button>
-      </span>
-      </form>
+      <h4>
+        *Login title goes here*
+      </h4>
+        <div class="card-body">
+        <form class="login-form">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label class="mat-label">
+              SHSU Email
+            </mat-label>
+            <input matInput placeholder="example@shsu.edu" name="username"
+            [(ngModel)] ="username">
+          </mat-form-field>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label class="mat-label">
+              Password
+            </mat-label>
+            <input matInput placeholder="Enter your password" value="" name="password" 
+            type="password" [(ngModel)]= "password">
+          </mat-form-field>
+          <button class="login-button" mat-raised-button (click)="submit()">
+            Login
+          </button>
+          <span *ngIf="valid_login"> 
+            <!--this is for future rerouting upon valid login-->
+            <button mat-button color="accent">
+              Login success !!
+            </button>
+          </span>
+        </form>
+      </div>
     </div>
   </div>
   
