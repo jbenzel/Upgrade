@@ -2,9 +2,9 @@
     <div class="container-fluid">
       <div class="card">
         <div class="card-title">
-          <h4>
-            *Login title goes here*
-          </h4>
+          <h2><b>
+            upGrade
+          </b></h2>
         </div>
         <div class="card-body">
           <mat-form-field class="login-input-box" appearance="outline">
@@ -12,7 +12,7 @@
               SHSU Email
             </mat-label>
             <input matInput placeholder="example@shsu.edu" name="username"
-            [(ngModel)] ="username">
+            type="email" [(ngModel)] ="username">
           </mat-form-field>
           <mat-form-field class="login-input-box" appearance="outline">
             <mat-label class="mat-label">
@@ -25,14 +25,20 @@
             <button class="login-button" mat-raised-button (click)="submit()">
               Login
             </button>
+            <span *ngIf="valid_login"> 
+              <!--this is for future rerouting upon valid login-->
+            </span>
+            <!--probably need to make dialog component-->
+              <button class="reset-button" mat-raised-button (click)="re_set_password()">
+                Forgot password?
+              </button>
+            <span *ngIf="reset_password">
+              You chose: <i>{{reset_password}}</i>
+            </span>
           </div>
+
         </div>
-          <span *ngIf="valid_login"> 
-            <!--this is for future rerouting upon valid login-->
-            <button mat-button color="accent">
-              Login success !!
-            </button>
-          </span>
+
       </div>
     </div>
   </div>

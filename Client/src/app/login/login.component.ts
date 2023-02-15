@@ -8,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class LoginComponent implements OnInit {
   username : string = "";
   password : string = "";
+  valid_user_syntax: boolean = false;
   valid_login : boolean = false;
+  reset_password: boolean = false;
 
   constructor() { }
 
@@ -24,6 +26,13 @@ export class LoginComponent implements OnInit {
     this.username ="";
     this.password = "";
     this.valid_login = false;
+    this.valid_user_syntax = false;
+  }
+
+  re_set_password(){
+    this.reset_password = true;
+    //used for setting password for new users, or resetting if forgotten
+    //must make use of email notifs here
   }
 
   ngOnInit(): void {
