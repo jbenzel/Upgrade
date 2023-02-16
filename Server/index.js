@@ -41,6 +41,11 @@ class Student extends Model {
 }
 Student.init({
     //inherit UserID
+    studentID:{
+        type: Sequelize.DataTypes.INTEGER,
+        primaryKey: true, 
+        autoIncrement: true
+    },
     eGPA: {
         type: Sequelize.DataTypes.FLOAT
     },
@@ -81,8 +86,6 @@ Grade.init({
     },
     //inherit userID
     //inherit courseID
-    // testimg got
-    
     urgency:{
         type: Sequelize.DataTypes.TINYINT
     },
@@ -107,38 +110,30 @@ Grade.init({
 }, { sequelize, timestamps: false })
 models["Grade"] = Grade;
 
-//user student relations
-User.hasOne(Student);
-Student.belongsTo(User);
-
-//user course relations
-User.hasMany(Course);
-Course.hasOne(User);
-
-//student course relations
-Student.hasMany(Course);
-Course.hasMany(Student);
-
-//couse grade relations
-Course.hasMany(Grade);
-Grade.hasOne(Course);
-/*
-delete some relations, some relations might only need 1 liune
-*/
-
+Student.belongsTo(User, {
+    foreignKey: 'userID'
+});
+Course.belongsTo(User, {
+    foreignKey: 'userID'
+});
+Grade.belongsTo(Course, {
+    foreignKey: 'courseID'
+});
+Grade.belongsTo(Course, {
+    foreignKey: 'userID'
+});
 
 sequelize.sync();
 sequelize.authenticate();
-/*
-const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    csrfPrevention: true,
-    cache: 'bounded',
-    context: ({req, res}) => ({models, req, res})
-});
 
-server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`);
-  });
-  */
+//const server = new ApolloServer({
+//    typeDefs,
+//    resolvers,
+//    csrfPrevention: true,
+//    cache: 'bounded',
+//    context: ({req, res}) => ({models, req, res})
+//});
+//
+//server.listen().then(({ url }) => {
+//    console.log(`🚀  Server ready at ${url}`);
+//  });
