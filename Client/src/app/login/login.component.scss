@@ -18,12 +18,12 @@
 .login-button{
     color: #FFFFFF;
     background-color: #F56423;
+    width: 50%;
 }
 
 .reset-button{
     color: #000000;
     background-color:#dadada;
-    float:right;
 }
 
 .card{
@@ -34,11 +34,16 @@
     -webkit-box-flex: 1;
         -ms-flex: 1 1 auto;
             flex: 1 1 auto;
-    padding: 1.25rem; 
+
+}
+
+.card-header-danger{
+    background-color: #F56423; //still trying to get card header color right
 }
 
 .card-title{
-    margin: auto;
+    text-align: center;
+    font-weight: bold;
 }
 
 .card-body {
@@ -48,7 +53,7 @@
     -webkit-box-flex: 1;
         -ms-flex: 1 1 auto;
             flex: 1 1 auto;
-    padding: 1.25rem; 
+    padding: 1rem; 
 }
 
 .center{
