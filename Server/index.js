@@ -126,14 +126,14 @@ Grade.belongsTo(Course, {
 sequelize.sync();
 sequelize.authenticate();
 
-//const server = new ApolloServer({
-//    typeDefs,
-//    resolvers,
-//    csrfPrevention: true,
-//    cache: 'bounded',
-//    context: ({req, res}) => ({models, req, res})
-//});
-//
-//server.listen().then(({ url }) => {
-//    console.log(`🚀  Server ready at ${url}`);
-//  });
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    csrfPrevention: true,
+    cache: 'bounded',
+    context: ({req, res}) => ({models, req, res})
+});
+
+server.listen().then(({ url }) => {
+    console.log(`🚀  Server ready at ${url}`);
+  });
