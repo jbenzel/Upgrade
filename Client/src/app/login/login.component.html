@@ -1,7 +1,7 @@
 <div class="main-content">
     <div class="container-fluid">
       <div class="card">
-        <div class="card-header-danger">
+        <div class="card title-card">
           <h2 class="card-title">upGrade</h2>
         </div>
         <div class="card-body">
@@ -20,20 +20,17 @@
             type="password" [(ngModel)]= "password">
           </mat-form-field>
           <div style="text-align:center;">
+            <a class="reset-link" href="#" (click)="re_set_password()">
+              <h6><u>Forgot Password or New User?</u></h6>
+            </a>
+            <span *ngIf="reset_password">
+              <!--prompt dialog-->
+            </span>
             <button class="login-button" mat-raised-button (click)="submit()">
               Login
             </button>
             <span *ngIf="valid_login"> 
               <!--this is for future rerouting upon valid login-->
-            </span>
-            <!--probably need to make dialog component-->
-            <br><br>
-            <h6>New account or Forgot password?</h6>
-            <button class="reset-button" mat-raised-button (click)="re_set_password()">
-              Reset Password
-            </button>
-            <span *ngIf="reset_password">
-              You chose: <i>{{reset_password}}</i>
             </span>
           </div>
 
