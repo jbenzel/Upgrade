@@ -10,6 +10,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { ResetPassDialogComponent } from './login/reset-pass-dialog/reset-pass-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   imports: [
@@ -20,15 +21,16 @@ import { MatDialogModule } from '@angular/material/dialog';
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCardModule,
   ],
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    ResetPassDialogComponent
+    ResetPassDialogComponent,
   ],
   entryComponents:[
-    ResetPassDialogComponent
+    ResetPassDialogComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]
