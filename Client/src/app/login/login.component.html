@@ -1,5 +1,6 @@
 <div class="main-content">
     <div class="container-fluid">
+
       <div class="card">
         <div class="card title-card">
           <h2 class="card-title">upGrade</h2>
@@ -20,23 +21,26 @@
             type="password" [(ngModel)]= "password">
           </mat-form-field>
           <div style="text-align:center;">
-            <a class="reset-link" href="#" (click)="re_set_password()">
+            <a class="reset-link" (click)="re_set_password()">
+              <!--href = "" seems to be necessary, but causes rerouting-->
               <h6><u>Forgot Password or New User?</u></h6>
             </a>
             <span *ngIf="reset_password">
-              <!--prompt dialog-->
+              <h5>reset password clicked</h5>
             </span>
             <button class="login-button" mat-raised-button (click)="submit()">
               Login
             </button>
             <span *ngIf="valid_login"> 
               <!--this is for future rerouting upon valid login-->
+              <h5>valid login</h5>
             </span>
           </div>
 
         </div>
 
       </div>
+
     </div>
   </div>
   
