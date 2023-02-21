@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import { ResetPassDialogComponent } from './reset-pass-dialog/reset-pass-dialog.component';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +14,7 @@ export class LoginComponent implements OnInit {
   valid_login : boolean = false;
   reset_password: boolean = false;
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   submit(){
     //console.log("user name is " + this.username)
@@ -31,6 +33,8 @@ export class LoginComponent implements OnInit {
 
   re_set_password(){
     this.reset_password = true;
+    const dialogRef = this.dialog.open(ResetPassDialogComponent, {
+      width: '370px'});
     //used for setting password for new users, or resetting if forgotten
     //must make use of email notifs here
   }

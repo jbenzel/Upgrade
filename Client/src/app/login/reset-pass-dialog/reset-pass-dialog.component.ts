@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { Component, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
 
 export interface DialogData {
   email: string;
@@ -11,19 +11,15 @@ export interface DialogData {
   styleUrls: ['./reset-pass-dialog.component.scss']
 })
 export class ResetPassDialogComponent implements OnInit {
-  email: string;
 
-  constructor(public dialog: MatDialog) { }
+  username : string = "";
 
-  openPasswordDialog(): void {
-    const dialogRef = this.dialog.open(ResetPassDialogComponent, {
-      data: {email: this.email},
-    });
+  constructor(
+    public dialogRef: MatDialogRef<ResetPassDialogComponent>) {}
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.email = result;
-    });
+  send_email(){
+    //there needs to be a boolean value in the backend so that
+    //next time user logs in, they are prompted to create a new password
   }
 
   ngOnInit(): void {

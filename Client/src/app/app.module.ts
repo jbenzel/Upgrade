@@ -8,6 +8,8 @@ import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { ResetPassDialogComponent } from './login/reset-pass-dialog/reset-pass-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -18,12 +20,15 @@ import { ResetPassDialogComponent } from './login/reset-pass-dialog/reset-pass-d
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
+    MatDialogModule
   ],
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-    ResetPassDialogComponent,
-    
+    ResetPassDialogComponent
+  ],
+  entryComponents:[
+    ResetPassDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
