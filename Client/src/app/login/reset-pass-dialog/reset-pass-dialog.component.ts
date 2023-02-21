@@ -15,7 +15,8 @@ export class ResetPassDialogComponent implements OnInit {
   username : string = "";
 
   constructor(
-    public dialogRef: MatDialogRef<ResetPassDialogComponent>) {}
+    public dialogRef: MatDialogRef<ResetPassDialogComponent>
+  ) {}
 
   send_email(){
     //there needs to be a boolean value in the backend so that

@@ -2,18 +2,8 @@
 <div class="main-content">
     <div class="container-fluid">
         <div style="text-align:center;">
-            <h5 mat-dialog-title>We'll email you a password reset link</h5>
-            <mat-form-field class="login-input-box" appearance="outline">
-                <!--need to fix 'NG8001: 'mat-form-field' is not a known element:' error -->
-                <mat-label class="mat-label">
-                  SHSU Email
-                </mat-label>
-                <input matInput placeholder="example@shsu.edu" name="username"
-                type="email" [(ngModel)] ="username">
-            </mat-form-field>
-            <button class="send-button" mat-raised-button (click)="send_email()">
-                Send
-            </button>
+            <h5>We'll email you a password reset link</h5>
+
         </div>
     </div>
 </div>
