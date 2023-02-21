@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
   re_set_password(){
     this.reset_password = true;
     const dialogRef = this.dialog.open(ResetPassDialogComponent, {
-      width: '450px'});
+      width: '400px'});
     //used for setting password for new users, or resetting if forgotten
     //must make use of email notifs here
   }

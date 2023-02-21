@@ -14,6 +14,7 @@ import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { LoginComponent } from 'app/login/login.component';
 import { StudentDashboardComponent } from 'app/student-dashboard/student-dashboard.component';
 import { DetailedViewComponent } from 'app/detailed-view/detailed-view.component';
+import { ResetPassDialogComponent } from 'app/login/reset-pass-dialog/reset-pass-dialog.component';
 
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
@@ -51,6 +52,7 @@ import { MatCardModule } from '@angular/material/card';
     LoginComponent,
     StudentDashboardComponent,
     DetailedViewComponent,
+    ResetPassDialogComponent,
   ]
 })
 

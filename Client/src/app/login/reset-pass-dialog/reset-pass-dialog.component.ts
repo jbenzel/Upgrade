@@ -23,6 +23,10 @@ export class ResetPassDialogComponent implements OnInit {
     //next time user logs in, they are prompted to create a new password
   }
 
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
   ngOnInit(): void {
   }
 
