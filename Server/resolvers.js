@@ -1,15 +1,34 @@
 const resolvers = {
     Query: {
+        //User Query
         async getUser(root, { userIDParam }, { models }) {
             let User = await models.User.findOne({ where: { userID: userIDParam } });
 
             return User;
         },
-        async getAllUsers(root, { userIDParam }, { models }) {
-            let Users = await models.User.findAll();
+        async getAllUser(root, { userIDParam },{ models }) {
+            let User = await models.User.findAll();
 
-            return Users;
+            return User;
         },
+
+        //Student Query
+        async  getStudentbyStudentID(root, { studentIDParam }, { models }) {
+            let Student = await models.Student.findOne({ where: { studentID: studentIDParam } });
+
+            return Student;
+        },
+        async  getStudentbyUserID(root, { userIDParam }, { models }) {
+            let Student = await models.Student.findOne({ where: { userID: userIDParam } });
+            console.log(userIDParam);
+            return Student;
+        },
+        async getAllStudents(root, {studentIDParam}, { models }) {
+            let Student = await models.Student.findAll();
+            return Student;
+        },
+
+        //Grade
     },
     Mutation: {
         addUser(root, { email, password, role, firstName, lastName }, { models }) {
@@ -24,34 +43,73 @@ const resolvers = {
             });
         },
         updateUser(root, { userIDParam, email, password, role, firstName, lastName }, { models }) {
-            models.User.update(
-                {
-                    email: email,
-                    password: password,
-                    role: role,
-                    firstName: firstName,
-                    lastName: lastName,
-                },
-                {
-                    where: { userID: userIDParam }
-                }
-            ).catch(err => {
+            models.User.update({
+                email: email,
+                password: password,
+                role: role,
+                firstName: firstName,
+                lastName: lastName,
+            },
+            {
+                where: { userID: userIDParam }
+            }).catch(err => {
                 //console.log(err);
                 return err;
             });
             return models.User.findOne({ where: { userID: userIDParam } });
         },
+        //User Mutations
         deleteUser(root, { userIDParam }, { models }) {
             models.User.destroy(
                 {
                     where: { userID: userIDParam }
                 }
             ).then((result) => {
-                return result
+                return result;
             }).catch(err => {
                 //console.log(err);
                 return false;
             });
+        },
+        deleteUserbyEmail(root, { emailIDParam }, { models }) {
+            models.User.destroy(
+                {
+                    where: { email: emailIDParam }
+                }
+            ).then((result) => {
+                return result;
+            }).catch(err => {
+                //console.log(err);
+                return false;
+            });
+        },
+
+        //Student Mutations
+        addStudent(root, { eGPA, cGPA, completedCourseCount, userID }, { models }) {
+            return models.Student.create({
+                eGPA: eGPA, 
+                cGPA: cGPA, 
+                completedCourseCount: completedCourseCount, 
+                userID: userID,
+            }).catch(err => {
+                //console.log(err);
+            });
+        },
+        updateStudent(root, { studentIDParam, eGPA, cGPA, completedCourseCount, userID }, {models}){
+            models.Student.update({
+                studentID: studentID,
+                eGPA: eGPA, 
+                cGPA: cGPA, 
+                completedCourseCount: completedCourseCount, 
+                userID: userID,
+            },
+            {
+                where: { studentID: studentIDParam }
+            }).catch(err => {
+                //console.log(err);
+                return err;
+            });
+            return models.Student.findOne({ where: { studentID: studentIDParam } });
         },
     }
 };

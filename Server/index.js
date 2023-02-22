@@ -35,7 +35,7 @@ User.init({
         type: Sequelize.DataTypes.TEXT
     }
 },{ sequelize, timestamps: false })
-models["User"] = User;
+//models["User"] = User;
 
 class Student extends Model {
 }
@@ -56,7 +56,7 @@ Student.init({
         type: Sequelize.DataTypes.SMALLINT
     }
 }, { sequelize, timestamps: false })
-models["Student"] = Student;
+//models["Student"] = Student;
 
 class Course extends Model {
 }
@@ -74,7 +74,7 @@ Course.init({
         type: Sequelize.DataTypes.TEXT
     }
 }, { sequelize, timestamps: false })
-models["Course"] = Course;
+//models["Course"] = Course;
 
 class Grade extends Model {
 }
@@ -108,7 +108,7 @@ Grade.init({
         type: Sequelize.DataTypes.TEXT
     }
 }, { sequelize, timestamps: false })
-models["Grade"] = Grade;
+//models["Grade"] = Grade;
 
 Student.belongsTo(User, {
     foreignKey: 'userID'
@@ -125,6 +125,11 @@ Grade.belongsTo(Course, {
 
 sequelize.sync();
 sequelize.authenticate();
+
+models["User"] = User;
+models["Student"] = Student;
+models["Course"] = Course;
+models["Grade"] = Grade;
 
 const server = new ApolloServer({
     typeDefs,
