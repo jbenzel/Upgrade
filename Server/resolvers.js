@@ -20,7 +20,7 @@ const resolvers = {
         },
         async  getStudentbyUserID(root, { userIDParam }, { models }) {
             let Student = await models.Student.findOne({ where: { userID: userIDParam } });
-            console.log(userIDParam);
+            
             return Student;
         },
         async getAllStudents(root, {studentIDParam}, { models }) {
@@ -32,6 +32,9 @@ const resolvers = {
     },
     Mutation: {
         addUser(root, { email, password, role, firstName, lastName }, { models }) {
+            if(email == null){
+                return "Email is null"
+            }
             return models.User.create({
                 email: email,
                 password: password,
@@ -42,7 +45,10 @@ const resolvers = {
                 //console.log(err);
             });
         },
-        updateUser(root, { userIDParam, email, password, role, firstName, lastName }, { models }) {
+        updateUser(root, { userIDParam, email, password, role, firstName, lastName }, { models }) {           
+            if(email == null){
+                return "Email is null"
+            }
             models.User.update({
                 email: email,
                 password: password,
@@ -71,21 +77,12 @@ const resolvers = {
                 return false;
             });
         },
-        deleteUserbyEmail(root, { emailIDParam }, { models }) {
-            models.User.destroy(
-                {
-                    where: { email: emailIDParam }
-                }
-            ).then((result) => {
-                return result;
-            }).catch(err => {
-                //console.log(err);
-                return false;
-            });
-        },
 
         //Student Mutations
         addStudent(root, { eGPA, cGPA, completedCourseCount, userID }, { models }) {
+//            if (userID == null) {
+//                return "Null ID";                
+//            }
             return models.Student.create({
                 eGPA: eGPA, 
                 cGPA: cGPA, 
@@ -93,11 +90,14 @@ const resolvers = {
                 userID: userID,
             }).catch(err => {
                 //console.log(err);
+                return err;
             });
         },
         updateStudent(root, { studentIDParam, eGPA, cGPA, completedCourseCount, userID }, {models}){
+            if (userID == null) {
+                return "Null ID";                
+            }            
             models.Student.update({
-                studentID: studentID,
                 eGPA: eGPA, 
                 cGPA: cGPA, 
                 completedCourseCount: completedCourseCount, 

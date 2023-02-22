@@ -51,11 +51,12 @@ const typeDefs = gql`
         addUser(email: String, password: String, role: Int, firstName: String, lastName: String): User
         updateUser(userIDParam: Int, email: String, password: String, role: Int, firstName: String, lastName: String): User
         deleteUser(userIDParam: Int): User
-        deleteUserbyEmail(emailIDParam: String): User
 
         addStudent(eGPA: Float, cGPA: Float, completedCourseCount: Int, userID: Int): Student
         updateStudent(studentIDParam: ID, eGPA: Float, cGPA: Float, completedCourseCount: Int, userID: Int): Student
     }
 `;
+
+
 
 module.exports = typeDefs
