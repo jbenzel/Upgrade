@@ -18,9 +18,36 @@ export class LoginComponent implements OnInit {
 
   submit(){
     //console.log("user name is " + this.username)
-    //must add the check for user + password
+    if(this.validate_user() && this.validate_password()){
+      //backend checks necessary for SQL injection
+      //valid login, reroute to proper page
+      this.valid_login = true;
+      alert("valid")
+    }else{
+      //output error (might be only in html)
+    }
     //then must reroute to appropriate dashboard based on student/staff
     this.clear();
+  }
+
+  validate_user(): boolean{
+    const email_regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (this.username == "") {
+      alert("Email must be filled out");
+      
+      return false;
+    } else if (email_regex.test(this.username.toLowerCase()) == false) {
+      alert("Email must be valid");
+    
+      return false;
+    }
+  
+    return true;
+  }
+
+  validate_password(): boolean{
+
+    return true;
   }
 
   clear(){
