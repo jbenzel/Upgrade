@@ -1,4 +1,5 @@
-const { gql } = require("apollo-server");
+const { ApolloServer, gql } = require('apollo-server');
+
 
 const typeDefs = gql`
 
@@ -48,12 +49,12 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        addUser(email: String, password: String, role: Int, firstName: String, lastName: String): User
-        updateUser(userIDParam: Int, email: String, password: String, role: Int, firstName: String, lastName: String): User
-        deleteUser(userIDParam: Int): User
+        addUser(email: String!, password: String!, role: Int, firstName: String, lastName: String): User
+        updateUser(userIDParam: Int!, email: String, password: String, role: Int, firstName: String, lastName: String): User
+        deleteUser(userIDParam: Int!): User
 
-        addStudent(eGPA: Float, cGPA: Float, completedCourseCount: Int, userID: Int): Student
-        updateStudent(studentIDParam: ID, eGPA: Float, cGPA: Float, completedCourseCount: Int, userID: Int): Student
+        addStudent(eGPA: Float, cGPA: Float, completedCourseCount: Int, userID: Int!): Student
+        updateStudent(studentIDParam: ID!, eGPA: Float, cGPA: Float, completedCourseCount: Int, userID: Int!): Student
     }
 `;
 
