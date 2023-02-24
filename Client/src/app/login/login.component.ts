@@ -10,7 +10,7 @@ import {FormControl, Validators} from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   username = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl('', [Validators.required]);
+  password = new FormControl('', [Validators.required, Validators.minLength(8)]);
   //theres a minLength validator among many others
   reset_password: boolean = false;
 
@@ -20,7 +20,8 @@ export class LoginComponent implements OnInit {
     //console.log("user name is " + this.username)
     if(!this.username.hasError('email') 
     && !this.username.hasError('required')
-    && !this.password.hasError('required')){
+    && !this.password.hasError('required')
+    && !this.password.hasError('minLength')){
       //backend checks necessary for SQL injection
       //check if email and password match
       //valid login, reroute to proper page
@@ -50,6 +51,8 @@ export class LoginComponent implements OnInit {
   validate_password_syntax(){
     if(this.password.hasError('required')){
       return 'Password required';
+    } else if(this.password.hasError('minlength')){
+      return 'Password must be least 8 characters';
     } else {
       return '';
     }
