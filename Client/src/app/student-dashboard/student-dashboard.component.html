@@ -1,6 +1,109 @@
 <div class="main-content">
-    <div class="container-fluid">
-        
-    </div>
+  <div class="container-fluid">
+      <!-- Start 1st row -->
+      <div class="row">
+        <!-- Start Semester Card -->
+        <div class="col-lg-7 col-md-6">
+          <div class="card">
+            <div class="card-header text-left">
+              <h2>Semester Overview</h2>
+            </div>
+            <div class="card-body container">
+                <div class="row no-gutters">
+                  <div class="col-lg-2">Input GPA</div>
+                  <div class="col-lg-5"><canvas  id="CGPAchart">{{ CGPAchart }}</canvas></div>
+                  <div class="col-lg-5"><canvas  id="EGPAchart">{{ EGPAchart }}</canvas></div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Semester Card -->
+
+        <!-- Start Progress Chart Card -->
+        <div class="col-lg-5 col-md-6">
+          <div class="card">
+            <div class="card-header text-left" style="margin-top: 0;">
+              <h2>Progess Chart</h2>
+            </div>
+            <div class="card-body container">
+              <canvas  id="progressChart">{{ progressChart }}</canvas>
+            </div>
+          </div>
+        </div>
+        <!-- End Progress Chart Card -->
+      </div>
+      <!-- End 1st row -->
+      <!-- Start 2nd row -->
+      <div class="row">
+        <!-- Start Course's Card -->
+        <div class="col-lg-3 col-md-6">
+          <div class="card course-card">
+            <div class="card-header text-center">
+              <h3>Course Name</h3>
+            </div>
+            <div class="card-body upcoming-items">
+              <h5 class="card-title">Upcoming:</h5>
+              <h6 class="card-subtitle">Assignment 1:</h6> 
+              <mat-slider class="w-100" color="warn">
+                  <input matSliderThumb>
+              </mat-slider>
+              <h6 class="card-subtitle">Exam 1:</h6> 
+              <mat-slider class="w-100" color="warn">
+                  <input matSliderThumb>
+              </mat-slider>
+            </div>
+            <div class="card-footer float-right">
+              <button mat-fab color="true" class="btn">
+                <i class="material-icons">arrow_circle_right</i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- End Course's Card -->
+
+        <!-- Start Course's Card -->
+        <div class="col-lg-3 col-md-6">
+          <div class="card course-card">
+            <div class="card-header text-center">
+              <h3>Course Name</h3>
+            </div>
+            <div class="card-body upcoming-items">
+              <h5 class="card-title">Upcoming:</h5>
+              <h6 class="card-subtitle">Assignment 1:</h6> 
+              <mat-slider class="w-100" color="warn">
+                  <input matSliderThumb>
+              </mat-slider>
+              <h6 class="card-subtitle">Exam 1:</h6> 
+              <mat-slider class="w-100" color="warn">
+                  <input matSliderThumb>
+              </mat-slider>
+            </div>
+          </div>
+        </div>
+        <!-- End Course's Card -->
+
+        <!-- Start Course's Card -->
+        <div class="col-lg-3 col-md-6">
+          <div class="card course-card">
+            <div class="card-header text-center">
+              <h3>Course Name</h3>
+            </div>
+            <div class="card-body upcoming-items">
+              <h5 class="card-title">Upcoming:</h5>
+              <h6 class="card-subtitle">Assignment 1:</h6> 
+              <mat-slider class="w-100" color="warn">
+                  <input matSliderThumb>
+              </mat-slider>
+              <h6 class="card-subtitle">Exam 1:</h6> 
+              <mat-slider class="w-100" color="warn">
+                  <input matSliderThumb>
+              </mat-slider>
+            </div>
+          </div>
+        </div>
+        <!-- End Course's Card -->
+      </div>
+      <!-- End 2nd row -->
   </div>
+</div>
   
