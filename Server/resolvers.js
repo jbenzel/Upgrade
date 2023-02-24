@@ -32,9 +32,6 @@ const resolvers = {
     },
     Mutation: {
         addUser(root, { email, password, role, firstName, lastName }, { models }) {
-            if(email == null){
-                return "Email is null"
-            }
             return models.User.create({
                 email: email,
                 password: password,
@@ -80,9 +77,6 @@ const resolvers = {
 
         //Student Mutations
         addStudent(root, { eGPA, cGPA, completedCourseCount, userID }, { models }) {
-//            if (userID == null) {
-//                return "Null ID";                
-//            }
             return models.Student.create({
                 eGPA: eGPA, 
                 cGPA: cGPA, 
@@ -93,10 +87,7 @@ const resolvers = {
                 return err;
             });
         },
-        updateStudent(root, { studentIDParam, eGPA, cGPA, completedCourseCount, userID }, {models}){
-            if (userID == null) {
-                return "Null ID";                
-            }            
+        updateStudent(root, { studentIDParam, eGPA, cGPA, completedCourseCount, userID }, {models}){        
             models.Student.update({
                 eGPA: eGPA, 
                 cGPA: cGPA, 
