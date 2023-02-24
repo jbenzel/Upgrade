@@ -10,25 +10,21 @@
             <mat-label class="mat-label">
               SHSU Email
             </mat-label>
-            <input matInput placeholder="example@shsu.edu" name="username"
-            type="email" [(ngModel)] ="username">
+            <input matInput placeholder="example@shsu.edu" [formControl]="username" required>
+            <mat-error *ngIf="username.invalid">{{validate_user_syntax()}}</mat-error>
           </mat-form-field>
           <mat-form-field class="pass-input-box" appearance="outline">
             <mat-label class="mat-label">
               Password
             </mat-label>
             <input matInput placeholder="Enter your password" value="" name="password" 
-            type="password" [(ngModel)]= "password">
+            type="password" [formControl]="password" required>
+            <mat-error *ngIf='password.invalid'>{{validate_password_syntax()}}</mat-error>
           </mat-form-field>
           <div style="text-align:center;">
-
             <button class="login-button" mat-raised-button (click)="submit()">
               Login
             </button>
-            <span *ngIf="valid_login"> 
-              <!--this is for future rerouting upon valid login-->
-              <h5>valid login</h5>
-            </span>
             <br><br>
             <a class="reset-link" (click)="re_set_password()">
               <h6><u>Forgot Password?</u></h6>

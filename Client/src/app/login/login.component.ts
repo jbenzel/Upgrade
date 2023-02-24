@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import { ResetPassDialogComponent } from './reset-pass-dialog/reset-pass-dialog.component';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -8,54 +9,57 @@ import { ResetPassDialogComponent } from './reset-pass-dialog/reset-pass-dialog.
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  username : string = "";
-  password : string = "";
-  valid_user_syntax: boolean = false;
-  valid_login : boolean = false;
+  username = new FormControl('', [Validators.required, Validators.email]);
+  password = new FormControl('', [Validators.required]);
+  //theres a minLength validator among many others
   reset_password: boolean = false;
 
   constructor(public dialog: MatDialog) { }
 
   submit(){
     //console.log("user name is " + this.username)
-    if(this.validate_user() && this.validate_password()){
+    if(!this.username.hasError('email') 
+    && !this.username.hasError('required')
+    && !this.password.hasError('required')){
       //backend checks necessary for SQL injection
+      //check if email and password match
       //valid login, reroute to proper page
-      this.valid_login = true;
-      alert("valid")
+      alert('succes')
     }else{
-      //output error (might be only in html)
+      
+      alert('syntax error still present')
     }
     //then must reroute to appropriate dashboard based on student/staff
     this.clear();
   }
 
-  validate_user(): boolean{
-    const email_regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (this.username == "") {
-      alert("Email must be filled out");
-      
-      return false;
-    } else if (email_regex.test(this.username.toLowerCase()) == false) {
-      alert("Email must be valid");
-    
-      return false;
+  validate_user_syntax(){
+    if (this.username.hasError('required')) {
+      //empty field
+      return 'SHSU email required';
+    } else if(this.username.hasError('email')){
+      //invalid email syntax
+      return 'Not a valid email';
+    } else{
+      //no syntax error detected
+      return '';
     }
-  
-    return true;
   }
 
-  validate_password(): boolean{
 
-    return true;
+  validate_password_syntax(){
+    if(this.password.hasError('required')){
+      return 'Password required';
+    } else {
+      return '';
+    }
   }
 
   clear(){
     //clears username and password fields
-    this.username ="";
-    this.password = "";
-    this.valid_login = false;
-    this.valid_user_syntax = false;
+    this.username //how to clear?
+    this.password
+    //this.valid_login = false;
   }
 
   re_set_password(){

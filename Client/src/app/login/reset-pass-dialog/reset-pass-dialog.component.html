@@ -8,14 +8,16 @@
                     <mat-label class="mat-label">
                       SHSU Email
                     </mat-label>
-                    <input matInput placeholder="example@shsu.edu" name="username"
-                    type="email" [(ngModel)] ="username">
+                    <input matInput placeholder="example@shsu.edu"
+                    [formControl]="username" required>
+                    <mat-error *ngIf="username.invalid">
+                        {{validate_user_syntax()}}</mat-error>
                 </mat-form-field>
                 <div style="justify-content: space-evenly;">
                     <button mat-raised-button class="cancel-button" (click)="onNoClick()">
                         Cancel
                     </button>
-                    <button mat-raised-button class="send-button">
+                    <button mat-raised-button class="send-button" (click)="send_email()">
                         Send
                     </button>
                 </div>
