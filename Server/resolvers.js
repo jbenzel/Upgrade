@@ -1,21 +1,25 @@
 const resolvers = {
     Query: {
         //User Query
-        async getUser(root, { userIDParam }, { models }) {
-            let User = await models.User.findOne({ where: { userID: userIDParam } });
-
-            return User;
-        },
         async getAllUser(root, { userIDParam },{ models }) {
             let User = await models.User.findAll();
 
             return User;
         },
+        async getUserbyID(root, { userIDParam }, { models }) {
+            let User = await models.User.findOne({ where: { userID: userIDParam } });
+
+            return User;
+        },
+        async getUserbyEmail(root, { emailParam }, { models }) {
+            let User = await models.User.findOne({ where: { email: emailParam } });
+
+            return User;
+        },
 
         //Student Query
-        async  getStudentbyStudentID(root, { studentIDParam }, { models }) {
-            let Student = await models.Student.findOne({ where: { studentID: studentIDParam } });
-
+        async getAllStudent(root, { studentIDParam }, { models }) {
+            let Student = await models.Student.findAll();
             return Student;
         },
         async  getStudentbyUserID(root, { userIDParam }, { models }) {
@@ -23,12 +27,50 @@ const resolvers = {
             
             return Student;
         },
-        async getAllStudents(root, {studentIDParam}, { models }) {
-            let Student = await models.Student.findAll();
+        async  getStudentbyStudentID(root, { studentIDParam }, { models }) {
+            let Student = await models.Student.findOne({ where: { studentID: studentIDParam } });
+
             return Student;
         },
 
+        //Course
+        async getAllCourse(root, { courseIDParam }, { models }) {
+            let Course = await models.Course.findAll();
+            return Course;
+        },
+        async  getCoursebyCourseID(root, { courseIDParam }, { models }) {
+            let Course = await models.Course.findOne({ where: { courseID: courseIDParam } });
+            
+            return Course;
+        },
+        async  getCoursebyUserID(root, { userIDParam }, { models }) {
+            let Course = await models.Course.findOne({ where: { userID: userIDParam } });
+            
+            return Course;
+        },
+
         //Grade
+        async  getAllGrade(root, { gradeIDParam }, { models }) {
+            let Grade = await models.Grade.findAll();
+            
+            return Grade;
+        },
+        async  getGradebyGradeID(root, { gradeIDParam }, { models }) {
+            let Grade = await models.Grade.findOne({ where: { gradeID: gradeIDParam } });
+            
+            return Grade;
+        },
+        async  getGradebyUserID(root, { userIDParam }, { models }) {
+            let Grade = await models.Grade.findOne({ where: { userID: userIDParam } });
+            
+            return Grade;
+        },
+        async  getGradebyGradeID(root, { courseIDParam }, { models }) {
+            let Grade = await models.Grade.findOne({ where: { courseID: courseIDParam } });
+            
+            return Grade;
+        },
+
     },
     Mutation: {
         addUser(root, { email, password, role, firstName, lastName }, { models }) {
@@ -83,7 +125,6 @@ const resolvers = {
                 completedCourseCount: completedCourseCount, 
                 userID: userID,
             }).catch(err => {
-                //console.log(err);
                 return err;
             });
         },
@@ -97,11 +138,103 @@ const resolvers = {
             {
                 where: { studentID: studentIDParam }
             }).catch(err => {
-                //console.log(err);
                 return err;
             });
             return models.Student.findOne({ where: { studentID: studentIDParam } });
         },
+        deleteStudent(root, { studentIDParam }, { models }) {
+            models.Student.destroy(
+                {
+                    where: { studentID: studentIDParam }
+                }
+            ).then((result) => {
+                return result;
+            }).catch(err => {
+                return false;
+            });
+        },
+
+        //Course Mutations
+        addCourse(root, { courseCode, courseName, userID }, { models }) {
+            return models.Course.create({
+                courseCode: courseCode,
+                courseName: courseName,
+                userID: userID
+            }).catch(err => {
+                return err;
+            });
+        },
+        updateCourse(root, { courseIDParam, courseCode, courseName, userID }, {models}){        
+            models.Course.update({
+                courseCode: courseCode,
+                courseName: courseName,
+                userID: userID
+            },
+            {
+                where: { courseID: courseIDParam }
+            }).catch(err => {
+                return err;
+            });
+            return models.Course.findOne({ where: { courseID: courseIDParam } });
+        },
+        deleteCourse(root, { courseIDParam }, { models }) {
+            models.Course.destroy(
+                {
+                    where: { courseID: courseIDParam }
+                }
+            ).then((result) => {
+                return result;
+            }).catch(err => {
+                return false;
+            });
+        },
+
+        //Grade Mutations
+        addGrade(root, { urgency, weight, dueDate, expectedGrade, grade, category, courseID, userID }, { models }) {
+            return models.Grade.create({
+                urgency: urgency, 
+                weight: weight,
+                dueDate: dueDate,
+                expectedGrade: expectedGrade, 
+                grade: grade, 
+                category: category, 
+                courseID: courseID, 
+                userID: userID
+            }).catch(err => {
+                console.log(userID);
+                return err;
+            });
+        },
+        updateGrade(root, { gradeIDParam, urgency, weight, dueDate, expectedGrade, grade, category, courseID, userID }, { models }) {
+            models.Grade.update({
+                urgency: urgency, 
+                weight: weight,
+                dueDate: dueDate,
+                expectedGrade: expectedGrade, 
+                grade: grade, 
+                category: category, 
+                courseID: courseID, 
+                userID: userID
+            },
+            {
+                where: { gradeID: gradeIDParam }
+            }).catch(err => {
+                return err;
+            });
+            return models.Grade.findOne({ where: { gradeID: gradeIDParam } });
+        },
+        deleteGrade(root, { gradeIDParam }, { models }) {
+            models.Grade.destroy(
+                {
+                    where: { gradeID: gradeIDParam }
+                }
+            ).then((result) => {
+                return result;
+            }).catch(err => {
+                return false;
+            });
+        },
+
     }
 };
 

@@ -122,6 +122,11 @@ Grade.belongsTo(Course, {
 Grade.belongsTo(Course, {
     foreignKey: 'userID'
 });
+/*
+Grade.belongsTo(User, {
+    foreignKey: 'userID'
+});
+*/
 
 sequelize.sync();
 sequelize.authenticate();
