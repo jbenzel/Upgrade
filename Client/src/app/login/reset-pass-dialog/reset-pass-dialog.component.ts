@@ -20,8 +20,7 @@ export class ResetPassDialogComponent implements OnInit {
   ) {}
 
   send_email(){
-    if(!this.username.hasError('email') 
-    && !this.username.hasError('required')){
+    if(this.username.valid){
       //there needs to be a boolean value in the backend so that
       //next time user logs in, they are prompted to create a new password
       alert('sending email')

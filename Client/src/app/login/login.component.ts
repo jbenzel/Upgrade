@@ -18,10 +18,7 @@ export class LoginComponent implements OnInit {
 
   submit(){
     //console.log("user name is " + this.username)
-    if(!this.username.hasError('email') 
-    && !this.username.hasError('required')
-    && !this.password.hasError('required')
-    && !this.password.hasError('minLength')){
+    if(this.username.valid && this.password.valid){
       //backend checks necessary for SQL injection
       //check if email and password match
       //valid login, reroute to proper page
