@@ -57,8 +57,8 @@ export class LoginComponent implements OnInit {
 
   clear(){
     //clears username and password fields
-    this.username //how to clear?
-    this.password
+    this.username.reset() //how to clear?
+    this.password.reset()
     //this.valid_login = false;
   }
 
