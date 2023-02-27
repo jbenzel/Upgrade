@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
+
 
 @Component({
   selector: 'app-reset-email',
@@ -6,10 +10,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./reset-email.component.scss']
 })
 export class ResetEmailComponent implements OnInit {
+  FormData: FormGroup;
+  constructor(private builder: FormBuilder) { }
 
-  constructor() { }
+  onSubmit(FormData){
+
+  }
 
   ngOnInit(): void {
+    this.FormData = this.builder.group({
+      EmailAddress: new FormControl('', [Validators.compose([Validators.required, Validators.email])]),
+      Body: new FormControl('', [Validators.required])
+    })
   }
 
 }
