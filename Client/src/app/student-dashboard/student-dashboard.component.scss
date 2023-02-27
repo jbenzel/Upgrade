@@ -5,7 +5,28 @@
 .upcoming-items {
     background-color: #EFEFEF;
 }
-#CPGAchart {
-    border-radius: 10px;
+.chart-container {
+    position: relative;
+    margin: auto;
 }
-.ct-chart .ct-series path {fill: white !important;}
+.input-border{
+	padding: 3px;
+ 	margin: 2vh 1vh; 
+	border-radius: 67px;
+    width: 40%;
+    background: #F56423;
+}
+.input-border:hover{
+    background: radial-gradient(circle, rgba(239,239,239,1) 15%, rgba(245,100,35,1) 41%, rgba(86,155,190,1) 68%, rgba(0,73,144,1) 100%);
+}
+.input{
+    text-align:center;
+    padding: 3px;
+	outline: none;
+	border:double 0;
+	border-radius: 67px;
+	position: relative;
+	box-sizing: border-box;
+	display: block;
+    width: 100%;
+}

@@ -22,6 +22,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider'; 
+import {MatIconModule} from '@angular/material/icon';
 import {NgChartsModule} from 'ng2-charts';
 
 @NgModule({
@@ -37,6 +38,7 @@ import {NgChartsModule} from 'ng2-charts';
     MatSelectModule,
     MatTooltipModule,
     MatSliderModule,
+    MatIconModule,
     NgChartsModule,
   ],
   declarations: [
