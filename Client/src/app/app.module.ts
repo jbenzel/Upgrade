@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatCardModule} from '@angular/material/card';
+import { ResetEmailComponent } from './login/reset-email/reset-email.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import {MatCardModule} from '@angular/material/card';
   declarations: [
     AppComponent,
     AdminLayoutComponent,
+    ResetEmailComponent,
   ],
   entryComponents:[
     
