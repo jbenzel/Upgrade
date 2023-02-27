@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder} from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 import {FormControl, Validators} from '@angular/forms';
+import { EmailServiceService } from './email-service.service';
 
 
 @Component({
@@ -11,10 +12,16 @@ import {FormControl, Validators} from '@angular/forms';
 })
 export class ResetEmailComponent implements OnInit {
   FormData: FormGroup;
-  constructor(private builder: FormBuilder) { }
+  constructor(private builder: FormBuilder, private contact: EmailServiceService) { }
 
   onSubmit(FormData){
-
+    this.contact.SendEmail(FormData)
+      .subscribe(response => {
+        location.href = 'https://mailthis.to/confirm'
+      }, error => {
+      console.warn(error.responseText)
+      console.log({ error })
+    })
   }
 
   ngOnInit(): void {

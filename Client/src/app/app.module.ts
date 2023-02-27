@@ -10,6 +10,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatCardModule} from '@angular/material/card';
 import { ResetEmailComponent } from './login/reset-email/reset-email.component';
+import { EmailServiceService } from './login/reset-email/email-service.service';
 
 @NgModule({
   imports: [
@@ -31,7 +32,9 @@ import { ResetEmailComponent } from './login/reset-email/reset-email.component';
   entryComponents:[
     
   ],
-  providers: [],
+  providers: [
+    EmailServiceService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
