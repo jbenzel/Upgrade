@@ -15,7 +15,7 @@ export class ResetEmailComponent implements OnInit {
   constructor(private builder: FormBuilder, private contact: EmailServiceService) { }
 
   onSubmit(FormData){
-    this.contact.SendEmail(FormData)
+    this.contact.SendEmail()
       .subscribe(response => {
         location.href = 'https://mailthis.to/confirm'
       }, error => {
@@ -27,7 +27,7 @@ export class ResetEmailComponent implements OnInit {
   ngOnInit(): void {
     this.FormData = this.builder.group({
       EmailAddress: new FormControl('', [Validators.compose([Validators.required, Validators.email])]),
-      Body: new FormControl('', [Validators.required])
+      Body: "bruh"
     })
   }
 
