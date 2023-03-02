@@ -6,7 +6,7 @@ const typeDefs = gql`
         userID: ID!
         email: String!
         password: String!
-        role: Int
+        role: String
         firstName: String
         lastName: String
     }

@@ -3,7 +3,7 @@ const resolvers = {
         //User Query
         async getUser(root, { userIDParam }, { models }) {
             let User = await models.User.findOne({ where: { userID: userIDParam } });
-
+            this.AESEncryptDecryptServiceService.encrypt("asdf");
             return User;
         },
         async getAllUser(root, { userIDParam },{ models }) {

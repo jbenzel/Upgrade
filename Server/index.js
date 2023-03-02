@@ -26,7 +26,7 @@ User.init({
         type: Sequelize.DataTypes.TEXT
     },
     role: {
-        type: Sequelize.DataTypes.TINYINT //8bit instead of 32
+        type: Sequelize.DataTypes.TEXT //8bit instead of 32
     },
     firstName: {
         type: Sequelize.DataTypes.TEXT
