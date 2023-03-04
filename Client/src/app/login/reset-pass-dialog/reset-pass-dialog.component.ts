@@ -3,6 +3,8 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {FormControl, Validators} from '@angular/forms';
 import { EmailServiceService } from '../reset-email/email-service.service';
 import { HttpClient } from '@angular/common/http';
+//import based on https://www.npmjs.com/package/apollo-angular
+//follow tutorial: https://www.howtographql.com/angular-apollo/1-getting-started/
 
 export interface DialogData {
   email: string;
@@ -27,6 +29,7 @@ export class ResetPassDialogComponent implements OnInit {
   send_email(){
     if(this.username.valid){
       //once username has been matched in backend
+
       //there needs to be a boolean value in the backend so that
       //next time user logs in, they are prompted to create a new password
       var url = this.EmailService.getURL() + this.username.value;
