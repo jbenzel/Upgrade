@@ -5,10 +5,6 @@ import { EmailServiceService } from '../reset-email/email-service.service';
 import { HttpClient } from '@angular/common/http';
 //import based on https://www.npmjs.com/package/apollo-angular
 //follow tutorial: https://www.howtographql.com/angular-apollo/1-getting-started/
-//installed the following in client folder:
-//npm install apollo-angular apollo-cache-inmemory apollo-client apollo-angular-link-http graphql-tag
-//(skipped graphql as it seems unnecessary)
-//apollo-angular-link-http and apollo-cache-inmemory can't be resolved... force installed)
 
 export interface DialogData {
   email: string;
