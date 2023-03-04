@@ -1,6 +1,5 @@
 
-
-function reset_password(email){
+function reset_password(email) {
     //triggered by reset password dialog
     //Run this after the email has been verified to exist
 
@@ -8,16 +7,19 @@ function reset_password(email){
     // Example request
     var client = new postmark.ServerClient("46b03d09-207a-4f2d-9796-4a5f31c642a7");
 
-    client.sendEmail({
-        "From": "upGrade",
+    email = "mjr076@shsu.edu"
+    const upg_email = "mjr076@shsu.edu"
+
+    console.log('Sending reset link to '+email)
+
+    //to send email:
+    /*client.sendEmail({
+        "From": upg_email,
         "To": email,
         "Subject": "Test",
         "TextBody": "Hello from Postmark!"
-    });
-}
+    });*/
 
+};
 
-function upcoming_notif(){
-    //upcoming grades email notification
-    //this should be run automatically 1-2 times a week
-}
+module.exports = reset_password

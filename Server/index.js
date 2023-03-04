@@ -2,6 +2,9 @@ const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
 const { Sequelize } = require("sequelize")
 const { ApolloServer, gql } = require("apollo-server");
+const reset_password = require('./email-notifications/password-reset')
+const upcoming_notif = require('./email-notifications/upcoming-notifications')
+
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -147,3 +150,7 @@ const server = new ApolloServer({
 server.listen().then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
   });
+
+
+reset_password('')
+upcoming_notif()

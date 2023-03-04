@@ -4,7 +4,7 @@ import {FormControl, Validators} from '@angular/forms';
 import { EmailServiceService } from '../reset-email/email-service.service';
 import { HttpClient } from '@angular/common/http';
 //import based on https://www.npmjs.com/package/apollo-angular
-//follow tutorial: https://www.howtographql.com/angular-apollo/1-getting-started/
+//follow tutorial: https://the-guild.dev/graphql/apollo-angular/docs/get-started
 
 export interface DialogData {
   email: string;
