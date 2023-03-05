@@ -1,7 +1,8 @@
 
-function reset_password(email) {
+async function reset_password(email) {
     //triggered by reset password dialog
     //Run this after the email has been verified to exist
+    //this might need to be frontend after all
 
     var postmark = require("postmark");
     // Example request
