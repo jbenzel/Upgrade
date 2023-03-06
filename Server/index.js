@@ -152,7 +152,7 @@ server.listen().then(({ url }) => {
   });
 
 
-reset_password('')
+//reset_password('') //currently only runs once for testing. Will need to trigger upon user demand.
 const notif_interval = 3.5 * 24 * 60 * 60 * 1000 //sleeps for 3.5 days
 //will see if there's an alternative to this than milisecond sleep
-setInterval(upcoming_notif, notif_interval)
+//setInterval(upcoming_notif, notif_interval)
