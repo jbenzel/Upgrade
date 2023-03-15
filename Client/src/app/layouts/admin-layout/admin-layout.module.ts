@@ -25,6 +25,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
+import { PassResetPageComponent } from 'app/pass-reset-page/pass-reset-page.component';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { MatCardModule } from '@angular/material/card';
     StudentDashboardComponent,
     DetailedViewComponent,
     ResetPassDialogComponent,
+    PassResetPageComponent,
   ]
 })
 

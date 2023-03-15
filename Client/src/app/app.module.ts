@@ -11,7 +11,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {MatCardModule} from '@angular/material/card';
 import { ResetEmailComponent } from './login/reset-email/reset-email.component';
 import { EmailServiceService } from './login/reset-email/email-service.service';
-import { PassResetPageComponent } from './pass-reset-page/pass-reset-page.component';
 
 @NgModule({
   imports: [
@@ -29,7 +28,6 @@ import { PassResetPageComponent } from './pass-reset-page/pass-reset-page.compon
     AppComponent,
     AdminLayoutComponent,
     ResetEmailComponent,
-    PassResetPageComponent,
   ],
   entryComponents:[
     

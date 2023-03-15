@@ -1,1 +1,38 @@
-<p>pass-reset-page works!</p>
+<div class="main-content">
+    <div class="container-fluid">
+
+      <mat-card class="login-card">
+        <div class="card-header">
+          <h1 class="card-title">Reset Password</h1>
+        </div>
+        <div class="card-body">
+            <mat-form-field class="pass-input-box" appearance="outline">
+                <mat-label class="mat-label">
+                  Password
+                </mat-label>
+                <input matInput placeholder="Enter your password" value="" name="password" 
+                type="password" [formControl]="password" required>
+                <mat-error *ngIf='password.invalid'>{{validate_password_syntax()}}</mat-error>
+              </mat-form-field>
+          <mat-form-field class="pass-input-box" appearance="outline">
+            <mat-label class="mat-label">
+              Confirm Password
+            </mat-label>
+            <input matInput placeholder="Re-enter your password" value="" name="password" 
+            type="password" [formControl]="conf_password" required>
+            <mat-error *ngIf='password.invalid'>{{validate_conf_password_syntax()}}</mat-error>
+          </mat-form-field>
+          <div style="text-align:center;">
+            <button class="login-button" mat-raised-button (click)="submit()">
+              Reset
+            </button>
+
+          </div>
+
+        </div>
+
+      </mat-card>
+
+    </div>
+  </div>
+  
