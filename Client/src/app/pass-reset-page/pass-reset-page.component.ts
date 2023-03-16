@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
+import {passMatchValidator, 
+  hasNumberValidator, 
+  hasLowercaseValidator, 
+  hasUppercaseValidator } from 'app/custom-validators';
+
 
 @Component({
   selector: 'app-pass-reset-page',
@@ -7,8 +12,18 @@ import {FormControl, Validators} from '@angular/forms';
   styleUrls: ['./pass-reset-page.component.scss']
 })
 export class PassResetPageComponent implements OnInit {
-  password = new FormControl('', [Validators.required, Validators.minLength(8)]);
-  conf_password = new FormControl('', [Validators.required, Validators.minLength(8)]);
+  password = new FormControl('', [
+    Validators.required, 
+    Validators.minLength(8), 
+    hasNumberValidator(),
+    hasLowercaseValidator(),
+    hasUppercaseValidator()
+  ]);
+
+  conf_password = new FormControl('', [
+    Validators.required,
+    passMatchValidator()
+  ]);
 
   constructor() { }
 
@@ -30,8 +45,14 @@ export class PassResetPageComponent implements OnInit {
     if(this.password.hasError('required')){
       return 'Password required';
     } else if(this.password.hasError('minlength')){
-      return 'Password must be least 8 characters';
-    } else {
+      return 'Must be least 8 characters';
+    } else if(this.password.hasError('hasNumeric')){
+      return 'Must contain a number'
+    } else if(this.password.hasError('hasLowercase')){
+      return 'Must contain one lowercase'
+    }else if(this.password.hasError('hasUppercase')){
+      return 'Must contain one uppercase'
+    }else {
       return '';
     }
   }
@@ -39,9 +60,9 @@ export class PassResetPageComponent implements OnInit {
   validate_conf_password_syntax(){
     if(this.conf_password.hasError('required')){
       return 'Password required';
-    } else if(this.password.hasError('minlength')){
-      return 'Password must be least 8 characters';
-    } else {
+    } else if(this.conf_password){
+      return 'Passwords must Match';
+    }else {
       return '';
     }
   }
