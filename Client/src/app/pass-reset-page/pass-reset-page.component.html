@@ -22,12 +22,27 @@
             type="password" [formControl]="conf_password" required>
             <mat-error *ngIf='password.invalid'>{{validate_conf_password_syntax()}}</mat-error>
           </mat-form-field>
+          <div *ngIf="notMatching">
+            <h6 style="color:red">Passwords do not match</h6>
+          </div>
+          <div>
+            <h4>
+              Password Requirements:
+            </h4>
+            <h5>
+              ◉ Minimum length of 8 characters<br>
+              ◉ Must contain one lowercase<br>
+              ◉ Must contain one uppercase<br>
+              ◉ Must contain one number
+            </h5>
+          </div>
           <div style="text-align:center;">
             <button class="login-button" mat-raised-button (click)="submit()">
-              Reset
+              Reset Password
             </button>
 
           </div>
+
 
         </div>
 

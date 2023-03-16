@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import { ResetPassDialogComponent } from './reset-pass-dialog/reset-pass-dialog.component';
 import {FormControl, Validators} from '@angular/forms';
+import {
+  hasNumberValidator, 
+  hasLowercaseValidator, 
+  hasUppercaseValidator } from 'app/custom-validators';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +14,13 @@ import {FormControl, Validators} from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   username = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl('', [Validators.required, Validators.minLength(8)]);
+  password = new FormControl('', [
+    Validators.required, 
+    Validators.minLength(8),
+    hasNumberValidator(),
+    hasLowercaseValidator(),
+    hasUppercaseValidator()
+  ]);
   //theres a minLength validator among many others
   reset_password: boolean = false;
 
@@ -49,8 +59,14 @@ export class LoginComponent implements OnInit {
     if(this.password.hasError('required')){
       return 'Password required';
     } else if(this.password.hasError('minlength')){
-      return 'Password must be least 8 characters';
-    } else {
+      return 'Must be least 8 characters';
+    } else if(this.password.hasError('hasNumeric')){
+      return 'Must contain a number'
+    } else if(this.password.hasError('hasLowercase')){
+      return 'Must contain one lowercase'
+    }else if(this.password.hasError('hasUppercase')){
+      return 'Must contain one uppercase'
+    }else {
       return '';
     }
   }

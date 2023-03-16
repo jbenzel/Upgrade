@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import {passMatchValidator, 
+import {
   hasNumberValidator, 
   hasLowercaseValidator, 
   hasUppercaseValidator } from 'app/custom-validators';
@@ -22,20 +22,22 @@ export class PassResetPageComponent implements OnInit {
 
   conf_password = new FormControl('', [
     Validators.required,
-    passMatchValidator()
   ]);
+
+  notMatching = false
 
   constructor() { }
 
   submit(){
-
-    if(this.conf_password.valid && this.password.valid &&
-      this.password.value == this.conf_password.value){
+    if(this.password.value !== this.conf_password.value){
+      this.notMatching = true
+    }else if(this.conf_password.valid && this.password.valid){
+      this.notMatching = false
 
       alert('success')
     }else{
       
-      alert('syntax error still present or passwords do not match')
+      alert('Another error')
     }
     //then must reroute to login page
     this.clear()
@@ -59,10 +61,8 @@ export class PassResetPageComponent implements OnInit {
 
   validate_conf_password_syntax(){
     if(this.conf_password.hasError('required')){
-      return 'Password required';
-    } else if(this.conf_password){
-      return 'Passwords must Match';
-    }else {
+      return 'Must confirm password';
+    } else {
       return '';
     }
   }
