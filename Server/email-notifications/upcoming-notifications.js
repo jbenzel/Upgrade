@@ -10,15 +10,36 @@ async function upcoming_notif(){
     var client = new postmark.ServerClient(api_auth_token);
     const upg_email = "mjr076@shsu.edu" //will have to use an shsu.edu email as source for upGrade
 
-    email = "" //must loop for each user to send each a personal email
 
-    //to send email:
+    //for each student
+    //  for each grade
+
+    email = "" //must loop for each student to send each a personal email
+    grades = [] //array of JSON objects for each upcoming grade within 2 weeks
+
+    //send email for each student:
     client.sendEmailWithTemplate({
         "From": upg_email,
         "To": email,
-        "TemplateAlias": "",
+        "TemplateAlias": "upcoming-notification",
         "TemplateModel": {
+            "product_url": "",
+            "product_name": "upGrade",
+            "Grades": grades,
+                /*
+                [
+                    {
+                        "class": "class_Value",
+                        "name": "name_Value",
+                        "dueDate": "dueDate_Value"
+                    },
+                    {
 
+                    },
+                ]
+                */
+            "company_name": "upGrade",
+            "company_address": ""
         }
     })
 };
