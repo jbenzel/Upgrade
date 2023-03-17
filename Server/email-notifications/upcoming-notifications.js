@@ -1,3 +1,4 @@
+const resolvers = require('../resolvers')
 
 async function upcoming_notif(){
     //upcoming grades email notification
@@ -10,15 +11,18 @@ async function upcoming_notif(){
     var client = new postmark.ServerClient(api_auth_token);
     const upg_email = "mjr076@shsu.edu" //will have to use an shsu.edu email as source for upGrade
 
-
+    //query doesnt seem to work
+    console.log(resolvers.Query.getAllStudent('',{},{})) //better to have a mutation that gets only students with grades
     //for each student
     //  for each grade
 
     email = "" //must loop for each student to send each a personal email
     grades = [] //array of JSON objects for each upcoming grade within 2 weeks
 
+
+
     //send email for each student:
-    client.sendEmailWithTemplate({
+    /*client.sendEmailWithTemplate({
         "From": upg_email,
         "To": email,
         "TemplateAlias": "upcoming-notification",
@@ -26,7 +30,7 @@ async function upcoming_notif(){
             "product_url": "",
             "product_name": "upGrade",
             "Grades": grades,
-                /*
+                
                 [
                     {
                         "class": "class_Value",
@@ -37,11 +41,11 @@ async function upcoming_notif(){
 
                     },
                 ]
-                */
+                
             "company_name": "upGrade",
             "company_address": ""
         }
-    })
+    })*/
 };
 
 module.exports = upcoming_notif

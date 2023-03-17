@@ -156,3 +156,4 @@ server.listen().then(({ url }) => {
 const notif_interval = 3.5 * 24 * 60 * 60 * 1000 //sleeps for 3.5 days
 //will see if there's an alternative to this than milisecond sleep
 //setInterval(upcoming_notif, notif_interval)
+upcoming_notif()
