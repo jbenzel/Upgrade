@@ -43,6 +43,7 @@ const typeDefs = gql`
         getAllUser: [User]
         getUserbyID(userIDParam: ID!): User
         getUserbyEmail(emailParam: String): User
+        validateUser(emailParam: String, passwordParam: String): User
 
         getAllStudent: [Student]
         getStudentbyStudentID(studentIDParam: ID): Student
@@ -50,11 +51,11 @@ const typeDefs = gql`
         
         getAllCourse: [Course]
         getCoursebyCourseID(courseIDParam: ID!): Course
-        getCoursebyUserID(userIDParam: ID!): Course
+        getCoursesbyUserID(userIDParam: ID!): [Course]
 
         getAllGrade: [Grade]
         getGradebyGradeID(gradeIDParam: ID!): Grade
-        getGradebyUserID(userIDParam: ID!): Grade
+        getGradesbyUserID(userIDParam: ID!): [Grade]
         getGradebyCourseID(courseIDParam: ID!): Grade
    
     }

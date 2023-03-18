@@ -1,4 +1,4 @@
-npm# Project 
+# Project 
 Upgrade
 
 # Prerequisites
@@ -7,14 +7,7 @@ Upgrade
 # Getting Started
 1. cd .\Server\
 2. npm install
-3. nodemon (if you are having trouble use npm install -g nodemon)
+3. node index.js
 4. cd .\Client\
 5. npm install (if you are having trouble use npm install --force)
 6. ng serve
-
-# Api versions we are runnint
-1. Apollo V3
-2. sequelize V6
-
-# To Run Database Server
-1. 
