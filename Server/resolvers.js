@@ -16,6 +16,19 @@ const resolvers = {
 
             return User;
         },
+        async validateUser(root, { emailParam, passwordParam}, { models }) {
+            let User = await models.User.findOne({ where: { email: emailParam } });
+            console.log(User);
+            if(User == null){
+                return null;
+            }
+            if(User.dataValues.password == passwordParam){
+                return User;
+            }
+            else{
+                return null;
+            }
+        },
 
         //Student Query
         async getAllStudent(root, { studentIDParam }, { models }) {
@@ -43,8 +56,8 @@ const resolvers = {
             
             return Course;
         },
-        async  getCoursebyUserID(root, { userIDParam }, { models }) {
-            let Course = await models.Course.findOne({ where: { userID: userIDParam } });
+        async  getCoursesbyUserID(root, { userIDParam }, { models }) {
+            let Course = await models.Course.findAll({ where: { userID: userIDParam } });
             
             return Course;
         },
@@ -60,8 +73,8 @@ const resolvers = {
             
             return Grade;
         },
-        async  getGradebyUserID(root, { userIDParam }, { models }) {
-            let Grade = await models.Grade.findOne({ where: { userID: userIDParam } });
+        async  getGradesbyUserID(root, { userIDParam }, { models }) {
+            let Grade = await models.Grade.findAll({ where: { userID: userIDParam } });
             
             return Grade;
         },

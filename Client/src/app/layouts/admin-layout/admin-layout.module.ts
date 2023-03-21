@@ -16,6 +16,11 @@ import { StudentDashboardComponent } from 'app/student-dashboard/student-dashboa
 import { DetailedViewComponent } from 'app/detailed-view/detailed-view.component';
 import { ResetPassDialogComponent } from 'app/login/reset-pass-dialog/reset-pass-dialog.component';
 import { ResetEmailComponent } from 'app/login/reset-email/reset-email.component';
+import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
+import { HttpLink } from 'apollo-angular/http';
+import { HttpClientModule } from '@angular/common/http';
+import { InMemoryCache } from '@apollo/client/core';
+
 
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
@@ -40,7 +45,9 @@ import { PassResetPageComponent } from 'app/pass-reset-page/pass-reset-page.comp
     MatSelectModule,
     MatTooltipModule,
     MatDialogModule,
-    MatCardModule
+    MatCardModule,
+    ApolloModule,
+    HttpClientModule
   ],
   declarations: [
     DashboardComponent,
@@ -56,6 +63,20 @@ import { PassResetPageComponent } from 'app/pass-reset-page/pass-reset-page.comp
     DetailedViewComponent,
     ResetPassDialogComponent,
     PassResetPageComponent,
+  ],
+  providers: [
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory(httpLink: HttpLink) {
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: 'http://localhost:4000/graphql'
+          })
+        }
+      },
+      deps: [HttpLink]
+    }
   ]
 })
 

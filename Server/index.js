@@ -107,7 +107,7 @@ Grade.init({
     category:{
         type: Sequelize.DataTypes.TEXT
     },
-    name:{
+    userID:{
         type: Sequelize.DataTypes.TEXT
     }
 }, { sequelize, timestamps: false })
@@ -121,9 +121,6 @@ Course.belongsTo(User, {
 });
 Grade.belongsTo(Course, {
     foreignKey: 'courseID'
-});
-Grade.belongsTo(Course, {
-    foreignKey: 'userID'
 });
 /*
 Grade.belongsTo(User, {
