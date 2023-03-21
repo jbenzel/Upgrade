@@ -6,6 +6,18 @@ import {
   hasNumberValidator, 
   hasLowercaseValidator, 
   hasUppercaseValidator } from 'app/custom-validators';
+import { Apollo, gql, QueryRef } from 'apollo-angular';
+
+//user info has to be sent to the server for authentication
+//otherwise, valid authentication cannot occur
+//something like send user creds and return true or false for authorization
+const VALIDATE_USER = gql`
+query ValidateUser($emailParam: String, $passwordParam: String) {
+  validateUser(emailParam: $emailParam, passwordParam: $passwordParam) {
+    email
+  }
+}
+`;
 
 @Component({
   selector: 'app-login',
@@ -13,6 +25,7 @@ import {
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  getAllSOVQuery!: QueryRef<any>;
   username = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [
     Validators.required, 
@@ -21,23 +34,28 @@ export class LoginComponent implements OnInit {
     hasLowercaseValidator(),
     hasUppercaseValidator()
   ]);
-  //theres a minLength validator among many others
-  reset_password: boolean = false;
 
-  constructor(public dialog: MatDialog) { }
+  reset_password: boolean = false;
+  constructor(public dialog: MatDialog, private apollo: Apollo) { }
 
   submit(){
-    //console.log("user name is " + this.username)
     if(this.username.valid && this.password.valid){
-      //backend checks necessary for SQL injection
-      //check if email and password match
+      //check if email and password match. MUST FIGURE OUT HOW TO PROPERLY VALIDATE USER WITHOUT EXPOSING SECRETS
+      this.apollo.watchQuery<any>({
+        query: VALIDATE_USER
+      }).valueChanges
+        .subscribe(({ data }) => {
+          console.log(data);
+        });
+  
+      this.getAllSOVQuery.refetch();
+
       //valid login, reroute to proper page
       alert('succes')
     }else{
       
       alert('syntax error still present')
     }
-    //then must reroute to appropriate dashboard based on student/staff
     this.clear();
   }
 
