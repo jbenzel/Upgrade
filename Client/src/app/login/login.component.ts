@@ -8,16 +8,15 @@ import {
   hasUppercaseValidator } from 'app/custom-validators';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 
-//user info has to be sent to the server for authentication
-//otherwise, valid authentication cannot occur
-//something like send user creds and return true or false for authorization
+//might have to encapsulate this to hide backend structure
 const VALIDATE_USER = gql`
-query ValidateUser($emailParam: String, $passwordParam: String) {
+query ($emailParam: String, $passwordParam: String) {
   validateUser(emailParam: $emailParam, passwordParam: $passwordParam) {
     email
   }
 }
 `;
+
 
 @Component({
   selector: 'app-login',
@@ -34,27 +33,42 @@ export class LoginComponent implements OnInit {
     hasLowercaseValidator(),
     hasUppercaseValidator()
   ]);
-
+  invalid_creds: boolean = false;
+  must_be_valid: boolean = false;
   reset_password: boolean = false;
   constructor(public dialog: MatDialog, private apollo: Apollo) { }
 
   submit(){
     if(this.username.valid && this.password.valid){
-      //check if email and password match. MUST FIGURE OUT HOW TO PROPERLY VALIDATE USER WITHOUT EXPOSING SECRETS
       this.apollo.watchQuery<any>({
-        query: VALIDATE_USER
-      }).valueChanges
-        .subscribe(({ data }) => {
-          console.log(data);
-        });
-  
-      this.getAllSOVQuery.refetch();
+        query: VALIDATE_USER,
+        variables: {
+          "emailParam": this.username.value,
+          "passwordParam": this.password.value
+        }
+      }).valueChanges.subscribe(({ data }) => {
+          //console.log(data);
+          if(data.validateUser != null){
+            //valid login, reroute to proper page
+            //pass username and password fields to render dashboard
+            alert('succes')
+            this.must_be_valid = false
+            this.invalid_creds = false
 
-      //valid login, reroute to proper page
-      alert('succes')
-    }else{
+          }else{
+            //invalid creds, alert user
+            alert('invalid creds')
+            this.invalid_creds = true
+            this.must_be_valid = false
+          }
+      });
       
+      //getAllSOVQuery.refetch gives me issues
+      //this.getAllSOVQuery.refetch();
+    }else{
       alert('syntax error still present')
+      this.must_be_valid = true
+      this.invalid_creds = false
     }
     this.clear();
   }
@@ -105,6 +119,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
 }
