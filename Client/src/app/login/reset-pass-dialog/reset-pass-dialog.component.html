@@ -13,6 +13,9 @@
                     <mat-error *ngIf="username.invalid">
                         {{validate_user_syntax()}}</mat-error>
                 </mat-form-field>
+                <div *ngIf="must_be_valid">
+                    <h6 style="color:red">email must be valid</h6>
+                </div>
                 <div style="justify-content: space-evenly;">
                     <button mat-raised-button class="cancel-button" (click)="onNoClick()">
                         Cancel

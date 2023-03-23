@@ -6,9 +6,10 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class EmailServiceService {
-  private url = "https://mailthis.to/"; // https://mailthis.to/
+  private url = "no url"; // https://mailthis.to/
   private message = "Email testing lol"
-  //replace upGrade-reset with any email based on user input
+  //must redo email service if its gonna be used.
+  //must somehow use this module to trigger backend
   constructor(private http: HttpClient){}
 
   SendEmail() {
