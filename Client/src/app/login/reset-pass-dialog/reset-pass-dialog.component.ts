@@ -45,10 +45,9 @@ export class ResetPassDialogComponent implements OnInit {
           "emailParam": this.username.value
         }
       }).valueChanges.subscribe(({ data }) => {
-          console.log(data);
+          //console.log(data);
           if(data.getUserbyEmail != null){
             //email matched, send email
-            alert('succes')
             this.must_be_valid = false
 
             var url = this.EmailService.getURL() + this.username.value;
@@ -58,12 +57,15 @@ export class ResetPassDialogComponent implements OnInit {
                 console.log(res);
               }
             );
-
-            this.dialogRef.close();
-            alert('Email sent to '+this.username.value)
-            this.email_sent = true
-            this.must_be_valid = false
-
+            
+            //if successfully sent, confirm to user email sent
+            (async () => { 
+              this.email_sent = true
+              this.must_be_valid = false
+              await this.delay(3000);
+              this.dialogRef.close()
+            })();
+            //alert('Email sent to '+this.username.value)
 
           }else{
             //invalid email, alert user
@@ -90,6 +92,10 @@ export class ResetPassDialogComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
   ngOnInit(): void {
