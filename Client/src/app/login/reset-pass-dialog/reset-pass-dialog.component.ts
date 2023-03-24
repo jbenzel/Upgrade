@@ -13,6 +13,14 @@ query ($emailParam: String) {
 }
 `;
 
+const SEND_EMAIL = gql`
+query ($emailParam: String) {
+  sendResetEmail(emailParam: $emailParam) {
+    email
+  }
+}
+`;
+
 export interface DialogData {
   email: string;
 }
@@ -47,25 +55,40 @@ export class ResetPassDialogComponent implements OnInit {
       }).valueChanges.subscribe(({ data }) => {
           //console.log(data);
           if(data.getUserbyEmail != null){
-            //email matched, send email
-            this.must_be_valid = false
 
-            var url = this.EmailService.getURL() + this.username.value;
+            //email matched, send email
+            this.must_be_valid = false;
+
+            this.apollo.watchQuery<any>({
+              query: SEND_EMAIL,
+              variables: {
+                "emailParam": this.username.value
+              }
+            }).valueChanges.subscribe(({ data }) => {
+
+              /*var url = this.EmailService.getURL() + this.username.value;
             var message = this.EmailService.getMessage();
             this.http.post(url, message).subscribe(
               res => {
                 console.log(res);
               }
-            );
+            );*/
+            
             
             //if successfully sent, confirm to user email sent
-            (async () => { 
-              this.email_sent = true
-              this.must_be_valid = false
-              await this.delay(3000);
-              this.dialogRef.close()
-            })();
-            //alert('Email sent to '+this.username.value)
+            if(data != null){
+              (async () => { 
+                this.email_sent = true
+                this.must_be_valid = false
+                await this.delay(3000);
+                this.dialogRef.close()
+              })();
+              //alert('Email sent to '+this.username.value)
+            }else{
+              //failed to send email due to non 200 response
+            }
+
+            });
 
           }else{
             //invalid email, alert user

@@ -1,3 +1,5 @@
+const reset_password = require('./email-notifications/password-reset')
+
 const resolvers = {
     Query: {
         //User Query
@@ -82,6 +84,16 @@ const resolvers = {
             let Grade = await models.Grade.findOne({ where: { courseID: courseIDParam } });
             
             return Grade;
+        },
+
+        //Executions (Marcos added this, remove if it starts breaking stuff)
+        async sendResetEmail(root, { emailParam }, { models }) {
+            let User = await models.User.findOne({ where: { email: emailParam } });
+            if(User != null){
+                reset_password(emailParam)
+                return User
+            }
+            return null;
         },
 
     },

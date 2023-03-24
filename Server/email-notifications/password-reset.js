@@ -13,6 +13,7 @@ async function reset_password(email) {
     console.log('Sending reset link to '+email)
 
     //to send email:
+    /*
     client.sendEmailWithTemplate({
         "From": upg_email,
         "To": email,
@@ -29,8 +30,10 @@ async function reset_password(email) {
             "browser_name": "",
             "support_url": ""
         }
-    })
-
+    }).subscribe(({data}) =>{
+        
+    })   //get HTTP response and return to query which then returns to user
+    */
 };
 
 module.exports = reset_password
