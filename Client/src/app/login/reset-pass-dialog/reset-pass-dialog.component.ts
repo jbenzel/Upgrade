@@ -36,6 +36,7 @@ export class ResetPassDialogComponent implements OnInit {
   must_be_valid: boolean = false;
   user_not_found: boolean = false;
   email_sent: boolean = false;
+  failed_to_send: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<ResetPassDialogComponent>,
@@ -66,33 +67,29 @@ export class ResetPassDialogComponent implements OnInit {
               }
             }).valueChanges.subscribe(({ data }) => {
 
-              /*var url = this.EmailService.getURL() + this.username.value;
-            var message = this.EmailService.getMessage();
-            this.http.post(url, message).subscribe(
-              res => {
-                console.log(res);
-              }
-            );*/
-            
-            
-            //if successfully sent, confirm to user email sent
-            if(data != null){
-              (async () => { 
-                this.email_sent = true
+              //if successfully sent, confirm to user email sent
+              console.log(data)
+              if(data.sendResetEmail != null){
+                (async () => { 
+                  this.email_sent = true
+                  this.must_be_valid = false
+                  this.failed_to_send = false
+                  await this.delay(3000);
+                  this.dialogRef.close()
+                })();
+                //alert('Email sent to '+this.username.value)
+              }else{
+                //failed to send email due to non 200 response
                 this.must_be_valid = false
-                await this.delay(3000);
-                this.dialogRef.close()
-              })();
-              //alert('Email sent to '+this.username.value)
-            }else{
-              //failed to send email due to non 200 response
-            }
+                this.failed_to_send = true
+              }
 
             });
 
           }else{
             //invalid email, alert user
             this.must_be_valid = true
+            this.failed_to_send = false
           }
       });
       //this.getAllSOVQuery.refetch();

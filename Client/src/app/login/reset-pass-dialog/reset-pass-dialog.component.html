@@ -26,6 +26,10 @@
                     <br>
                     <h5 style="color:red">Invalid email</h5>
                 </div>
+                <div *ngIf="failed_to_send">
+                    <br>
+                    <h5 style="color:red">❌Failed to send</h5>
+                </div>
                 <div *ngIf="email_sent">
                     <br>
                     <h5 style="color:green">✅Email Sent!</h5>

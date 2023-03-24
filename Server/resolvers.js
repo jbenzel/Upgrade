@@ -90,8 +90,15 @@ const resolvers = {
         async sendResetEmail(root, { emailParam }, { models }) {
             let User = await models.User.findOne({ where: { email: emailParam } });
             if(User != null){
-                reset_password(emailParam)
-                return User
+                //first check if token available
+
+                //then send email
+                var response = reset_password(emailParam)
+                if((await response).ErrorCode == 0){
+                    //if no errors while sending
+                    return User;
+                }
+                return null;
             }
             return null;
         },
