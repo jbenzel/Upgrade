@@ -23,6 +23,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider'; 
 import {MatIconModule} from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
 import {NgChartsModule} from 'ng2-charts';
 
 @NgModule({
@@ -39,6 +40,7 @@ import {NgChartsModule} from 'ng2-charts';
     MatTooltipModule,
     MatSliderModule,
     MatIconModule,
+    MatCardModule,
     NgChartsModule,
   ],
   declarations: [

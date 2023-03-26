@@ -1,79 +1,107 @@
-import { Component, OnInit } from '@angular/core';
-import { MatSliderModule } from '@angular/material/slider'; 
-import * as Chartist from 'chartist';
-import { Chart, ChartData, ChartEvent, ChartType } from 'chart.js';
-// import { PieChart } from 'chartist';
-
-//let userCPGA = (document.getElementById("CPGA") as HTMLInputElement).value;
+import { Component, OnInit, OnChanges, SimpleChanges, Input,HostListener, ViewChild, ViewChildren, ChangeDetectorRef, QueryList, AfterViewInit, ElementRef } from '@angular/core';
+import { Chart, ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
+// import { data } from 'jquery';
+// import { NgChartsModule, NgChartsConfiguration, BaseChartDirective } from 'ng2-charts';
+import * as userInfo from './student-info.json';
 
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
   styleUrls: ['./student-dashboard.component.scss']
 })
-export class StudentDashboardComponent implements OnInit {
+export class StudentDashboardComponent implements OnInit, AfterViewInit {
 
-  currentUser = {
-    'CGPA': 3.0,
-    'EGPA': 3.5,
-  };
-
-  constructor() { }
-  ngOnInit(): void {
-    this.createCGPAchart();
-    this.createEGPAchart();
-    this.createProgressChart();
-  }
-
-  public CGPAchart: any;
+  constructor() {}
+  ngOnInit(): void {}
+  
   public EGPAchart: any;
+  public CGPAchart: any;
   public progressChart: any;
-  public CGPAchartData: any = {
-    labels: ['CGPA', '', ],
-    datasets: [{
-      data: [this.currentUser.CGPA, 4-this.currentUser.CGPA],
-      backgroundColor: ['#F56423','gray',]
-    }],
-  };
+  public afterEGPA: number;
+  public afterCGPA: number;
 
-  public EGPAchartData: any = {
-    labels: ['CGPA', '', ],
-    datasets: [{
-      data: [this.currentUser.EGPA, 4-this.currentUser.EGPA],
-      backgroundColor: ['#F56423','gray',]
-    }],
-  };
+  current = userInfo;
+  CGPA = this.current.currentUser.getAllStudent[0].cGPA;
+  EGPA = this.current.currentUser.getAllStudent[0].eGPA;
 
-  createCGPAchart(){
-    this.CGPAchart = new Chart("CGPAchart", {
-      type: 'doughnut', //this denotes tha type of chart
-      data: this.CGPAchartData,
+  ngAfterViewInit() {
+    this.createProgressChart('progressChart');
+    this.createEGPAChart('estm');
+    this.createCGPAChart('current');
+  }
+
+  updateCurrChartData() {
+    // Update the chart data with the new value
+    const newGPA = [Number(this.afterCGPA), 4 - this.afterCGPA];
+
+    console.log(this.CGPAchart);
+    this.CGPAchart.data.datasets[0].data = newGPA;
+
+    // Update the chart properties with the modified data
+    this.CGPAchart.update();
+    this.CGPAchart.render();
+  }
+
+  updateEstmatedChartData() {
+    // Update the chart data with the new value
+    const newGPA = [Number(this.afterEGPA), 4 - this.afterEGPA];
+
+    console.log(this.EGPAchart);
+    this.EGPAchart.data.datasets[0].data = newGPA;
+
+    // Update the chart properties with the modified data
+    this.EGPAchart.update();
+    this.EGPAchart.render();
+  }
+
+  createEGPAChart(chartId) {
+    this.EGPAchart = new Chart(chartId, {
+      type: 'doughnut',
+      data: {
+        labels: ['EGPA', ''],
+        datasets: [
+          {
+            data: [this.EGPA, 4 - this.EGPA],
+            backgroundColor: ['#F56423', '#707070'],
+            hoverBackgroundColor: ['#F56423', '#707070']
+          }
+        ]
+      },
       options: {
-        aspectRatio: 2,
-        maintainAspectRatio: false,
+        responsive: true,
+        maintainAspectRatio: false
       }
     });
   }
 
-  createEGPAchart(){
-    this.EGPAchart = new Chart("EGPAchart", {
-      type: 'doughnut', //this denotes tha type of chart
-      data: this.EGPAchartData,
+  createCGPAChart(chartId) {
+    this.CGPAchart = new Chart(chartId, {
+      type: 'doughnut',
+      data: {
+        labels: ['CGPA', ''],
+        datasets: [
+          {
+            data: [this.CGPA, 4 - this.CGPA],
+            backgroundColor: ['#F56423', '#707070'],
+            hoverBackgroundColor: ['#F56423', '#707070']
+          }
+        ]
+      },
       options: {
-        aspectRatio: 2,
-        maintainAspectRatio: false,
+        responsive: true,
+        maintainAspectRatio: false
       }
     });
   }
 
-  createProgressChart(){
-    this.progressChart = new Chart("progressChart", {
+  createProgressChart(chartId){
+    this.progressChart = new Chart(chartId, {
       type: 'line', //this denotes tha type of chart
       data: {// values on X-Axis
         labels: ['0', '4', '8', '12', '16 (weeks)' ], 
 	       datasets: [
           {
-            label: "1",
+            label: this.current.currentUser.getAllCourse[0].courseCode,
             data: ['72','78', '83', '75', '92',],
             backgroundColor: '#F56423',
             borderColor: '#F56423',
@@ -82,7 +110,7 @@ export class StudentDashboardComponent implements OnInit {
             pointRadius: 5
           },
           {
-            label: "2",
+            label: this.current.currentUser.getAllCourse[1].courseCode,
             data: ['70', '86', '75', '70', '80',],
             backgroundColor: '#569BBE',
             borderColor: '#569BBE',
@@ -91,7 +119,7 @@ export class StudentDashboardComponent implements OnInit {
             pointRadius: 5
           },
           {
-            label: "3",
+            label: this.current.currentUser.getAllCourse[2].courseCode,
             data: ['90','70', '94', '97', '100',],
             backgroundColor: '#707070',
             borderColor: '#707070',
@@ -100,7 +128,7 @@ export class StudentDashboardComponent implements OnInit {
             pointRadius: 5
           },
           {
-            label: "4",
+            label: this.current.currentUser.getAllCourse[3].courseCode,
             data: ['80','74', '85', '72', '96',],
             backgroundColor: '#004990',
             borderColor: '#004990',
@@ -111,8 +139,9 @@ export class StudentDashboardComponent implements OnInit {
         ]
       },
       options: {
-        aspectRatio: 2,
-        maintainAspectRatio: false,
+        aspectRatio: 1,
+        responsive: true,
+        maintainAspectRatio: false
       }
     });
   }

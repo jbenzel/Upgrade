@@ -3,33 +3,38 @@
       <!-- Start 1st row -->
       <div class="row">
         <!-- Start Semester Card -->
-        <div class="col-lg-7 col-md-12 align-self-stretch">
+        <div class="col-lg-7 col-md-12 align-self-stretch m-0">
           <div class="card">
             <div class="card-header text-left">
-              <h2>Semester Overview</h2>
+              <h2 class="header">Semester Overview</h2>
             </div>
             <div class="card-body container">
                 <div class="row no-gutters">
-                  <div class="col-lg-4">
-                    <span>Current GPA: {{currentUser.CGPA}}</span>
+                  <div class="row col-lg-4 justify-content-center align-items-center">
                       <!-- Start User Input -->
-                      <div class="d-flex justify-content-around">
-                        <div class="input-border">
-                          <input class="input" id="CGPA" type="text" placeholder="CGPA">
-                        </div>
-                        <div class="input-border">
-                          <input class="input" id="EGPA" type="text" placeholder="EGPA">
-                        </div>
+                      <div class="col-lg-12 col-md-6 w-100 mb-0">
+                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="CGPA">Current GPA:</p>
+                          <div class="input-border">
+                            <input class="input" id="CGPA" [(ngModel)]="afterCGPA" (change)="updateCurrChartData()" type="text" min="1.5" max="4" placeholder="CGPA" >
+                          </div>
+                      </div>
+                      <div class="col-lg-12 col-md-6 w-100 mt-0">
+                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="EGPA">Estimated GPA:</p>
+                          <div class="input-border justify-content-center">
+                            <input class="input" id="EGPA" [(ngModel)]="afterEGPA" (change)="updateEstmatedChartData()" type="text" min="1.5" max="4" placeholder="EGPA" >
+                          </div>
                       </div>
                       <!-- End User Input -->
                   </div>
-                  <div class="col-lg-8">
-                    <div class="d-flex flex-column flex-md-row justify-content-around chart-container">
+                  <div class="row col-lg-8 d-flex flex-column flex-md-row justify-content-center chart-container">
                       <!-- Start GPA charts -->
-                        <div><canvas  id="CGPAchart">{{ CGPAchart }}</canvas></div>
-                        <div><canvas  id="EGPAchart">{{ EGPAchart }}</canvas></div>
+                        <div class="col-6 align-self-center">
+                          <canvas id="current">{{ CGPAchart }}</canvas>
+                        </div>
+                        <div class="col-6 align-self-center">
+                          <canvas id="estm">{{ EGPAchart }}</canvas>
+                        </div>
                       <!-- End GPA charts -->
-                    </div>
                   </div>
                 </div>
             </div>
@@ -38,10 +43,10 @@
         <!-- End Semester Card -->
 
         <!-- Start Progress Chart Card -->
-        <div class="col-lg-5 col-md-12 align-self-stretch">
+        <div class="col-lg-5 col-md-12 align-self-stretch m-0">
           <div class="card">
             <div class="card-header text-left" style="margin-top: 0;">
-              <h2>Progess Chart</h2>
+              <h2 class="header">Progess Chart</h2>
             </div>
             <div class="card-body container chart-container">
               <canvas  id="progressChart">{{ progressChart }}</canvas>
@@ -55,28 +60,27 @@
       <!-- Start 2nd row -->
       <div class="row">
         <!-- Start Course's Card -->
-        <div class="col-lg-3 col-md-6">
-          <div class="card course-card">
-            <div class="card-header text-center">
-              <h3>Course Name</h3>
-            </div>
-            <div class="card-body upcoming-items">
+        <div class="col-lg-3 col-sm-6" *ngFor="let num of [0,1,2,3]">
+          <mat-card class="card course-card p-4">
+            <mat-card-title class="card-title text-center mt-2">{{ current.currentUser.getAllCourse[num].courseCode }}</mat-card-title>
+            <mat-card-subtitle class="card-subtitle text-center">{{ current.currentUser.getAllCourse[num].courseName }}</mat-card-subtitle>
+            <mat-card-content class="card-body upcoming-items">
               <h5 class="card-title">Upcoming:</h5>
-              <h6 class="card-subtitle">Assignment 1:</h6> 
-              <mat-slider class="w-100" color="warn">
+              <h6 class="card-subtitle">Assignment:</h6> 
+              <mat-slider thumbLabel class="w-100" color="warn" min="60" max="100">
                   <input matSliderThumb>
               </mat-slider>
-              <h6 class="card-subtitle">Exam 1:</h6> 
-              <mat-slider class="w-100" color="warn">
+              <h6 class="card-subtitle">Exam:</h6> 
+              <mat-slider thumbLabel class="w-100" color="warn" min="60" max="100">
                   <input matSliderThumb>
               </mat-slider>
-            </div>
-            <div class="card-footer d-flex flex-row-reverse">
-              <button class="mt-2" mat-fab color="true" aria-label="">
+            </mat-card-content>
+            <mat-card-actions class="mb-1" align="end">
+              <button class="m-2" mat-fab color="true" aria-label="Go to course's specific page">
                 <mat-icon>keyboard_double_arrow_right</mat-icon>
               </button>
-            </div>
-          </div>
+            </mat-card-actions>
+          </mat-card>
         </div>
         <!-- End Course's Card -->
       </div>
