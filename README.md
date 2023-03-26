@@ -7,8 +7,7 @@ Upgrade
 # Getting Started
 1. cd .\Server\
 2. npm install
-3. nodemon
+3. node index.js
 4. cd .\Client\
 5. npm install (if you are having trouble use npm install --force)
 6. ng serve
-

@@ -14,6 +14,11 @@ import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { LoginComponent } from 'app/login/login.component';
 import { StudentDashboardComponent } from 'app/student-dashboard/student-dashboard.component';
 import { DetailedViewComponent } from 'app/detailed-view/detailed-view.component';
+import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
+import { HttpLink } from 'apollo-angular/http';
+import { HttpClientModule } from '@angular/common/http';
+import { InMemoryCache } from '@apollo/client/core';
+
 
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
@@ -42,6 +47,8 @@ import {NgChartsModule} from 'ng2-charts';
     MatIconModule,
     MatCardModule,
     NgChartsModule,
+    ApolloModule,
+    HttpClientModule
   ],
   declarations: [
     DashboardComponent,
@@ -55,6 +62,20 @@ import {NgChartsModule} from 'ng2-charts';
     LoginComponent,
     StudentDashboardComponent,
     DetailedViewComponent,
+  ],
+  providers: [
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory(httpLink: HttpLink) {
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: 'http://localhost:4000/graphql'
+          })
+        }
+      },
+      deps: [HttpLink]
+    }
   ]
 })
 
