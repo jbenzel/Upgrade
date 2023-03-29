@@ -57,6 +57,7 @@ const typeDefs = gql`
         getGradebyGradeID(gradeIDParam: ID!): Grade
         getAllGradesbyUserID(userIDParam: ID!): [Grade]
         getAllGradebyCourseID(courseIDParam: ID!): [Grade]
+        sendResetEmail(emailParam: String): User
    
     }
 
