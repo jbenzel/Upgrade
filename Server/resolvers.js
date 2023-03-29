@@ -58,7 +58,7 @@ const resolvers = {
             
             return Course;
         },
-        async  getCoursesbyUserID(root, { userIDParam }, { models }) {
+        async  getAllCoursesbyUserID(root, { userIDParam }, { models }) {
             let Course = await models.Course.findAll({ where: { userID: userIDParam } });
             
             return Course;
@@ -75,13 +75,13 @@ const resolvers = {
             
             return Grade;
         },
-        async  getGradesbyUserID(root, { userIDParam }, { models }) {
+        async  getAllGradesbyUserID(root, { userIDParam }, { models }) {
             let Grade = await models.Grade.findAll({ where: { userID: userIDParam } });
             
             return Grade;
         },
-        async  getGradebyGradeID(root, { courseIDParam }, { models }) {
-            let Grade = await models.Grade.findOne({ where: { courseID: courseIDParam } });
+        async  getAllGradebyCourseID(root, { courseIDParam }, { models }) {
+            let Grade = await models.Grade.findAll({ where: { courseID: courseIDParam } });
             
             return Grade;
         },
