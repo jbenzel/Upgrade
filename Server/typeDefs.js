@@ -51,12 +51,12 @@ const typeDefs = gql`
         
         getAllCourse: [Course]
         getCoursebyCourseID(courseIDParam: ID!): Course
-        getCoursesbyUserID(userIDParam: ID!): [Course]
+        getAllCoursesbyUserID(userIDParam: ID!): [Course]
 
         getAllGrade: [Grade]
         getGradebyGradeID(gradeIDParam: ID!): Grade
-        getGradesbyUserID(userIDParam: ID!): [Grade]
-        getGradebyCourseID(courseIDParam: ID!): Grade
+        getAllGradesbyUserID(userIDParam: ID!): [Grade]
+        getAllGradebyCourseID(courseIDParam: ID!): [Grade]
    
     }
 
