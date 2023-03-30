@@ -12,6 +12,11 @@ import {
   styleUrls: ['./pass-reset-page.component.scss']
 })
 export class PassResetPageComponent implements OnInit {
+
+  token = new FormControl('', [
+    Validators.required,
+  ]);
+
   password = new FormControl('', [
     Validators.required, 
     Validators.minLength(8), 
@@ -31,9 +36,9 @@ export class PassResetPageComponent implements OnInit {
   submit(){
     if(this.password.value !== this.conf_password.value){
       this.notMatching = true
-    }else if(this.conf_password.valid && this.password.valid){
+    }else if(this.conf_password.valid && this.password.valid && this.token.valid){
       this.notMatching = false
-
+      //check that token is valid in backend
       alert('success')
     }else{
       
@@ -62,6 +67,14 @@ export class PassResetPageComponent implements OnInit {
   validate_conf_password_syntax(){
     if(this.conf_password.hasError('required')){
       return 'Must confirm password';
+    } else {
+      return '';
+    }
+  }
+
+  token_required(){
+    if(this.token.hasError('required')){
+      return 'Token required';
     } else {
       return '';
     }

@@ -67,6 +67,7 @@ async function upcoming_notif(){
                 query: GET_GRADES,
                 variables: {userIdParam: current_student}
             });
+            //must filter out far out grades, only include upcoming in the next 2 weeks or so
             var grades_response = data
 
             var grades_info = [] //array of JSON objects for each upcoming grade within 2 weeks
@@ -93,6 +94,8 @@ async function upcoming_notif(){
                 var day = due_date.slice(8)
                 var year = due_date.slice(0, 4)
                 var due_date = month+"/"+day+"/"+year
+                //if due_date later than the next 2 weeks, continue to next iteration
+                //  continue
 
                 var {data} = await BackClient.query({
                     query: GET_COURSE,
