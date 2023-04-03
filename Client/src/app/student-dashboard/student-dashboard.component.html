@@ -1,3 +1,4 @@
+<script src="https://kit.fontawesome.com/8aef0bca49.js" crossorigin="anonymous"></script>
 <div class="main-content">
   <div class="container-fluid">
       <!-- Start 1st row -->
@@ -5,18 +6,23 @@
         <!-- Start Semester Card -->
         <div class="col-lg-7 col-md-12 align-self-stretch m-0">
           <div class="card">
+            <!-- Start Semester Card header -->
             <div class="card-header text-left">
               <h2 class="header">Semester Overview</h2>
             </div>
+            <!-- End Semester Card header -->
+
+            <!-- Start Semester Card body -->
             <div class="card-body container">
                 <div class="row no-gutters">
                   <div class="row col-lg-4 justify-content-center align-items-center">
                       <!-- Start User Input -->
+                      <button mat-raised-button color="primary" (click)="queryTest()">Test Query</button>
                       <div class="col-lg-12 col-md-6 w-100 mb-0">
-                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="CGPA">Current GPA:</p>
-                          <div class="input-border">
+                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="CGPA">Current GPA: {{CGPA}}</p>
+                          <!-- <div class="input-border">
                             <input class="input" id="CGPA" [(ngModel)]="afterCGPA" (change)="updateCurrChartData()" type="text" min="1.5" max="4" placeholder="CGPA" >
-                          </div>
+                          </div> -->
                       </div>
                       <div class="col-lg-12 col-md-6 w-100 mt-0">
                           <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="EGPA">Estimated GPA:</p>
@@ -38,6 +44,7 @@
                   </div>
                 </div>
             </div>
+            <!-- End Semester Card body -->
           </div>
         </div>
         <!-- End Semester Card -->
@@ -65,18 +72,13 @@
             <mat-card-title class="card-title text-center mt-2">{{ current.currentUser.getAllCourse[num].courseCode }}</mat-card-title>
             <mat-card-subtitle class="card-subtitle text-center">{{ current.currentUser.getAllCourse[num].courseName }}</mat-card-subtitle>
             <mat-card-content class="card-body upcoming-items">
-              <h5 class="card-title">Upcoming:</h5>
-              <h6 class="card-subtitle">Assignment:</h6> 
-              <mat-slider thumbLabel class="w-100" color="warn" min="60" max="100">
-                  <input matSliderThumb>
-              </mat-slider>
-              <h6 class="card-subtitle">Exam:</h6> 
-              <mat-slider thumbLabel class="w-100" color="warn" min="60" max="100">
-                  <input matSliderThumb>
-              </mat-slider>
+              <h5 class="card-title mb-0">Upcoming:</h5>
+              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #ec2222;"></span>Assignment 1</p>
+              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #00c31d;"></span>Exam 2</p>
+              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #ede20d;"></span>Exam 1</p>
             </mat-card-content>
             <mat-card-actions class="mb-1" align="end">
-              <button class="m-2" mat-fab color="true" aria-label="Go to course's specific page">
+              <button class="m-1" mat-fab color="true" aria-label="Go to course's specific page">
                 <mat-icon>keyboard_double_arrow_right</mat-icon>
               </button>
             </mat-card-actions>

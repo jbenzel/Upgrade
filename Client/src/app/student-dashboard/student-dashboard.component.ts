@@ -1,8 +1,20 @@
 import { Component, OnInit, OnChanges, SimpleChanges, Input,HostListener, ViewChild, ViewChildren, ChangeDetectorRef, QueryList, AfterViewInit, ElementRef } from '@angular/core';
 import { Chart, ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
-// import { data } from 'jquery';
-// import { NgChartsModule, NgChartsConfiguration, BaseChartDirective } from 'ng2-charts';
 import * as userInfo from './student-info.json';
+import { Apollo, gql, QueryRef } from 'apollo-angular';
+
+const GET_ALL_USERS = gql`
+query GetAllUser {
+  getAllUser {
+    userID
+    email
+    password
+    role
+    firstName
+    lastName
+  }
+}
+`;
 
 @Component({
   selector: 'app-student-dashboard',
@@ -11,9 +23,28 @@ import * as userInfo from './student-info.json';
 })
 export class StudentDashboardComponent implements OnInit, AfterViewInit {
 
-  constructor() {}
-  ngOnInit(): void {}
+  getAllSOVQuery!: QueryRef<any>;
+
+  constructor(private apollo: Apollo) { }
+  ngOnInit(): void {
+    this.getAllSOVQuery = this.apollo.watchQuery<any>({
+      query: GET_ALL_USERS,
+    });
+  }
+
+  // Testing queries
+  queryTest() {
+    this.apollo.watchQuery<any>({
+      query: GET_ALL_USERS
+    }).valueChanges
+      .subscribe(({ data }) => {
+        console.log(data);
+      });
+
+    this.getAllSOVQuery.refetch();
+  }
   
+  // chart variables
   public EGPAchart: any;
   public CGPAchart: any;
   public progressChart: any;
@@ -30,6 +61,7 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
     this.createCGPAChart('current');
   }
 
+  // start updating Current GPA Donut Chart
   updateCurrChartData() {
     // Update the chart data with the new value
     const newGPA = [Number(this.afterCGPA), 4 - this.afterCGPA];
@@ -41,7 +73,9 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
     this.CGPAchart.update();
     this.CGPAchart.render();
   }
+  // end updating Current GPA Donut Chart
 
+  // start updating Estimated GPA Donut Chart
   updateEstmatedChartData() {
     // Update the chart data with the new value
     const newGPA = [Number(this.afterEGPA), 4 - this.afterEGPA];
@@ -53,7 +87,9 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
     this.EGPAchart.update();
     this.EGPAchart.render();
   }
+  // end updating Estimated GPA Donut Chart
 
+  // start creating Estimated GPA Donut Chart
   createEGPAChart(chartId) {
     this.EGPAchart = new Chart(chartId, {
       type: 'doughnut',
@@ -73,7 +109,9 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
       }
     });
   }
+  // end creating Estimated GPA Donut Chart
 
+  // start creating Current GPA Donut Chart
   createCGPAChart(chartId) {
     this.CGPAchart = new Chart(chartId, {
       type: 'doughnut',
@@ -93,7 +131,9 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
       }
     });
   }
+  // end creating Current GPA Donut Chart
 
+  // start creating Progress Line Chart
   createProgressChart(chartId){
     this.progressChart = new Chart(chartId, {
       type: 'line', //this denotes tha type of chart
@@ -145,5 +185,6 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
       }
     });
   }
+  // end creating Progress Line Chart
 
 }
