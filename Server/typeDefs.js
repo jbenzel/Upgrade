@@ -7,9 +7,9 @@ const typeDefs = gql`
         userID: ID!
         email: String!
         password: String!
-        role: Int
         firstName: String
         lastName: String
+        role: Int
     }
 
     type Student {
@@ -22,19 +22,32 @@ const typeDefs = gql`
 
     type Course {
         courseID: ID!
-        courseCode: String
         courseName: String
+        courseCode: String
+        courseNum: Int
+        credits: Int
+        userID: ID!
+    }
+
+    type PrevCourse {
+        prevCourseID: ID!
+        pCourseName: String
+        pCourseNum: Int
+        PCourseGrade: Float
+        pCourseCredits: Int
         userID: ID!
     }
 
     type Grade {
         gradeID: ID!
-        urgency: Int
-        weight: Float
+        name: String
         dueDate: String
         expectedGrade: Float
         grade: Float
         category: String
+        weight: Float
+        urgency: Int
+        locked: Boolean
         courseID: ID!
         userID: ID!
     }
@@ -53,6 +66,10 @@ const typeDefs = gql`
         getCoursebyCourseID(courseIDParam: ID!): Course
         getAllCoursesbyUserID(userIDParam: ID!): [Course]
 
+        getAllPrevCourse: [PrevCourse]
+        getPrevCoursebyPrevCourseID(prevCourseID: ID!): PrevCourse
+        getAllPrevCoursesbyUserID(userIDParam: ID!): [PrevCourse]
+
         getAllGrade: [Grade]
         getGradebyGradeID(gradeIDParam: ID!): Grade
         getAllGradesbyUserID(userIDParam: ID!): [Grade]
@@ -61,20 +78,24 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        addUser(email: String!, password: String!, role: Int, firstName: String, lastName: String): User
-        updateUser(userIDParam: Int!, email: String, password: String, role: Int, firstName: String, lastName: String): User
+        addUser(email: String!, password: String!, firstName: String, lastName: String, role: Int): User
+        updateUser(userIDParam: Int!, email: String!, password: String!, firstName: String, lastName: String, role: Int): User
         deleteUser(userIDParam: Int!): User
 
         addStudent(eGPA: Float, cGPA: Float, completedCourseCount: Int, userID: Int!): Student
         updateStudent(studentIDParam: ID!, eGPA: Float, cGPA: Float, completedCourseCount: Int, userID: Int!): Student
         deleteStudent(studentIDParam: ID!): Student
     
-        addCourse(courseCode: String, courseName: String, userID: ID!): Course
-        updateCourse(courseIDParam: ID!, courseCode: String, courseName: String, userID: ID!): Course
+        addCourse(courseName: String, courseCode: String, courseNum: Int, courseCredits: Int, userID: ID!): Course
+        updateCourse(courseIDParam: ID!, courseName: String, courseCode: String, courseNum: Int, courseCredits: Int, userID: ID!): Course
         deleteCourse(courseIDParam: ID!): Course
 
-        addGrade(urgency: Int, weight: Float, dueDate: String, expectedGrade: Float, grade: Float, category: String, courseID: ID!, userID: ID!): Grade
-        updateGrade(gradeIDParam: ID!, urgency: Int, weight: Float, dueDate: String, expectedGrade: Float, grade: Float, category: String, courseID: ID!, userID: ID!): Grade
+        addPrevCourse(pCourseName: String, pCourseNum: Int, pCourseGrade: Float, pCourseCredits: Int, userID: ID!): PrevCourse
+        updatePrevCourse(prevCourseIDParam: ID!, pCourseName: String, pCourseNum: Int, pCourseGrade: Float, pCourseCredits: Int, userID: ID!): PrevCourse
+        deletePrevCourse(prevCourseIDParam: ID!): PrevCourse
+
+        addGrade(name: String, dueDate: String, expectedGrade: Float, grade: Float, category: String, weight: Float, urgency: Int, locked: Boolean, courseID: ID!, userID: ID!): Grade
+        updateGrade(gradeIDParam: ID!, name: String, dueDate: String, expectedGrade: Float, grade: Float, category: String, weight: Float, urgency: Int, locked: Boolean, courseID: ID!, userID: ID!): Grade
         deleteGrade(gradeIDParam: ID!): Grade
     }
 `;
