@@ -61,11 +61,7 @@ const resolvers = {
             
             return Course;
         },
-/*
-        getAllPrevCourse: [Course]
-        getPrevCoursebyPrevCourseID(prevCourseID: ID!): Course
-        getAllPrevCoursesbyUserID(userIDParam: ID!): [Course]
-*/
+
         //PrevCourse
         async getAllPrevCourse(root, { prevCourseIDParam }, { models }) {
             let PrevCourse = await models.PrevCourse.findAll();
@@ -77,10 +73,27 @@ const resolvers = {
             
             return PrevCourse;
         },
-        async  getAllPrevCoursesbyUserID(root, { userIDParam }, { models }) {
+        async  getAllPrevCoursebyUserID(root, { userIDParam }, { models }) {
             let PrevCourse = await models.PrevCourse.findAll({ where: { userID: userIDParam } });
             
             return PrevCourse;
+        },
+
+        //Token
+        async getAllToken(root, { tokenIDParam }, { models }) {
+            let Token = await models.Token.findAll();
+
+            return Token;
+        },
+        async  getTokenbyTokenID(root, { tokenIDParam }, { models }) {
+            let Token = await models.Token.findOne({ where: { tokenID: tokenIDParam } });
+            
+            return Token;
+        },
+        async  getTokenbyUserID(root, { userIDParam }, { models }) {
+            let Token = await models.Token.findAll({ where: { userID: userIDParam } });
+            
+            return Token;
         },
 
         //Grade
@@ -265,6 +278,42 @@ const resolvers = {
                 return false;
             });
         },
+
+        //Token Mutations
+
+        addToken(root, { content, creationTime, userID}, { models } ){
+            return models.Token.create({
+                content: content, 
+                creationTime: creationTime, 
+                userID: userID
+            })
+        },
+        updateToken(root, { tokenIDParam, content, creationTime, userID}, { models } ){
+            models.Token.update({
+                content: content, 
+                creationTime: creationTime, 
+                userID: userID
+            },
+            {
+                where: { tokenID: tokenIDParam }
+            }).catch(err => {
+                return err;
+            });
+            return models.Token.findOne({ where: { tokenID: tokenIDParam } });
+        
+        },
+        deleteToken(root, { tokenIDParam }, { models } ){
+            models.PrevCourse.destroy(
+                {
+                    where: { tokenID: tokenIDParam }
+                }
+            ).then((result) => {
+                return result;
+            }).catch(err => {
+                return false;
+            });
+        },
+
 
         //Grade Mutations
         addGrade(root, { name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID }, { models }) {
