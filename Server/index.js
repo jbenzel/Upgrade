@@ -27,14 +27,14 @@ User.init({
     password: {
         type: Sequelize.DataTypes.TEXT
     },
-    role: {
-        type: Sequelize.DataTypes.TINYINT //8bit instead of 32
-    },
     firstName: {
         type: Sequelize.DataTypes.TEXT
     },
     lastName: {
         type: Sequelize.DataTypes.TEXT
+    }, 
+    role: {
+        type: Sequelize.DataTypes.INTEGER //8bit instead of 32
     }
 },{ sequelize, timestamps: false })
 //models["User"] = User;
@@ -55,7 +55,7 @@ Student.init({
         type: Sequelize.DataTypes.FLOAT
     },
     completedCourseCount: {
-        type: Sequelize.DataTypes.SMALLINT
+        type: Sequelize.DataTypes.INTEGER
     }
 }, { sequelize, timestamps: false })
 //models["Student"] = Student;
@@ -69,14 +69,42 @@ Course.init({
         autoIncrement: true
     },
     //inherit userID
+    courseName:{
+        type: Sequelize.DataTypes.TEXT
+    },
     courseCode:{
         type: Sequelize.DataTypes.TEXT
     },
-    courseName:{
-        type: Sequelize.DataTypes.TEXT
+    courseNum:{
+        type: Sequelize.DataTypes.INTEGER
+    },
+    credits:{
+        type: Sequelize.DataTypes.INTEGER
     }
 }, { sequelize, timestamps: false })
 //models["Course"] = Course;
+
+class PrevCourse extends Model {
+}
+PrevCourse.init({
+    prevCourseID:{
+        type: Sequelize.DataTypes.INTEGER,
+        primaryKey: true, 
+        autoIncrement: true
+    },
+    pCourseName:{
+        type: Sequelize.DataTypes.TEXT
+    },
+    pCourseNum:{
+        type: Sequelize.DataTypes.INTEGER
+    },
+    pCourseGrade:{
+        type: Sequelize.DataTypes.FLOAT
+    },
+    pCourseCredits:{
+        type: Sequelize.DataTypes.INTEGER
+    }
+}, { sequelize, timestamps: false })
 
 class Grade extends Model {
 }
@@ -88,11 +116,9 @@ Grade.init({
     },
     //inherit userID
     //inherit courseID
-    urgency:{
-        type: Sequelize.DataTypes.TINYINT
-    },
-    weight:{
-        type: Sequelize.DataTypes.FLOAT
+    
+    gradeName:{
+        type: Sequelize.DataTypes.TEXT
     },
     dueDate:{
         type: Sequelize.DataTypes.DATE //DATEONLY if time isnt neccesary
@@ -106,6 +132,15 @@ Grade.init({
     category:{
         type: Sequelize.DataTypes.TEXT
     },
+    weight:{
+        type: Sequelize.DataTypes.FLOAT
+    },
+    urgency:{
+        type: Sequelize.DataTypes.INTEGER
+    },
+    locked:{
+        type: Sequelize.DataTypes.BOOLEAN
+    },
     userID:{
         type: Sequelize.DataTypes.TEXT
     }
@@ -116,6 +151,9 @@ Student.belongsTo(User, {
     foreignKey: 'userID'
 });
 Course.belongsTo(User, {
+    foreignKey: 'userID'
+});
+PrevCourse.belongsTo(User, {
     foreignKey: 'userID'
 });
 Grade.belongsTo(Course, {
@@ -133,6 +171,7 @@ sequelize.authenticate();
 models["User"] = User;
 models["Student"] = Student;
 models["Course"] = Course;
+models["PrevCourse"] = PrevCourse;
 models["Grade"] = Grade;
 
 const server = new ApolloServer({

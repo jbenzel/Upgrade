@@ -63,6 +63,27 @@ const resolvers = {
             
             return Course;
         },
+/*
+        getAllPrevCourse: [Course]
+        getPrevCoursebyPrevCourseID(prevCourseID: ID!): Course
+        getAllPrevCoursesbyUserID(userIDParam: ID!): [Course]
+*/
+        //PrevCourse
+        async getAllPrevCourse(root, { prevCourseIDParam }, { models }) {
+            let PrevCourse = await models.PrevCourse.findAll();
+
+            return PrevCourse;
+        },
+        async  getPrevCoursebyPrevCourseID(root, { prevCourseIDParam }, { models }) {
+            let PrevCourse = await models.PrevCourse.findOne({ where: { prevCourseID: prevCourseIDParam } });
+            
+            return PrevCourse;
+        },
+        async  getAllPrevCoursesbyUserID(root, { userIDParam }, { models }) {
+            let PrevCourse = await models.PrevCourse.findAll({ where: { userID: userIDParam } });
+            
+            return PrevCourse;
+        },
 
         //Grade
         async  getAllGrade(root, { gradeIDParam }, { models }) {
@@ -105,27 +126,27 @@ const resolvers = {
 
     },
     Mutation: {
-        addUser(root, { email, password, role, firstName, lastName }, { models }) {
+        addUser(root, { email, password, firstName, lastName, role }, { models }) {
             return models.User.create({
                 email: email,
                 password: password,
-                role: role,
                 firstName: firstName,
                 lastName: lastName,
+                role: role
             }).catch(err => {
                 //console.log(err);
             });
         },
-        updateUser(root, { userIDParam, email, password, role, firstName, lastName }, { models }) {           
+        updateUser(root, { userIDParam, email, password, firstName, lastName, role }, { models }) {           
             if(email == null){
                 return "Email is null"
             }
             models.User.update({
                 email: email,
                 password: password,
-                role: role,
                 firstName: firstName,
                 lastName: lastName,
+                role: role
             },
             {
                 where: { userID: userIDParam }
@@ -187,19 +208,23 @@ const resolvers = {
         },
 
         //Course Mutations
-        addCourse(root, { courseCode, courseName, userID }, { models }) {
+        addCourse(root, { courseName, courseCode, courseNum, courseCredits, userID }, { models }) {
             return models.Course.create({
-                courseCode: courseCode,
                 courseName: courseName,
+                courseCode: courseCode,
+                coursNum: courseNum, 
+                courseCredits: courseCredits,
                 userID: userID
             }).catch(err => {
                 return err;
             });
         },
-        updateCourse(root, { courseIDParam, courseCode, courseName, userID }, {models}){        
+        updateCourse(root, { courseIDParam, courseName, courseCode, courseNum, courseCredits, userID }, {models}){        
             models.Course.update({
-                courseCode: courseCode,
                 courseName: courseName,
+                courseCode: courseCode,
+                coursNum: courseNum, 
+                courseCredits: courseCredits,
                 userID: userID
             },
             {
@@ -221,15 +246,56 @@ const resolvers = {
             });
         },
 
+        //PrevCourseMutations
+        addPrevCourse(root, { pCourseName, pCourseNum, pCourseGrade, pCourseCredits, userID }, { models }) {
+            return models.PrevCourse.create({
+                pCourseName: pCourseName,
+                pCourseNum: pCourseNum,
+                pCourseGrade: pCourseGrade, 
+                pCourseCredits: pCourseCredits, 
+                userID: userID
+            }).catch(err => {
+                return err;
+            });
+        },
+        updatePrevCourse(root, { prevCourseIDParam, pCourseName, pCourseNum, pCourseGrade, pCourseCredits, userID }, {models}){        
+            models.PrevCourse.update({
+                pCourseName: pCourseName,
+                pCourseNum: pCourseNum,
+                pCourseGrade: pCourseGrade, 
+                pCourseCredits: pCourseCredits, 
+                userID: userID
+            },
+            {
+                where: { prevCourseID: prevCourseIDParam }
+            }).catch(err => {
+                return err;
+            });
+            return models.PrevCourse.findOne({ where: { prevCourseID: prevCourseIDParam } });
+        },
+        deletePrevCourse(root, { prevCourseIDParam }, { models }) {
+            models.PrevCourse.destroy(
+                {
+                    where: { courseID: prevCourseIDParam }
+                }
+            ).then((result) => {
+                return result;
+            }).catch(err => {
+                return false;
+            });
+        },
+
         //Grade Mutations
-        addGrade(root, { urgency, weight, dueDate, expectedGrade, grade, category, courseID, userID }, { models }) {
+        addGrade(root, { name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID }, { models }) {
             return models.Grade.create({
-                urgency: urgency, 
-                weight: weight,
-                dueDate: dueDate,
-                expectedGrade: expectedGrade, 
+                name: name,
+                dueDate: dueDate, 
+                expectedGrade: expectedGrade,
                 grade: grade, 
                 category: category, 
+                weight: weight, 
+                urgency: urgency, 
+                locked: locked, 
                 courseID: courseID, 
                 userID: userID
             }).catch(err => {
@@ -237,14 +303,16 @@ const resolvers = {
                 return err;
             });
         },
-        updateGrade(root, { gradeIDParam, urgency, weight, dueDate, expectedGrade, grade, category, courseID, userID }, { models }) {
+        updateGrade(root, { gradeIDParam, name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID }, { models }) {
             models.Grade.update({
-                urgency: urgency, 
-                weight: weight,
-                dueDate: dueDate,
-                expectedGrade: expectedGrade, 
+                name: name,
+                dueDate: dueDate, 
+                expectedGrade: expectedGrade,
                 grade: grade, 
                 category: category, 
+                weight: weight, 
+                urgency: urgency, 
+                locked: locked, 
                 courseID: courseID, 
                 userID: userID
             },
