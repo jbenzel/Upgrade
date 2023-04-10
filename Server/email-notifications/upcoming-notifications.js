@@ -75,7 +75,7 @@ async function upcoming_notif(){
             for(let gra = 0; gra < grades_response.getAllGradesbyUserID.length; gra++){
                 var current_grade = grades_response.getAllGradesbyUserID[gra]
                 //still waiting on name attribute for grades
-                var grade_name = "[pending]"
+                var grade_name = current_grade.name
                 var urgency = current_grade.urgency
                 switch(urgency){
                     case 1: urgency = "GREAT"
