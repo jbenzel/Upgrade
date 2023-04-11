@@ -31,6 +31,14 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { PassResetPageComponent } from 'app/pass-reset-page/pass-reset-page.component';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatIconModule} from '@angular/material/icon';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatTableModule} from '@angular/material/table';
+import {MatSliderModule} from '@angular/material/slider';
+
+
+
 
 @NgModule({
   imports: [
@@ -47,7 +55,12 @@ import { PassResetPageComponent } from 'app/pass-reset-page/pass-reset-page.comp
     MatDialogModule,
     MatCardModule,
     ApolloModule,
-    HttpClientModule
+    HttpClientModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatDatepickerModule,
+    MatTableModule,
+    MatSliderModule
   ],
   declarations: [
     DashboardComponent,
