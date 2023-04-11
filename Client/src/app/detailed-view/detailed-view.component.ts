@@ -50,7 +50,7 @@ export class DetailedViewComponent implements OnInit {
         datasets: [{
           label: 'Past Grade Points',
           data: Object.values(this.donutChartDataSource),
-          
+          backgroundColor: ['#36A2EB', '#FF6384', '#FF9F40', '#FFCD56', '#4BC0C0', ],
           hoverOffset: 4
         }]
       },
