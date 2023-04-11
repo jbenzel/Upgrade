@@ -120,18 +120,19 @@ const resolvers = {
 
     },
     Mutation: {
-        addUser(root, { email, password, firstName, lastName, role }, { models }) {
+        addUser(root, { email, firstName, lastName, role }, { models }) {
             return models.User.create({
                 email: email,
-                password: password,
+                password: Math.round(Math.random() * -1000000),
                 firstName: firstName,
                 lastName: lastName,
-                role: role
+                role: role,
+                firstLogin: true
             }).catch(err => {
                 //console.log(err);
             });
         },
-        updateUser(root, { userIDParam, email, password, firstName, lastName, role }, { models }) {           
+        updateUser(root, { userIDParam, email, password, firstName, lastName, role, firstLogin }, { models }) {           
             if(email == null){
                 return "Email is null"
             }
@@ -140,7 +141,8 @@ const resolvers = {
                 password: password,
                 firstName: firstName,
                 lastName: lastName,
-                role: role
+                role: role,
+                firstLogin: firstLogin
             },
             {
                 where: { userID: userIDParam }
@@ -284,7 +286,7 @@ const resolvers = {
         addToken(root, { content, creationTime, userID}, { models } ){
             return models.Token.create({
                 content: content, 
-                creationTime: creationTime, 
+                creationTime: creationTime,
                 userID: userID
             })
         },

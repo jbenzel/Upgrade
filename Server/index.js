@@ -36,6 +36,7 @@ User.init({
     },
     firstLogin: { 
         type: Sequelize.DataTypes.BOOLEAN
+        
     }
 },{ sequelize, timestamps: false })
 //models["User"] = User;
