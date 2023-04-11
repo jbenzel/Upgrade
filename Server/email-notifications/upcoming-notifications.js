@@ -23,6 +23,7 @@ async function upcoming_notif(){
         getAllGradesbyUserID(userIDParam: $userIdParam) {
           dueDate
           courseID
+          name
         }
       }
     `;
@@ -75,17 +76,20 @@ async function upcoming_notif(){
                 var current_grade = grades_response.getAllGradesbyUserID[gra]
                 //still waiting on name attribute for grades
                 var grade_name = current_grade.name
-                
+
                 //dueDate still needs to be redone for final date format
-                var due_date = new Date(parseInt(current_grade.dueDate))
-                due_date = due_date.toISOString().slice(0, 10)
-                var month = due_date.slice(5, 7)
-                var day = due_date.slice(8)
-                var year = due_date.slice(0, 4)
-                var due_date = month+"/"+day+"/"+year
+                var due_date = current_grade.dueDate
+                //var due_date = new Date(parseInt(current_grade.dueDate))
+                //due_date = due_date.toISOString().slice(0, 10)
+                //var month = due_date.slice(5, 7)
+                //var day = due_date.slice(8)
+                //var year = due_date.slice(0, 4)
+                //var due_date = month+"/"+day+"/"+year
+
                 //if due_date later than the next 2 weeks, continue to next iteration
                 //  continue
 
+                //get the name of the course based on course ID
                 var {data} = await BackClient.query({
                     query: GET_COURSE,
                     variables: {courseIdParam: current_grade.courseID}
@@ -103,10 +107,10 @@ async function upcoming_notif(){
             //lastly, get student email
             var {data} = await BackClient.query({
                 query: GET_EMAIL,
-                variables: {userIdParam: current_grade.courseID}
+                variables: {userIdParam: current_student}
             });
             var email = data.getUserbyID.email
-            console.log(email)
+            console.log("sending to "+email)
 
             //send email for each student:
             var response = client.sendEmailWithTemplate({
@@ -121,12 +125,13 @@ async function upcoming_notif(){
                     "company_address": ""
                 }
             })
-            console.log("Send response:\n"+response)
+            console.log("Send response: "+(await response).ErrorCode)
 
         }
 
     }else{
-        console.log('No emails to send in database.')
+        //if no grades in database for this student
+        console.log('No grades to send in database.')
     }
 
 };
