@@ -29,16 +29,14 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
-import { MatCardModule } from '@angular/material/card';
 import { PassResetPageComponent } from 'app/pass-reset-page/pass-reset-page.component';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {MatIconModule} from '@angular/material/icon';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatTableModule} from '@angular/material/table';
-import {MatSliderModule} from '@angular/material/slider';
-
-
-
+import {MatSliderModule} from '@angular/material/slider'; 
+import {MatIconModule} from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+import {NgChartsModule} from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -54,6 +52,10 @@ import {MatSliderModule} from '@angular/material/slider';
     MatTooltipModule,
     MatDialogModule,
     MatCardModule,
+    MatSliderModule,
+    MatIconModule,
+    MatCardModule,
+    NgChartsModule,
     ApolloModule,
     HttpClientModule,
     MatExpansionModule,
