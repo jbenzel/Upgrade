@@ -17,6 +17,14 @@ query ($emailParam: String, $passwordParam: String) {
 }
 `;
 
+const CHECK_LOGIN = gql`
+query ($emailParam: String) {
+  getUserbyEmail(emailParam: $emailParam) {
+    firstLogin
+  }
+}
+`;
+
 
 @Component({
   selector: 'app-login',
@@ -24,6 +32,7 @@ query ($emailParam: String, $passwordParam: String) {
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
   getAllSOVQuery!: QueryRef<any>;
   username = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [
@@ -36,37 +45,65 @@ export class LoginComponent implements OnInit {
   invalid_creds: boolean = false;
   must_be_valid: boolean = false;
   reset_password: boolean = false;
+
   constructor(public dialog: MatDialog, private apollo: Apollo) { }
 
+
   submit(){
+
+
     if(this.username.valid && this.password.valid){
+      //if valid syntax, check for valid creds in backend
       this.apollo.watchQuery<any>({
-        query: VALIDATE_USER,
+        query: CHECK_LOGIN,
         variables: {
           "emailParam": this.username.value,
-          "passwordParam": this.password.value
         }
       }).valueChanges.subscribe(({ data }) => {
-          //console.log(data);
-          if(data.validateUser != null){
-            //valid login, reroute to proper page
-            //pass username and password fields to render dashboard
-            alert('succes')
-            this.must_be_valid = false
-            this.invalid_creds = false
+
+          console.log(data.getUserbyEmail.firstLogin)
+          //check that not first login
+          if(!data.getUserbyEmail.firstLogin){
+
+            this.apollo.watchQuery<any>({
+              query: VALIDATE_USER,
+              variables: {
+                "emailParam": this.username.value,
+                "passwordParam": this.password.value
+              }
+            }).valueChanges.subscribe(({ data }) => {
+
+              console.log(data.validateUser)
+              //check that credentials are valid
+              if(data.validateUser != null){
+                //route to dashboard upon successful login
+                alert('succes')
+                this.must_be_valid = false
+                this.invalid_creds = false
+
+              }else{
+                //invalid creds, alert user
+                this.invalid_creds = true
+                this.must_be_valid = false
+              }
+
+            });
 
           }else{
             //invalid creds, alert user
-            alert('invalid creds')
             this.invalid_creds = true
             this.must_be_valid = false
           }
       });
-      
+
+
+      //console.log(validated+" and "+firstLogin)
+
+          
+
       //getAllSOVQuery.refetch gives me issues
       //this.getAllSOVQuery.refetch();
     }else{
-      alert('syntax error still present')
       this.must_be_valid = true
       this.invalid_creds = false
     }
