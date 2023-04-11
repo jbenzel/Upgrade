@@ -10,6 +10,7 @@ const typeDefs = gql`
         firstName: String
         lastName: String
         role: Int
+        firstLogin: Boolean
     }
 
     type Student {
@@ -33,8 +34,15 @@ const typeDefs = gql`
         prevCourseID: ID!
         pCourseName: String
         pCourseNum: Int
-        PCourseGrade: Float
+        pCourseGrade: Float
         pCourseCredits: Int
+        userID: ID!
+    }
+
+    type Token { 
+        tokenID: ID!
+        content: String
+        creationTime: String
         userID: ID!
     }
 
@@ -49,7 +57,7 @@ const typeDefs = gql`
         urgency: Int
         locked: Boolean
         courseID: ID!
-        userID: ID!
+        userID: ID
     }
 
     type Query {
@@ -67,8 +75,12 @@ const typeDefs = gql`
         getAllCoursesbyUserID(userIDParam: ID!): [Course]
 
         getAllPrevCourse: [PrevCourse]
-        getPrevCoursebyPrevCourseID(prevCourseID: ID!): PrevCourse
-        getAllPrevCoursesbyUserID(userIDParam: ID!): [PrevCourse]
+        getPrevCoursebyPrevCourseID(prevCourseIDParam: ID!): PrevCourse
+        getAllPrevCoursebyUserID(userIDParam: ID!): [PrevCourse]
+
+        getAllToken: [Token]
+        getTokenbyTokenID(tokenIDParam: ID!): Token
+        getTokenbyUserID(userIDParam: ID!): Token
 
         getAllGrade: [Grade]
         getGradebyGradeID(gradeIDParam: ID!): Grade
@@ -78,8 +90,8 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        addUser(email: String!, password: String!, firstName: String, lastName: String, role: Int): User
-        updateUser(userIDParam: Int!, email: String!, password: String!, firstName: String, lastName: String, role: Int): User
+        addUser(email: String!, firstName: String, lastName: String, role: Int): User
+        updateUser(userIDParam: Int!, email: String!, password: String!, firstName: String, lastName: String, role: Int, firstLogin: Boolean): User
         deleteUser(userIDParam: Int!): User
 
         addStudent(eGPA: Float, cGPA: Float, completedCourseCount: Int, userID: Int!): Student
@@ -93,6 +105,10 @@ const typeDefs = gql`
         addPrevCourse(pCourseName: String, pCourseNum: Int, pCourseGrade: Float, pCourseCredits: Int, userID: ID!): PrevCourse
         updatePrevCourse(prevCourseIDParam: ID!, pCourseName: String, pCourseNum: Int, pCourseGrade: Float, pCourseCredits: Int, userID: ID!): PrevCourse
         deletePrevCourse(prevCourseIDParam: ID!): PrevCourse
+
+        addToken(content: String, creationTime: String, userID: ID!): Token
+        updateToken(tokenIDParam: ID!, content: String, creationTime: String, userID: ID!): Token
+        deleteToken(tokenIDParam: ID!): Token
 
         addGrade(name: String, dueDate: String, expectedGrade: Float, grade: Float, category: String, weight: Float, urgency: Int, locked: Boolean, courseID: ID!, userID: ID!): Grade
         updateGrade(gradeIDParam: ID!, name: String, dueDate: String, expectedGrade: Float, grade: Float, category: String, weight: Float, urgency: Int, locked: Boolean, courseID: ID!, userID: ID!): Grade

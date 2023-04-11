@@ -33,6 +33,10 @@ User.init({
     }, 
     role: {
         type: Sequelize.DataTypes.INTEGER //8bit instead of 32
+    },
+    firstLogin: { 
+        type: Sequelize.DataTypes.BOOLEAN
+        
     }
 },{ sequelize, timestamps: false })
 //models["User"] = User;
@@ -104,6 +108,23 @@ PrevCourse.init({
     }
 }, { sequelize, timestamps: false })
 
+class Token extends Model{
+}
+Token.init({
+    tokenID: {
+        type: Sequelize.DataTypes.INTEGER, 
+        primaryKey: true, 
+        autoIncrement: true
+    },
+    content: {
+        type: Sequelize.DataTypes.TEXT
+    },
+    creationTime: {
+        type: Sequelize.DataTypes.STRING
+    }
+}, { sequelize, timestamps: false })
+
+
 class Grade extends Model {
 }
 Grade.init({
@@ -115,11 +136,11 @@ Grade.init({
     //inherit userID
     //inherit courseID
     
-    gradeName:{
+    name:{
         type: Sequelize.DataTypes.TEXT
     },
     dueDate:{
-        type: Sequelize.DataTypes.DATE //DATEONLY if time isnt neccesary
+        type: Sequelize.DataTypes.STRING //DATEONLY if time isnt neccesary
     },
     expectedGrade:{
         type: Sequelize.DataTypes.FLOAT
@@ -154,6 +175,10 @@ Course.belongsTo(User, {
 PrevCourse.belongsTo(User, {
     foreignKey: 'userID'
 });
+Token.belongsTo(User, {
+    foreignKey: 'userID'
+});
+
 Grade.belongsTo(Course, {
     foreignKey: 'courseID'
 });
@@ -170,6 +195,7 @@ models["User"] = User;
 models["Student"] = Student;
 models["Course"] = Course;
 models["PrevCourse"] = PrevCourse;
+models["Token"] = Token;
 models["Grade"] = Grade;
 
 const server = new ApolloServer({
