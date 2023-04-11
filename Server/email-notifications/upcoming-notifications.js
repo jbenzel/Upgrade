@@ -21,7 +21,6 @@ async function upcoming_notif(){
     const GET_GRADES = gql`
     query ($userIdParam: ID!) {
         getAllGradesbyUserID(userIDParam: $userIdParam) {
-          urgency
           dueDate
           courseID
         }
@@ -52,7 +51,6 @@ async function upcoming_notif(){
     });
     if(data.getAllStudent.length !== 0){
         console.log('Sending to '+data.getAllStudent.length+' students.')
-        //console.log(data)
         var studentIDs = data.getAllStudent
 
         const api_auth_token = "46b03d09-207a-4f2d-9796-4a5f31c642a7"
@@ -71,23 +69,14 @@ async function upcoming_notif(){
             var grades_response = data
 
             var grades_info = [] //array of JSON objects for each upcoming grade within 2 weeks
-            //for each grade
+
+            //for each grade, produce JSON and store in grades_info
             for(let gra = 0; gra < grades_response.getAllGradesbyUserID.length; gra++){
                 var current_grade = grades_response.getAllGradesbyUserID[gra]
                 //still waiting on name attribute for grades
                 var grade_name = current_grade.name
-                var urgency = current_grade.urgency
-                switch(urgency){
-                    case 1: urgency = "GREAT"
-                    break
-                    case 2: urgency = "OK"
-                    break
-                    case 3: urgency = "IMPORTANT"
-                    break
-                    case 4: urgency = "VITAL"
-                    break
-                    case 5: urgency = "URGENT"
-                }
+                
+                //dueDate still needs to be redone for final date format
                 var due_date = new Date(parseInt(current_grade.dueDate))
                 due_date = due_date.toISOString().slice(0, 10)
                 var month = due_date.slice(5, 7)
@@ -107,7 +96,6 @@ async function upcoming_notif(){
                     "class": course_name,
                     "name": grade_name,
                     "dueDate": due_date,
-                    "urgency": urgency
                 })
 
             }
@@ -121,7 +109,7 @@ async function upcoming_notif(){
             console.log(email)
 
             //send email for each student:
-            /*var response = client.sendEmailWithTemplate({
+            var response = client.sendEmailWithTemplate({
                 "From": upg_email,
                 "To": email,
                 "TemplateAlias": "upcoming-notification",
@@ -133,7 +121,7 @@ async function upcoming_notif(){
                     "company_address": ""
                 }
             })
-            console.log("Send response:\n"+response)*/
+            console.log("Send response:\n"+response)
 
         }
 
