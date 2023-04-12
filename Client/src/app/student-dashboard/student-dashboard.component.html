@@ -17,7 +17,6 @@
                 <div class="row no-gutters">
                   <div class="row col-lg-4 justify-content-center align-items-center">
                       <!-- Start User Input -->
-                      <button mat-raised-button color="primary" (click)="queryTest()">Test Query</button>
                       <div class="col-lg-12 col-md-6 w-100 mb-0">
                           <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="CGPA">Current GPA: {{CGPA}}</p>
                           <!-- <div class="input-border">
@@ -67,13 +66,13 @@
       <!-- Start 2nd row -->
       <div class="row">
         <!-- Start Course's Card -->
-        <div class="col-lg-3 col-sm-6" *ngFor="let num of [0,1,2,3]">
+        <div class="col-lg-3 col-sm-6" *ngFor="let course of courseList">
           <mat-card class="card course-card p-4">
-            <mat-card-title class="card-title text-center mt-2">{{ current.currentUser.getAllCourse[num].courseCode }}</mat-card-title>
-            <mat-card-subtitle class="card-subtitle text-center">{{ current.currentUser.getAllCourse[num].courseName }}</mat-card-subtitle>
+            <mat-card-title class="card-title text-center mt-2">{{ course.courseCode }}</mat-card-title>
+            <mat-card-subtitle class="card-subtitle text-center">{{ course.courseName }}</mat-card-subtitle>
             <mat-card-content class="card-body upcoming-items">
               <h5 class="card-title mb-0">Upcoming:</h5>
-              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #ec2222;"></span>Assignment 1</p>
+              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #ec2222;"></span></p>
               <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #00c31d;"></span>Exam 2</p>
               <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #ede20d;"></span>Exam 1</p>
             </mat-card-content>

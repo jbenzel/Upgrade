@@ -15,7 +15,35 @@ query GetAllUser {
   }
 }
 `;
-
+const GET_ALL_COURSES = gql`
+query GetAllCoursesbyUserID($userIdParam: ID!) {
+  getAllCoursesbyUserID(userIDParam: $userIdParam) {
+    courseID
+    courseName
+    courseCode
+    courseNum
+    credits
+    userID
+  }
+}
+`;
+const GET_ALL_GRADES = gql`
+query GetAllGradesbyUserID($userIdParam: ID!) {
+  getAllGradesbyUserID(userIDParam: $userIdParam) {
+    gradeID
+    name
+    dueDate
+    expectedGrade
+    grade
+    category
+    weight
+    urgency
+    locked
+    courseID
+    userID
+  }
+}
+`;
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
@@ -25,24 +53,62 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
 
   getAllSOVQuery!: QueryRef<any>;
 
+  public userID: number = 1;
+  public courseList: any;
+  public gradesList: any;
+  
   constructor(private apollo: Apollo) { }
   ngOnInit(): void {
     this.getAllSOVQuery = this.apollo.watchQuery<any>({
       query: GET_ALL_USERS,
     });
+
+    this.getCourses();
+    this.getGrades();
+    console.log(this.courseList);
   }
 
-  // Testing queries
-  queryTest() {
+  // start querying all course
+  getCourses() {
     this.apollo.watchQuery<any>({
-      query: GET_ALL_USERS
+      query: GET_ALL_COURSES,
+      variables: {
+        "userIdParam": this.userID
+      }
     }).valueChanges
       .subscribe(({ data }) => {
         console.log(data);
+        this.courseList = data.getAllCoursesbyUserID;
+        console.log(this.courseList);
       });
 
     this.getAllSOVQuery.refetch();
   }
+  // end querying all course
+
+  // start querying all grades
+  getGrades() {
+    this.apollo.watchQuery<any>({
+      query: GET_ALL_GRADES,
+      variables: {
+        "userIdParam": this.userID
+      }
+    }).valueChanges
+      .subscribe(({ data }) => {
+        console.log(data);
+        this.gradesList = data.getAllGradesbyUserID;
+        console.log(this.gradesList);
+      });
+
+    this.getAllSOVQuery.refetch();
+  }
+  // end querying all grades
+
+  // start mapping grades to corresponsing course
+  mappingGrades() {
+
+  }
+  // end mapping grades to corresponsing course
   
   // chart variables
   public EGPAchart: any;
@@ -59,6 +125,22 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
     this.createProgressChart('progressChart');
     this.createEGPAChart('estm');
     this.createCGPAChart('current');
+
+    // Loop through the outer array using forEach()
+    this.courseList.forEach(course => {
+
+      this.gradesList.forEach(grade => {
+        // Find the matching object in the toysArray
+        let matchingCourse = this.gradesList.find(grade => grade.courseID === course.courseID);
+      
+        // If there is a matching toy, add it to the pet's toys array
+        if (matchingCourse) {
+          course.grades = grade;
+        }
+      });
+    });
+
+    console.log(this.courseList);
   }
 
   // start updating Current GPA Donut Chart
