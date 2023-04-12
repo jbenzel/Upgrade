@@ -1,3 +1,4 @@
+
 const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
 const { Sequelize } = require("sequelize")
@@ -33,7 +34,7 @@ User.init({
         type: Sequelize.DataTypes.TEXT
     }, 
     role: {
-        type: Sequelize.DataTypes.INTEGER //8bit instead of 32
+        type: Sequelize.DataTypes.INTEGER 
     },
     firstLogin: { 
         type: Sequelize.DataTypes.BOOLEAN
@@ -212,7 +213,6 @@ server.listen().then(({ url }) => {
   });
 
 
-  tokenExpireLoop()
   setInterval(() => {
     tokenExpireLoop()
-  }, 10000)
+  }, (10 * 1000) )
