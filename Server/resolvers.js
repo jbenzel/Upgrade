@@ -283,29 +283,8 @@ const resolvers = {
 
         //Token Mutations
 
-        addToken(root, { content, creationTime, userID}, { models } ){
-            return models.Token.create({
-                content: content, 
-                creationTime: creationTime,
-                userID: userID
-            })
-        },
-        updateToken(root, { tokenIDParam, content, creationTime, userID}, { models } ){
-            models.Token.update({
-                content: content, 
-                creationTime: creationTime, 
-                userID: userID
-            },
-            {
-                where: { tokenID: tokenIDParam }
-            }).catch(err => {
-                return err;
-            });
-            return models.Token.findOne({ where: { tokenID: tokenIDParam } });
-        
-        },
         deleteToken(root, { tokenIDParam }, { models } ){
-            models.PrevCourse.destroy(
+            models.Token.destroy(
                 {
                     where: { tokenID: tokenIDParam }
                 }
@@ -314,6 +293,30 @@ const resolvers = {
             }).catch(err => {
                 return false;
             });
+        },
+        
+        async createorUpdateToken(root, { tokenIDParam, content, creationTime, userID}, { models } ){
+            let Token = await models.Token.findOne({ where: {userID: userID} });
+            let date = Date.now();
+            date = date.toString();
+            if(Token != null){
+                models.Token.update({
+                    content: content, 
+                    creationTime: date, 
+                    userID: userID
+                },
+                {
+                    where: { userID: userID }
+                })
+            }
+            else{
+                models.Token.create({
+                    content: content, 
+                    creationTime: date,
+                    userID: userID
+                })
+            }
+            return models.Token.findOne({ where: { userID: userID } });
         },
 
 

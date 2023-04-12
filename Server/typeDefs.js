@@ -40,7 +40,7 @@ const typeDefs = gql`
     }
 
     type Token { 
-        tokenID: ID!
+        tokenID: ID
         content: String
         creationTime: String
         userID: ID!
@@ -106,9 +106,8 @@ const typeDefs = gql`
         updatePrevCourse(prevCourseIDParam: ID!, pCourseName: String, pCourseNum: Int, pCourseGrade: Float, pCourseCredits: Int, userID: ID!): PrevCourse
         deletePrevCourse(prevCourseIDParam: ID!): PrevCourse
 
-        addToken(content: String, creationTime: String, userID: ID!): Token
-        updateToken(tokenIDParam: ID!, content: String, creationTime: String, userID: ID!): Token
         deleteToken(tokenIDParam: ID!): Token
+        createorUpdateToken(tokenIDParam: ID, content: String, creationTime: String, userID: ID!): Token
 
         addGrade(name: String, dueDate: String, expectedGrade: Float, grade: Float, category: String, weight: Float, urgency: Int, locked: Boolean, courseID: ID!, userID: ID!): Grade
         updateGrade(gradeIDParam: ID!, name: String, dueDate: String, expectedGrade: Float, grade: Float, category: String, weight: Float, urgency: Int, locked: Boolean, courseID: ID!, userID: ID!): Grade

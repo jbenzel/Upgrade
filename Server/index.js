@@ -2,6 +2,7 @@ const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
 const { Sequelize } = require("sequelize")
 const { ApolloServer, gql } = require("apollo-server");
+const tokenExpireLoop = require('./tokenAutoDelete')
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -209,3 +210,9 @@ const server = new ApolloServer({
 server.listen().then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
   });
+
+
+  tokenExpireLoop()
+  setInterval(() => {
+    tokenExpireLoop()
+  }, 10000)
