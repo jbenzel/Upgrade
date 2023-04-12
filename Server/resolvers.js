@@ -307,13 +307,17 @@ const resolvers = {
                 },
                 {
                     where: { userID: userID }
-                })
+                }).catch(err => {
+                    return false;
+                })                
             }
             else{
                 models.Token.create({
                     content: content, 
                     creationTime: date,
                     userID: userID
+                }).catch(err => {
+                    return false;
                 })
             }
             return models.Token.findOne({ where: { userID: userID } });
