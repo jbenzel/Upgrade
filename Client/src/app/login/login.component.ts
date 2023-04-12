@@ -45,26 +45,26 @@ export class LoginComponent implements OnInit {
   invalid_creds: boolean = false;
   must_be_valid: boolean = false;
   reset_password: boolean = false;
+  first_login: boolean = true;
 
   constructor(public dialog: MatDialog, private apollo: Apollo) { }
 
-
   submit(){
 
-
     if(this.username.valid && this.password.valid){
-      //if valid syntax, check for valid creds in backend
+      //if valid syntax, proceed with backend checks
+      //check that not first login
       this.apollo.watchQuery<any>({
         query: CHECK_LOGIN,
         variables: {
           "emailParam": this.username.value,
         }
-      }).valueChanges.subscribe(({ data }) => {
+      }).valueChanges.subscribe((first_login_check) => {
 
-          console.log(data.getUserbyEmail.firstLogin)
-          //check that not first login
-          if(!data.getUserbyEmail.firstLogin){
+          this.first_login = first_login_check.data.getUserbyEmail.firstLogin
+          console.log(this.first_login)
 
+            //check that credentials are valid
             this.apollo.watchQuery<any>({
               query: VALIDATE_USER,
               variables: {
@@ -74,32 +74,21 @@ export class LoginComponent implements OnInit {
             }).valueChanges.subscribe(({ data }) => {
 
               console.log(data.validateUser)
-              //check that credentials are valid
-              if(data.validateUser != null){
-                //route to dashboard upon successful login
+
+              if(data.validateUser != null && !this.first_login){
+                //if both criteria met, route to dashboard upon successful login
                 alert('succes')
                 this.must_be_valid = false
                 this.invalid_creds = false
 
               }else{
                 //invalid creds, alert user
-                this.invalid_creds = true
                 this.must_be_valid = false
+                this.invalid_creds = true
               }
 
             });
-
-          }else{
-            //invalid creds, alert user
-            this.invalid_creds = true
-            this.must_be_valid = false
-          }
       });
-
-
-      //console.log(validated+" and "+firstLogin)
-
-          
 
       //getAllSOVQuery.refetch gives me issues
       //this.getAllSOVQuery.refetch();
@@ -107,6 +96,7 @@ export class LoginComponent implements OnInit {
       this.must_be_valid = true
       this.invalid_creds = false
     }
+
     this.clear();
   }
 
