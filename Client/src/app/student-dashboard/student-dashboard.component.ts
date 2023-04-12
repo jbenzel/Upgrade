@@ -56,6 +56,9 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
   public userID: number = 1;
   public courseList: any;
   public gradesList: any;
+  public newCourseList: any[] = [];
+  public newGradesList: any[] = [];
+  public mergedList: any;
   
   constructor(private apollo: Apollo) { }
   ngOnInit(): void {
@@ -65,7 +68,6 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
 
     this.getCourses();
     this.getGrades();
-    console.log(this.courseList);
   }
 
   // start querying all course
@@ -77,9 +79,12 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
       }
     }).valueChanges
       .subscribe(({ data }) => {
-        console.log(data);
         this.courseList = data.getAllCoursesbyUserID;
         console.log(this.courseList);
+
+        data.getAllCoursesbyUserID.forEach(course => {
+          this.newCourseList.push(course);
+        });
       });
 
     this.getAllSOVQuery.refetch();
@@ -95,9 +100,12 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
       }
     }).valueChanges
       .subscribe(({ data }) => {
-        console.log(data);
         this.gradesList = data.getAllGradesbyUserID;
         console.log(this.gradesList);
+
+        data.getAllGradesbyUserID.forEach(grade => {
+          this.newGradesList.push(grade);
+        });
       });
 
     this.getAllSOVQuery.refetch();
@@ -106,7 +114,35 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
 
   // start mapping grades to corresponsing course
   mappingGrades() {
+    this.apollo.watchQuery<any>({
+      query: GET_ALL_COURSES,
+      variables: {
+        "userIdParam": this.userID
+      }
+    }).valueChanges
+      .subscribe((courses) => {
 
+        this.apollo.watchQuery<any>({
+          query: GET_ALL_GRADES,
+          variables: {
+            "userIdParam": this.userID
+          }
+        }).valueChanges.subscribe((grades) => {
+
+          // Merging two arrays
+          this.mergedList = courses.data.getAllCoursesbyUserID.map(course => {
+            const matchingItem = grades.data.getAllGradesbyUserID.filter((grade) =>course.courseID === grade.courseID);
+            return {
+              ...course,
+              gradeslist: matchingItem ? [matchingItem] : []
+            };
+          });
+          console.log(this.mergedList);
+          
+        });
+      });
+
+    this.getAllSOVQuery.refetch();
   }
   // end mapping grades to corresponsing course
   
@@ -125,22 +161,7 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
     this.createProgressChart('progressChart');
     this.createEGPAChart('estm');
     this.createCGPAChart('current');
-
-    // Loop through the outer array using forEach()
-    this.courseList.forEach(course => {
-
-      this.gradesList.forEach(grade => {
-        // Find the matching object in the toysArray
-        let matchingCourse = this.gradesList.find(grade => grade.courseID === course.courseID);
-      
-        // If there is a matching toy, add it to the pet's toys array
-        if (matchingCourse) {
-          course.grades = grade;
-        }
-      });
-    });
-
-    console.log(this.courseList);
+    this.mappingGrades();
   }
 
   // start updating Current GPA Donut Chart
