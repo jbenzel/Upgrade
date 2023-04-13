@@ -133,11 +133,10 @@ const resolvers = {
         async sendResetEmail(root, { emailParam }, { models }) {
             let User = await models.User.findOne({ where: { email: emailParam } });
             if(User != null){
-                //first check if token available
-
-                //then send email
-                var response = reset_password(emailParam)
-                if((await response).ErrorCode == 0){
+                //if user exists, execute procedure
+                var success = reset_password(emailParam)
+                console.log(await success)
+                if(await success){
                     //if no errors while sending
                     return User;
                 }

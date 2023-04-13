@@ -10,17 +10,50 @@ async function reset_password(email) {
         cache: new InMemoryCache(),
     });
 
+    const GET_USER_ID = gql`
+    query ($emailParam: String) {
+        getUserbyEmail(emailParam: $emailParam) {
+          userID
+        }
+      }
+    `;
+
+    const MAKE_TOKEN = gql`
+    mutation($userId: ID!) {
+        createorUpdateToken(userID: $userId) {
+          content
+        }
+      }
+    `;
+
     const upg_email = "mjr076@shsu.edu" //will have to use an shsu.edu email as source for upGrade
     const reset_url = "http://localhost:4200/#/pass-reset" //link to reset page
 
-    //check if token already exists, update. else, generate new token
-    var user_token
+    //get userID by email
+    var user_id = await BackClient.query({
+        query: GET_USER_ID,
+        variables: {emailParam: email}
+    });
+    console.log(user_id.data.getUserbyEmail.userID)
+
+    //generate / update token and fetch it
+    var token_data = await BackClient.mutate({
+        mutation: MAKE_TOKEN,
+        variables: {userId: user_id.data.getUserbyEmail.userID}
+    });
+
+    if(token_data.errors != undefined){
+        console.log("Errors encountered attempting to create/update Token")
+        return false
+    }
+
+    var user_token = token_data.data.createorUpdateToken.content
+    console.log(user_token)
 
     console.log('Sending reset link to '+email)
 
     //to send email:
-    
-    var response = client.sendEmailWithTemplate({
+    var response = await client.sendEmailWithTemplate({
         "From": upg_email,
         "To": email,
         "TemplateAlias": "password-reset",
@@ -29,7 +62,7 @@ async function reset_password(email) {
             "product_name": "upGrade",
             "name": email,
             "auth_token": user_token,
-            "action_url": reset_url, //URL To be determined, action_url must be filled to properly load the button in the email
+            "action_url": reset_url, //URL To be determined
             "company_name": "upGrade",
             "company_address": "",
             "operating_system": "",
@@ -38,8 +71,12 @@ async function reset_password(email) {
         }
     })
     
-    console.log("Error Code is: "+(await response).ErrorCode)
-    return (await response)
+    console.log("Error Code is: "+(response).ErrorCode)
+    if((response).ErrorCode == 0){
+        return true
+    }
+    console.log("Non 0 Error code while sending: Code "+(response).ErrorCode)
+    return false
     
 };
 
