@@ -35,7 +35,7 @@ async function autoDeleteToken(){
       for(let t = 0; t < tokenTimes.length; t++){
         //console.log(tokenTimes[t].creationTime)
         if( cDate > (parseInt(tokenTimes[t].creationTime) + 1800000) ){
-            //console.log("this prompted true at: " + tokenTimes[t].creationTime)
+            console.log("this prompted true at: " + tokenTimes[t].creationTime + " when current time is: " + cDate)
             await BackClient.mutate({
                 mutation: deleteTokenbyID, 
                 variables: {

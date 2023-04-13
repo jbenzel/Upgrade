@@ -1,3 +1,13 @@
+const characters ='+-!_%$#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
+function generateString(length) {
+    let result = '';
+    const charLength = characters.length;
+    for(let i = 0; i < length; i++){
+        result += characters.charAt(Math.floor(Math.random() * charLength));
+    }
+    return result;
+}
+
 const resolvers = {
     Query: {
         //User Query
@@ -120,10 +130,11 @@ const resolvers = {
 
     },
     Mutation: {
-        addUser(root, { email, firstName, lastName, role }, { models }) {
+        async addUser(root, { email, firstName, lastName, role }, { models }) {
+            let inPass = await generateString(16)
             return models.User.create({
                 email: email,
-                password: Math.round(Math.random() * -1000000),
+                password: inPass,
                 firstName: firstName,
                 lastName: lastName,
                 role: role,
@@ -299,9 +310,10 @@ const resolvers = {
             let Token = await models.Token.findOne({ where: {userID: userID} });
             let date = Date.now();
             date = date.toString();
+            let inPass = await generateString(8)
             if(Token != null){
                 models.Token.update({
-                    content: content, 
+                    content: inPass, 
                     creationTime: date, 
                     userID: userID
                 },
@@ -313,7 +325,7 @@ const resolvers = {
             }
             else{
                 models.Token.create({
-                    content: content, 
+                    content: generateString(6), 
                     creationTime: date,
                     userID: userID
                 }).catch(err => {
