@@ -7,6 +7,13 @@
         </div>
         <div class="card-body">
           <div class="input-field">
+            <mat-form-field class="login-input-box" appearance="outline">
+              <mat-label class="mat-label">
+                SHSU Email
+              </mat-label>
+              <input matInput placeholder="example@shsu.edu" [formControl]="username" required>
+              <mat-error *ngIf="username.invalid">{{validate_user_syntax()}}</mat-error>
+            </mat-form-field>
             <mat-form-field class="pass-input-box" appearance="outline">
               <mat-label class="mat-label">
                 Token
@@ -32,8 +39,13 @@
               type="password" [formControl]="conf_password" required>
               <mat-error *ngIf='password.invalid'>{{validate_conf_password_syntax()}}</mat-error>
             </mat-form-field>
-          <div *ngIf="notMatching">
-            <h6 style="color:red">Passwords do not match</h6>
+          <div style="text-align:center;">
+            <div *ngIf="notMatching">
+              <h6 style="color:red">Passwords do not match</h6>
+            </div>
+            <div *ngIf="syntax_error">
+              <h6 style="color:red">Invalid data in field(s)</h6>
+            </div>
           </div>
           <div>
             <h4>

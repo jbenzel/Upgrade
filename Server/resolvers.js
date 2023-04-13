@@ -145,6 +145,12 @@ const resolvers = {
             return null;
         },
 
+
+        async setNewPassword(root, { emailParam, password, content }, { models }) {
+            
+            return null;
+        },
+
     },
     Mutation: {
         async addUser(root, { email, firstName, lastName, role }, { models }) {

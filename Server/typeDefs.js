@@ -87,6 +87,7 @@ const typeDefs = gql`
         getAllGradesbyUserID(userIDParam: ID!): [Grade]
         getAllGradebyCourseID(courseIDParam: ID!): [Grade]
         sendResetEmail(emailParam: String): User
+        setNewPassword(emailParam: String, password: String, content: String): User
    
     }
 

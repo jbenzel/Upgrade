@@ -13,6 +13,8 @@ import {
 })
 export class PassResetPageComponent implements OnInit {
 
+  username = new FormControl('', [Validators.required, Validators.email]);
+
   token = new FormControl('', [
     Validators.required,
   ]);
@@ -30,22 +32,41 @@ export class PassResetPageComponent implements OnInit {
   ]);
 
   notMatching = false
+  syntax_error = false
 
   constructor() { }
 
   submit(){
     if(this.password.value !== this.conf_password.value){
       this.notMatching = true
-    }else if(this.conf_password.valid && this.password.valid && this.token.valid){
+    }else if(this.conf_password.valid && this.password.valid 
+      && this.token.valid &&this.username.valid){
+
       this.notMatching = false
-      //check that token is valid in backend
+      this.syntax_error = false
+      //call setNewPassword to check token is valid, if so destroy it
+
+
+      //route to dashboard
       alert('success')
     }else{
-      
-      alert('Another error')
+      this.syntax_error = true
     }
     //then must reroute to login page
     this.clear()
+  }
+
+  validate_user_syntax(){
+    if (this.username.hasError('required')) {
+      //empty field
+      return 'SHSU email required';
+    } else if(this.username.hasError('email')){
+      //invalid email syntax
+      return 'Not a valid email';
+    } else{
+      //no syntax error detected
+      return '';
+    }
   }
 
   validate_password_syntax(){
