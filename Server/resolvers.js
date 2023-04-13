@@ -1,4 +1,13 @@
 const reset_password = require('./email-notifications/password-reset')
+const characters ='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
+function generateString(length) {
+    let result = '';
+    const charLength = characters.length;
+    for(let i = 0; i < length; i++){
+        result += characters.charAt(Math.floor(Math.random() * charLength));
+    }
+    return result;
+}
 
 const resolvers = {
     Query: {
@@ -139,16 +148,17 @@ const resolvers = {
 
     },
     Mutation: {
-        addUser(root, { email, firstName, lastName, role }, { models }) {
+        async addUser(root, { email, firstName, lastName, role }, { models }) {
+            let inPass = await generateString(16)
             return models.User.create({
                 email: email,
-                password: Math.round(Math.random() * -1000000),
+                password: inPass,
                 firstName: firstName,
                 lastName: lastName,
                 role: role,
                 firstLogin: true
             }).catch(err => {
-                //console.log(err);
+                return err;
             });
         },
         updateUser(root, { userIDParam, email, password, firstName, lastName, role, firstLogin }, { models }) {           
@@ -302,29 +312,8 @@ const resolvers = {
 
         //Token Mutations
 
-        addToken(root, { content, creationTime, userID}, { models } ){
-            return models.Token.create({
-                content: content, 
-                creationTime: creationTime,
-                userID: userID
-            })
-        },
-        updateToken(root, { tokenIDParam, content, creationTime, userID}, { models } ){
-            models.Token.update({
-                content: content, 
-                creationTime: creationTime, 
-                userID: userID
-            },
-            {
-                where: { tokenID: tokenIDParam }
-            }).catch(err => {
-                return err;
-            });
-            return models.Token.findOne({ where: { tokenID: tokenIDParam } });
-        
-        },
         deleteToken(root, { tokenIDParam }, { models } ){
-            models.PrevCourse.destroy(
+            models.Token.destroy(
                 {
                     where: { tokenID: tokenIDParam }
                 }
@@ -333,6 +322,35 @@ const resolvers = {
             }).catch(err => {
                 return false;
             });
+        },
+        
+        async createorUpdateToken(root, { tokenIDParam, content, creationTime, userID}, { models } ){
+            let Token = await models.Token.findOne({ where: {userID: userID} });
+            let date = Date.now();
+            date = date.toString();
+            let inPass = await generateString(8)
+            if(Token != null){
+                models.Token.update({
+                    content: inPass, 
+                    creationTime: date, 
+                    userID: userID
+                },
+                {
+                    where: { userID: userID }
+                }).catch(err => {
+                    return false;
+                })                
+            }
+            else{
+                models.Token.create({
+                    content: generateString(6), 
+                    creationTime: date,
+                    userID: userID
+                }).catch(err => {
+                    return false;
+                })
+            }
+            return models.Token.findOne({ where: { userID: userID } });
         },
 
 
