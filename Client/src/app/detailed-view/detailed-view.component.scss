@@ -1,0 +1,112 @@
+table {
+    width: 100%;
+  }
+
+.top-div{
+  width: 100%;
+  display: inline-block;
+}
+
+.dashboard-button{
+  background-color: #424242bb;
+  color: white;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.add-grade-button{
+  background-color: #52b788;
+  color: white;
+  font-size: 22px;
+  margin-left: 12.5%;
+  width: 40%;
+}
+
+.left-accord{
+  padding: 0;
+  width: 65%;
+  float: left;
+}
+
+.chart-container{
+  float: right;
+  width: 32%;
+}
+
+.history-table{
+  background-color: rgba(128, 128, 128, 0.015);
+}
+
+::ng-deep.future-grade-info{
+  display: inline-block;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 15vw;
+}
+
+.future-grade{
+  width: 100%;
+  padding: 5px;
+  background-color: rgba(128, 128, 128, 0.015);
+}
+
+.slider-box{
+  width: 100%;
+  display:inline-block;
+}
+
+.grade-input{
+  font-size: 16px;
+  display: inline-block;
+  padding: 0;
+  margin: 25px 0px 0px 10px;
+  width: 60px;
+  height: 70px;
+}
+
+.example-label-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 10px 0;
+  max-width: 284px;
+}
+
+.example-result-card .example-value-label {
+  font-weight: 600;
+}
+
+::ng-deep .mat-accent .mat-slider-track-fill {
+  background-color: #F56423 !important;
+}
+
+::ng-deep .mat-slider-thumb-label {
+  background-color: #f47438 !important;
+
+}
+
+::ng-deep.mat-slider-thumb {
+  background-color: #F56423 !important;
+}
+
+.grade-info-container{
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.future-grade-button-container{
+  width: 40%;
+  float: right;
+  margin-top: 30px;
+}
+
+.future-grade-button{
+  margin-left: 5px;
+  margin-right: 5px;
+  background-color: #f56623df;
+}
+
+::ng-deep .toolTip{
+  background-color: rgba(17, 17, 17, 0.59) !important;
+  color: white !important;
+}

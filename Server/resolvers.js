@@ -1,3 +1,5 @@
+const reset_password = require('./email-notifications/password-reset')
+
 const resolvers = {
     Query: {
         //User Query
@@ -56,10 +58,44 @@ const resolvers = {
             
             return Course;
         },
-        async  getCoursesbyUserID(root, { userIDParam }, { models }) {
+        async  getAllCoursesbyUserID(root, { userIDParam }, { models }) {
             let Course = await models.Course.findAll({ where: { userID: userIDParam } });
             
             return Course;
+        },
+
+        //PrevCourse
+        async getAllPrevCourse(root, { prevCourseIDParam }, { models }) {
+            let PrevCourse = await models.PrevCourse.findAll();
+
+            return PrevCourse;
+        },
+        async  getPrevCoursebyPrevCourseID(root, { prevCourseIDParam }, { models }) {
+            let PrevCourse = await models.PrevCourse.findOne({ where: { prevCourseID: prevCourseIDParam } });
+            
+            return PrevCourse;
+        },
+        async  getAllPrevCoursebyUserID(root, { userIDParam }, { models }) {
+            let PrevCourse = await models.PrevCourse.findAll({ where: { userID: userIDParam } });
+            
+            return PrevCourse;
+        },
+
+        //Token
+        async getAllToken(root, { tokenIDParam }, { models }) {
+            let Token = await models.Token.findAll();
+
+            return Token;
+        },
+        async  getTokenbyTokenID(root, { tokenIDParam }, { models }) {
+            let Token = await models.Token.findOne({ where: { tokenID: tokenIDParam } });
+            
+            return Token;
+        },
+        async  getTokenbyUserID(root, { userIDParam }, { models }) {
+            let Token = await models.Token.findAll({ where: { userID: userIDParam } });
+            
+            return Token;
         },
 
         //Grade
@@ -73,40 +109,59 @@ const resolvers = {
             
             return Grade;
         },
-        async  getGradesbyUserID(root, { userIDParam }, { models }) {
+        async  getAllGradesbyUserID(root, { userIDParam }, { models }) {
             let Grade = await models.Grade.findAll({ where: { userID: userIDParam } });
             
             return Grade;
         },
-        async  getGradebyGradeID(root, { courseIDParam }, { models }) {
-            let Grade = await models.Grade.findOne({ where: { courseID: courseIDParam } });
+        async  getAllGradebyCourseID(root, { courseIDParam }, { models }) {
+            let Grade = await models.Grade.findAll({ where: { courseID: courseIDParam } });
             
             return Grade;
         },
 
+        //Executions (Marcos added this, remove if it starts breaking stuff)
+        async sendResetEmail(root, { emailParam }, { models }) {
+            let User = await models.User.findOne({ where: { email: emailParam } });
+            if(User != null){
+                //first check if token available
+
+                //then send email
+                var response = reset_password(emailParam)
+                if((await response).ErrorCode == 0){
+                    //if no errors while sending
+                    return User;
+                }
+                return null;
+            }
+            return null;
+        },
+
     },
     Mutation: {
-        addUser(root, { email, password, role, firstName, lastName }, { models }) {
+        addUser(root, { email, firstName, lastName, role }, { models }) {
             return models.User.create({
                 email: email,
-                password: password,
-                role: role,
+                password: Math.round(Math.random() * -1000000),
                 firstName: firstName,
                 lastName: lastName,
+                role: role,
+                firstLogin: true
             }).catch(err => {
                 //console.log(err);
             });
         },
-        updateUser(root, { userIDParam, email, password, role, firstName, lastName }, { models }) {           
+        updateUser(root, { userIDParam, email, password, firstName, lastName, role, firstLogin }, { models }) {           
             if(email == null){
                 return "Email is null"
             }
             models.User.update({
                 email: email,
                 password: password,
-                role: role,
                 firstName: firstName,
                 lastName: lastName,
+                role: role,
+                firstLogin: firstLogin
             },
             {
                 where: { userID: userIDParam }
@@ -168,19 +223,23 @@ const resolvers = {
         },
 
         //Course Mutations
-        addCourse(root, { courseCode, courseName, userID }, { models }) {
+        addCourse(root, { courseName, courseCode, courseNum, courseCredits, userID }, { models }) {
             return models.Course.create({
-                courseCode: courseCode,
                 courseName: courseName,
+                courseCode: courseCode,
+                coursNum: courseNum, 
+                courseCredits: courseCredits,
                 userID: userID
             }).catch(err => {
                 return err;
             });
         },
-        updateCourse(root, { courseIDParam, courseCode, courseName, userID }, {models}){        
+        updateCourse(root, { courseIDParam, courseName, courseCode, courseNum, courseCredits, userID }, {models}){        
             models.Course.update({
-                courseCode: courseCode,
                 courseName: courseName,
+                courseCode: courseCode,
+                coursNum: courseNum, 
+                courseCredits: courseCredits,
                 userID: userID
             },
             {
@@ -202,15 +261,92 @@ const resolvers = {
             });
         },
 
+        //PrevCourseMutations
+        addPrevCourse(root, { pCourseName, pCourseNum, pCourseGrade, pCourseCredits, userID }, { models }) {
+            return models.PrevCourse.create({
+                pCourseName: pCourseName,
+                pCourseNum: pCourseNum,
+                pCourseGrade: pCourseGrade, 
+                pCourseCredits: pCourseCredits, 
+                userID: userID
+            }).catch(err => {
+                return err;
+            });
+        },
+        updatePrevCourse(root, { prevCourseIDParam, pCourseName, pCourseNum, pCourseGrade, pCourseCredits, userID }, {models}){        
+            models.PrevCourse.update({
+                pCourseName: pCourseName,
+                pCourseNum: pCourseNum,
+                pCourseGrade: pCourseGrade, 
+                pCourseCredits: pCourseCredits, 
+                userID: userID
+            },
+            {
+                where: { prevCourseID: prevCourseIDParam }
+            }).catch(err => {
+                return err;
+            });
+            return models.PrevCourse.findOne({ where: { prevCourseID: prevCourseIDParam } });
+        },
+        deletePrevCourse(root, { prevCourseIDParam }, { models }) {
+            models.PrevCourse.destroy(
+                {
+                    where: { courseID: prevCourseIDParam }
+                }
+            ).then((result) => {
+                return result;
+            }).catch(err => {
+                return false;
+            });
+        },
+
+        //Token Mutations
+
+        addToken(root, { content, creationTime, userID}, { models } ){
+            return models.Token.create({
+                content: content, 
+                creationTime: creationTime,
+                userID: userID
+            })
+        },
+        updateToken(root, { tokenIDParam, content, creationTime, userID}, { models } ){
+            models.Token.update({
+                content: content, 
+                creationTime: creationTime, 
+                userID: userID
+            },
+            {
+                where: { tokenID: tokenIDParam }
+            }).catch(err => {
+                return err;
+            });
+            return models.Token.findOne({ where: { tokenID: tokenIDParam } });
+        
+        },
+        deleteToken(root, { tokenIDParam }, { models } ){
+            models.PrevCourse.destroy(
+                {
+                    where: { tokenID: tokenIDParam }
+                }
+            ).then((result) => {
+                return result;
+            }).catch(err => {
+                return false;
+            });
+        },
+
+
         //Grade Mutations
-        addGrade(root, { urgency, weight, dueDate, expectedGrade, grade, category, courseID, userID }, { models }) {
+        addGrade(root, { name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID }, { models }) {
             return models.Grade.create({
-                urgency: urgency, 
-                weight: weight,
-                dueDate: dueDate,
-                expectedGrade: expectedGrade, 
+                name: name,
+                dueDate: dueDate, 
+                expectedGrade: expectedGrade,
                 grade: grade, 
                 category: category, 
+                weight: weight, 
+                urgency: urgency, 
+                locked: locked, 
                 courseID: courseID, 
                 userID: userID
             }).catch(err => {
@@ -218,14 +354,16 @@ const resolvers = {
                 return err;
             });
         },
-        updateGrade(root, { gradeIDParam, urgency, weight, dueDate, expectedGrade, grade, category, courseID, userID }, { models }) {
+        updateGrade(root, { gradeIDParam, name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID }, { models }) {
             models.Grade.update({
-                urgency: urgency, 
-                weight: weight,
-                dueDate: dueDate,
-                expectedGrade: expectedGrade, 
+                name: name,
+                dueDate: dueDate, 
+                expectedGrade: expectedGrade,
                 grade: grade, 
                 category: category, 
+                weight: weight, 
+                urgency: urgency, 
+                locked: locked, 
                 courseID: courseID, 
                 userID: userID
             },

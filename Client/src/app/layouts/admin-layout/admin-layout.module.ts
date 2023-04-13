@@ -14,6 +14,8 @@ import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { LoginComponent } from 'app/login/login.component';
 import { StudentDashboardComponent } from 'app/student-dashboard/student-dashboard.component';
 import { DetailedViewComponent } from 'app/detailed-view/detailed-view.component';
+import { ResetPassDialogComponent } from 'app/login/reset-pass-dialog/reset-pass-dialog.component';
+import { ResetEmailComponent } from 'app/login/reset-email/reset-email.component';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -26,6 +28,15 @@ import {MatRippleModule} from '@angular/material/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
+import {MatDialogModule} from '@angular/material/dialog';
+import { PassResetPageComponent } from 'app/pass-reset-page/pass-reset-page.component';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatTableModule} from '@angular/material/table';
+import {MatSliderModule} from '@angular/material/slider'; 
+import {MatIconModule} from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+import {NgChartsModule} from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -39,8 +50,19 @@ import {MatSelectModule} from '@angular/material/select';
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
+    MatDialogModule,
+    MatCardModule,
+    MatSliderModule,
+    MatIconModule,
+    MatCardModule,
+    NgChartsModule,
     ApolloModule,
-    HttpClientModule
+    HttpClientModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatDatepickerModule,
+    MatTableModule,
+    MatSliderModule
   ],
   declarations: [
     DashboardComponent,
@@ -54,6 +76,8 @@ import {MatSelectModule} from '@angular/material/select';
     LoginComponent,
     StudentDashboardComponent,
     DetailedViewComponent,
+    ResetPassDialogComponent,
+    PassResetPageComponent,
   ],
   providers: [
     {

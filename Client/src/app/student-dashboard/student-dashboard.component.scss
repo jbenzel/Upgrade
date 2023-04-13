@@ -1,0 +1,54 @@
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+
+.card {
+    backdrop-filter: blur(14px);
+    box-shadow: 0 15px 25px rgba(129, 124, 124, 0.2);
+    border-radius: 20px;
+}
+.header {
+    font-weight: 600;
+}
+.card-title {
+    font-weight: 600;
+}
+.card-subtitle {
+    font-weight: 500;
+}
+.course-card {
+    padding: 1rem;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 15px 25px rgba(129, 124, 124, 0.2);
+    border-radius: 20px;
+}
+.upcoming-items {
+    background-color: #EFEFEF;
+    border-radius: 20px;
+}
+.chart-container {
+    position: relative;
+    margin: auto;
+}
+.input-border{
+	padding: 4px;
+ 	// margin: 2vh 5vh; 
+    margin-left: 20%;
+    margin-right: 20%;
+	border-radius: 67px;
+    width: 60%;
+    background: #F56423;
+}
+.input-border:hover{
+    background: radial-gradient(circle, rgba(239,239,239,1) 15%, rgba(245,100,35,1) 41%, rgba(86,155,190,1) 68%, rgba(0,73,144,1) 100%);
+}
+.input{
+    text-align:center;
+    padding: 3px;
+	outline: none;
+	border:double 0;
+	border-radius: 67px;
+	position: relative;
+	box-sizing: border-box;
+	display: block;
+    width: 100%;
+}
+  

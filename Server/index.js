@@ -2,6 +2,8 @@ const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
 const { Sequelize } = require("sequelize")
 const { ApolloServer, gql } = require("apollo-server");
+const upcoming_notif = require('./email-notifications/upcoming-notifications')
+
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -25,14 +27,18 @@ User.init({
     password: {
         type: Sequelize.DataTypes.TEXT
     },
-    role: {
-        type: Sequelize.DataTypes.TINYINT //8bit instead of 32
-    },
     firstName: {
         type: Sequelize.DataTypes.TEXT
     },
     lastName: {
         type: Sequelize.DataTypes.TEXT
+    }, 
+    role: {
+        type: Sequelize.DataTypes.INTEGER //8bit instead of 32
+    },
+    firstLogin: { 
+        type: Sequelize.DataTypes.BOOLEAN
+        
     }
 },{ sequelize, timestamps: false })
 //models["User"] = User;
@@ -53,7 +59,7 @@ Student.init({
         type: Sequelize.DataTypes.FLOAT
     },
     completedCourseCount: {
-        type: Sequelize.DataTypes.SMALLINT
+        type: Sequelize.DataTypes.INTEGER
     }
 }, { sequelize, timestamps: false })
 //models["Student"] = Student;
@@ -67,14 +73,59 @@ Course.init({
         autoIncrement: true
     },
     //inherit userID
+    courseName:{
+        type: Sequelize.DataTypes.TEXT
+    },
     courseCode:{
         type: Sequelize.DataTypes.TEXT
     },
-    courseName:{
-        type: Sequelize.DataTypes.TEXT
+    courseNum:{
+        type: Sequelize.DataTypes.INTEGER
+    },
+    credits:{
+        type: Sequelize.DataTypes.INTEGER
     }
 }, { sequelize, timestamps: false })
 //models["Course"] = Course;
+
+class PrevCourse extends Model {
+}
+PrevCourse.init({
+    prevCourseID:{
+        type: Sequelize.DataTypes.INTEGER,
+        primaryKey: true, 
+        autoIncrement: true
+    },
+    pCourseName:{
+        type: Sequelize.DataTypes.TEXT
+    },
+    pCourseNum:{
+        type: Sequelize.DataTypes.INTEGER
+    },
+    pCourseGrade:{
+        type: Sequelize.DataTypes.FLOAT
+    },
+    pCourseCredits:{
+        type: Sequelize.DataTypes.INTEGER
+    }
+}, { sequelize, timestamps: false })
+
+class Token extends Model{
+}
+Token.init({
+    tokenID: {
+        type: Sequelize.DataTypes.INTEGER, 
+        primaryKey: true, 
+        autoIncrement: true
+    },
+    content: {
+        type: Sequelize.DataTypes.TEXT
+    },
+    creationTime: {
+        type: Sequelize.DataTypes.STRING
+    }
+}, { sequelize, timestamps: false })
+
 
 class Grade extends Model {
 }
@@ -86,14 +137,12 @@ Grade.init({
     },
     //inherit userID
     //inherit courseID
-    urgency:{
-        type: Sequelize.DataTypes.TINYINT
-    },
-    weight:{
-        type: Sequelize.DataTypes.FLOAT
+    
+    name:{
+        type: Sequelize.DataTypes.TEXT
     },
     dueDate:{
-        type: Sequelize.DataTypes.DATE //DATEONLY if time isnt neccesary
+        type: Sequelize.DataTypes.STRING //DATEONLY if time isnt neccesary
     },
     expectedGrade:{
         type: Sequelize.DataTypes.FLOAT
@@ -103,6 +152,15 @@ Grade.init({
     },
     category:{
         type: Sequelize.DataTypes.TEXT
+    },
+    weight:{
+        type: Sequelize.DataTypes.FLOAT
+    },
+    urgency:{
+        type: Sequelize.DataTypes.INTEGER
+    },
+    locked:{
+        type: Sequelize.DataTypes.BOOLEAN
     },
     userID:{
         type: Sequelize.DataTypes.TEXT
@@ -116,6 +174,13 @@ Student.belongsTo(User, {
 Course.belongsTo(User, {
     foreignKey: 'userID'
 });
+PrevCourse.belongsTo(User, {
+    foreignKey: 'userID'
+});
+Token.belongsTo(User, {
+    foreignKey: 'userID'
+});
+
 Grade.belongsTo(Course, {
     foreignKey: 'courseID'
 });
@@ -131,6 +196,8 @@ sequelize.authenticate();
 models["User"] = User;
 models["Student"] = Student;
 models["Course"] = Course;
+models["PrevCourse"] = PrevCourse;
+models["Token"] = Token;
 models["Grade"] = Grade;
 
 const server = new ApolloServer({
@@ -143,4 +210,12 @@ const server = new ApolloServer({
 
 server.listen().then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
-  });
+});
+
+
+const notif_interval = 3.5 * 24 * 60 * 60 * 1000 //sleeps for 3.5 days
+//will see if there's an alternative to this than milisecond sleep
+setInterval(() => {
+    upcoming_notif()
+}, notif_interval);
+

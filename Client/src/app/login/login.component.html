@@ -1,6 +1,48 @@
 <div class="main-content">
     <div class="container-fluid">
-        
+
+      <mat-card class="login-card">
+        <div class="card-header">
+          <h1 class="card-title">upGrade</h1>
+        </div>
+        <div class="card-body">
+          <mat-form-field class="login-input-box" appearance="outline">
+            <mat-label class="mat-label">
+              SHSU Email
+            </mat-label>
+            <input matInput placeholder="example@shsu.edu" [formControl]="username" required>
+            <mat-error *ngIf="username.invalid">{{validate_user_syntax()}}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="pass-input-box" appearance="outline">
+            <mat-label class="mat-label">
+              Password
+            </mat-label>
+            <input matInput placeholder="Enter your password" value="" name="password" 
+            type="password" [formControl]="password" required>
+            <mat-error *ngIf='password.invalid'>{{validate_password_syntax()}}</mat-error>
+          </mat-form-field>
+          <div style="text-align:center;">
+            <div *ngIf="invalid_creds">
+              <h6 style="color:red">Wrong email and/or password</h6>
+            </div>
+            <div *ngIf="must_be_valid">
+              <h6 style="color:red">email and password must be valid</h6>
+            </div>
+            <button class="login-button" mat-raised-button (click)="submit()">
+              Login
+            </button>
+            <br>
+            <br>
+            <a class="reset-link" (click)="re_set_password()">
+              <h6><u>New User - Forgot Password?</u></h6>
+            </a>
+
+          </div>
+
+        </div>
+
+      </mat-card>
+
     </div>
   </div>
   

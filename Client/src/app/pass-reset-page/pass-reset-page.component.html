@@ -1,0 +1,63 @@
+<div class="main-content">
+    <div class="container-fluid">
+
+      <mat-card class="login-card">
+        <div class="card-header">
+          <h1 class="card-title">Reset Password</h1>
+        </div>
+        <div class="card-body">
+          <div class="input-field">
+            <mat-form-field class="pass-input-box" appearance="outline">
+              <mat-label class="mat-label">
+                Token
+              </mat-label>
+              <input matInput placeholder="Enter token provided in email" value="" name="token" 
+              type="token" [formControl]="token" required>
+              <mat-error *ngIf='token.invalid'>{{token_required()}}</mat-error>
+            </mat-form-field>
+          </div>
+            <mat-form-field class="pass-input-box" appearance="outline">
+                <mat-label class="mat-label">
+                  Password
+                </mat-label>
+                <input matInput placeholder="Enter your password" value="" name="password" 
+                type="password" [formControl]="password" required>
+                <mat-error *ngIf='password.invalid'>{{validate_password_syntax()}}</mat-error>
+            </mat-form-field>
+            <mat-form-field class="pass-input-box" appearance="outline">
+              <mat-label class="mat-label">
+                Confirm Password
+              </mat-label>
+              <input matInput placeholder="Re-enter your password" value="" name="password" 
+              type="password" [formControl]="conf_password" required>
+              <mat-error *ngIf='password.invalid'>{{validate_conf_password_syntax()}}</mat-error>
+            </mat-form-field>
+          <div *ngIf="notMatching">
+            <h6 style="color:red">Passwords do not match</h6>
+          </div>
+          <div>
+            <h4>
+              Password Requirements:
+            </h4>
+            <h5>
+              ◉ Minimum length of 8 characters<br>
+              ◉ Must contain one lowercase<br>
+              ◉ Must contain one uppercase<br>
+              ◉ Must contain one number
+            </h5>
+          </div>
+          <div class="text-center">
+            <button class="login-button" mat-raised-button (click)="submit()">
+              Reset Password
+            </button>
+
+          </div>
+
+
+        </div>
+
+      </mat-card>
+
+    </div>
+  </div>
+  

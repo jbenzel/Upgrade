@@ -1,6 +1,93 @@
+<script src="https://kit.fontawesome.com/8aef0bca49.js" crossorigin="anonymous"></script>
 <div class="main-content">
-    <div class="container-fluid">
-        
-    </div>
+  <div class="container-fluid">
+      <!-- Start 1st row -->
+      <div class="row">
+        <!-- Start Semester Card -->
+        <div class="col-lg-7 col-md-12 align-self-stretch m-0">
+          <div class="card">
+            <!-- Start Semester Card header -->
+            <div class="card-header text-left">
+              <h2 class="header">Semester Overview</h2>
+            </div>
+            <!-- End Semester Card header -->
+
+            <!-- Start Semester Card body -->
+            <div class="card-body container">
+                <div class="row no-gutters">
+                  <div class="row col-lg-4 justify-content-center align-items-center">
+                      <!-- Start User Input -->
+                      <button mat-raised-button color="primary" (click)="queryTest()">Test Query</button>
+                      <div class="col-lg-12 col-md-6 w-100 mb-0">
+                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="CGPA">Current GPA: {{CGPA}}</p>
+                          <!-- <div class="input-border">
+                            <input class="input" id="CGPA" [(ngModel)]="afterCGPA" (change)="updateCurrChartData()" type="text" min="1.5" max="4" placeholder="CGPA" >
+                          </div> -->
+                      </div>
+                      <div class="col-lg-12 col-md-6 w-100 mt-0">
+                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="EGPA">Estimated GPA:</p>
+                          <div class="input-border justify-content-center">
+                            <input class="input" id="EGPA" [(ngModel)]="afterEGPA" (change)="updateEstmatedChartData()" type="text" min="1.5" max="4" placeholder="EGPA" >
+                          </div>
+                      </div>
+                      <!-- End User Input -->
+                  </div>
+                  <div class="row col-lg-8 d-flex flex-column flex-md-row justify-content-center chart-container">
+                      <!-- Start GPA charts -->
+                        <div class="col-6 align-self-center">
+                          <canvas id="current">{{ CGPAchart }}</canvas>
+                        </div>
+                        <div class="col-6 align-self-center">
+                          <canvas id="estm">{{ EGPAchart }}</canvas>
+                        </div>
+                      <!-- End GPA charts -->
+                  </div>
+                </div>
+            </div>
+            <!-- End Semester Card body -->
+          </div>
+        </div>
+        <!-- End Semester Card -->
+
+        <!-- Start Progress Chart Card -->
+        <div class="col-lg-5 col-md-12 align-self-stretch m-0">
+          <div class="card">
+            <div class="card-header text-left" style="margin-top: 0;">
+              <h2 class="header">Progess Chart</h2>
+            </div>
+            <div class="card-body container chart-container">
+              <canvas  id="progressChart">{{ progressChart }}</canvas>
+            </div>
+          </div>
+        </div>
+        <!-- End Progress Chart Card -->
+      </div>
+      <!-- End 1st row -->
+
+      <!-- Start 2nd row -->
+      <div class="row">
+        <!-- Start Course's Card -->
+        <div class="col-lg-3 col-sm-6" *ngFor="let num of [0,1,2,3]">
+          <mat-card class="card course-card p-4">
+            <mat-card-title class="card-title text-center mt-2">{{ current.currentUser.getAllCourse[num].courseCode }}</mat-card-title>
+            <mat-card-subtitle class="card-subtitle text-center">{{ current.currentUser.getAllCourse[num].courseName }}</mat-card-subtitle>
+            <mat-card-content class="card-body upcoming-items">
+              <h5 class="card-title mb-0">Upcoming:</h5>
+              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #ec2222;"></span>Assignment 1</p>
+              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #00c31d;"></span>Exam 2</p>
+              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #ede20d;"></span>Exam 1</p>
+            </mat-card-content>
+            <mat-card-actions class="mb-1" align="end">
+              <button class="m-1" mat-fab color="true" aria-label="Go to course's specific page">
+                <mat-icon>keyboard_double_arrow_right</mat-icon>
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+        <!-- End Course's Card -->
+      </div>
+      <!-- End 2nd row -->
+
   </div>
+</div>
   

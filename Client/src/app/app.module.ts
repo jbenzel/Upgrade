@@ -7,6 +7,10 @@ import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import {MatCardModule} from '@angular/material/card';
+import { ResetEmailComponent } from './login/reset-email/reset-email.component';
+import { EmailServiceService } from './login/reset-email/email-service.service';
 
 @NgModule({
   imports: [
@@ -17,13 +21,20 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
+    MatDialogModule,
+    MatCardModule,
   ],
   declarations: [
     AppComponent,
     AdminLayoutComponent,
+    ResetEmailComponent,
+  ],
+  entryComponents:[
     
   ],
-  providers: [],
+  providers: [
+    EmailServiceService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
