@@ -140,7 +140,7 @@ const resolvers = {
                 role: role,
                 firstLogin: true
             }).catch(err => {
-                //console.log(err);
+                return err;
             });
         },
         updateUser(root, { userIDParam, email, password, firstName, lastName, role, firstLogin }, { models }) {           
