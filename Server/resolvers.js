@@ -1,4 +1,4 @@
-const characters ='+-!_%$#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
+const characters ='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
 function generateString(length) {
     let result = '';
     const charLength = characters.length;
