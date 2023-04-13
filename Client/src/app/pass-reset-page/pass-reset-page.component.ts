@@ -4,6 +4,16 @@ import {
   hasNumberValidator, 
   hasLowercaseValidator, 
   hasUppercaseValidator } from 'app/custom-validators';
+import { Apollo, gql, QueryRef } from 'apollo-angular';
+
+
+const RESET_PROCEDURE = gql`
+query ($emailParam: String, $password: String, $content: String) {
+  setNewPassword(emailParam: $emailParam, password: $password, content: $content) {
+    email
+  }
+}
+`;
 
 
 @Component({
@@ -33,24 +43,42 @@ export class PassResetPageComponent implements OnInit {
 
   notMatching = false
   syntax_error = false
+  invalid_creds = false
 
-  constructor() { }
+  constructor(private apollo: Apollo) { }
 
   submit(){
     if(this.password.value !== this.conf_password.value){
       this.notMatching = true
+      this.syntax_error = false
+      this.invalid_creds = false
     }else if(this.conf_password.valid && this.password.valid 
       && this.token.valid &&this.username.valid){
 
       this.notMatching = false
       this.syntax_error = false
       //call setNewPassword to check token is valid, if so destroy it
+      this.apollo.watchQuery<any>({
+        query: RESET_PROCEDURE,
+        variables: {
+          "emailParam": this.username.value,
+          "password": this.conf_password.value,
+          "content": this.token.value
+        }
+      }).valueChanges.subscribe((reset_response) => {
+        //return User if success
+        //route to dashboard
+      
+      //else fail
+      this.invalid_creds = true
 
+      })
 
-      //route to dashboard
       alert('success')
     }else{
       this.syntax_error = true
+      this.invalid_creds = false
+      this.notMatching = false
     }
     //then must reroute to login page
     this.clear()

@@ -1,4 +1,5 @@
 const reset_password = require('./email-notifications/password-reset')
+const setNewPassword = require('./setNewPassword')
 const characters ='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
 function generateString(length) {
     let result = '';
@@ -140,14 +141,22 @@ const resolvers = {
                     //if no errors while sending
                     return User;
                 }
-                return null;
             }
             return null;
         },
 
 
         async setNewPassword(root, { emailParam, password, content }, { models }) {
-            
+            let User = await models.User.findOne({ where: { email: emailParam } });
+            if(User != null){
+                //if user exists, execute
+                success = setNewPassword(emailParam, password, content)
+                console.log(await success)
+                if(await success){
+                    //if no errors and valid token
+                    return User;
+                }
+            }
             return null;
         },
 
