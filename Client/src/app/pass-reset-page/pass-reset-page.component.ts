@@ -49,14 +49,18 @@ export class PassResetPageComponent implements OnInit {
 
   submit(){
     if(this.password.value !== this.conf_password.value){
+
       this.notMatching = true
       this.syntax_error = false
       this.invalid_creds = false
+
     }else if(this.conf_password.valid && this.password.valid 
       && this.token.valid &&this.username.valid){
 
+      //reset all conditionals
       this.notMatching = false
       this.syntax_error = false
+      this.invalid_creds = false
       //call setNewPassword to check token is valid, if so destroy it
       this.apollo.watchQuery<any>({
         query: RESET_PROCEDURE,
@@ -67,14 +71,18 @@ export class PassResetPageComponent implements OnInit {
         }
       }).valueChanges.subscribe((reset_response) => {
         //return User if success
-        //route to dashboard
-      
-      //else fail
-      this.invalid_creds = true
+        console.log(reset_response.data)
+        if(reset_response.data.setNewPassword != null){
+          //route to dashboard
+          alert("success")
 
+        }else{
+          //else fail
+          this.invalid_creds = true
+        }
       })
 
-      alert('success')
+
     }else{
       this.syntax_error = true
       this.invalid_creds = false

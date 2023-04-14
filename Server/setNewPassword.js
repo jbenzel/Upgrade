@@ -18,13 +18,14 @@ async function setNewPassword(email, password, token_content){
     query ($userIdParam: ID!) {
         getTokenbyUserID(userIDParam: $userIdParam) {
           content
+          tokenID
         }
       }
     `;
 
     const UPDATE_PASSWORD = gql`
-    mutation ($userIdParam: Int!, $password: String!, $email: String!) {
-        updateUser(userIDParam: $userIdParam, password: $password, email: $email) {
+    mutation ($userIdParam: Int!, $email: String!, $password: String!) {
+        updateUser(userIDParam: $userIdParam, email: $email, password: $password) {
           password
         }
       }
@@ -51,13 +52,17 @@ async function setNewPassword(email, password, token_content){
         query: GET_TOKEN,
         variables: {userIdParam: user_id}
     });
-    var retreived_token = token_data.data.getTokenbyUserID.content
-    console.log(retreived_token)
-    //if errors occur
-    if(token_data.errors != undefined){
-        console.log("Errors encountered while retrieving token_data")
+    console.log(token_data)
+
+    //catch null data
+    if(token_data.data.getTokenbyUserID.length == 0){
+        console.log("No token_data retrieved")
         return false
     }
+
+    var retreived_token = token_data.data.getTokenbyUserID[0].content
+    console.log("retrived token is "+retreived_token)
+
     //if a token has not been created, cancel
     if(retreived_token == null){
         return false
@@ -67,10 +72,16 @@ async function setNewPassword(email, password, token_content){
         return false
     }
 
+    console.log("Updating password...")
+    console.log(user_id)
+    console.log(password)
+    console.log(email)
     //since token matches token_content, update password to new password
     var update_pass = await BackClient.mutate({
         mutation: UPDATE_PASSWORD,
-        variables: {userIdParam: user_id, password: password, email: email}
+        variables: {userIdParam: parseInt(user_id), 
+                    email: email,
+                    password: password, }
     });
     console.log(update_pass)
     //if errors occur
@@ -84,16 +95,19 @@ async function setNewPassword(email, password, token_content){
     }
 
     //destroy token
+    console.log("destroying token.")
+    console.log(token_data.data.getTokenbyUserID[0])
     var destroy_result = await BackClient.mutate({
         mutation: DESTROY_TOKEN,
-        variables: {tokenIdParam: token_data.data.getTokenbyUserID.tokenID}
+        variables: {tokenIdParam: parseInt(token_data.data.getTokenbyUserID[0].tokenID)}
     });
-
+    console.log(destroy_result)
     //if no errors while destroying token, return true
     if(destroy_result.errors != undefined){
         console.log("Errors encountered while deleting token")
         return false
     }else{
+        console.log("Token successfully deleted")
         return true
     }
 

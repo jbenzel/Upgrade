@@ -46,6 +46,9 @@
             <div *ngIf="syntax_error">
               <h6 style="color:red">Invalid data in field(s)</h6>
             </div>
+            <div *ngIf="invalid_creds">
+              <h6 style="color:red">Invalid Credentials</h6>
+            </div>
           </div>
           <div>
             <h4>

@@ -80,7 +80,7 @@ const typeDefs = gql`
 
         getAllToken: [Token]
         getTokenbyTokenID(tokenIDParam: ID!): Token
-        getTokenbyUserID(userIDParam: ID!): Token
+        getTokenbyUserID(userIDParam: ID!): [Token]
 
         getAllGrade: [Grade]
         getGradebyGradeID(gradeIDParam: ID!): Grade

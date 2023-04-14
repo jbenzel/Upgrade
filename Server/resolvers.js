@@ -150,7 +150,7 @@ const resolvers = {
             let User = await models.User.findOne({ where: { email: emailParam } });
             if(User != null){
                 //if user exists, execute
-                success = setNewPassword(emailParam, password, content)
+                var success = setNewPassword(emailParam, password, content)
                 console.log(await success)
                 if(await success){
                     //if no errors and valid token
