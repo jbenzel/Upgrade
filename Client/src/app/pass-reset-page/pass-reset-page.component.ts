@@ -139,6 +139,8 @@ export class PassResetPageComponent implements OnInit {
 
   clear(){
     //clears password fields
+    this.username.reset()
+    this.token.reset()
     this.conf_password.reset()
     this.password.reset()
   }
