@@ -1,0 +1,39 @@
+{
+    "currentUser": {
+        "getAllStudent": [
+            {
+            "studentID": "1",
+            "eGPA": 3.5,
+            "cGPA": 3.0,
+            "completedCourseCount": null,
+            "userID": 1
+            }
+        ],
+        "getAllCourse": [
+            {
+            "courseID": "1",
+            "courseCode": "COSC 1437",
+            "courseName": "Programming Fundamentals II",
+            "userID": 1
+            },
+            {
+            "courseID": "2",
+            "courseCode": "HIST 1234",
+            "courseName": "World History",
+            "userID": 1
+            },
+            {
+            "courseID": "3",
+            "courseCode": "ENGL 1430",
+            "courseName": "English Literature",
+            "userID": 1
+            },
+            {
+            "courseID": "4",
+            "courseCode": "ETDD 1320",
+            "courseName": "Engineering Technology",
+            "userID": 1
+            }
+        ]
+    }
+}

@@ -61,6 +61,11 @@ export class LoginComponent implements OnInit {
         }
       }).valueChanges.subscribe((first_login_check) => {
 
+        if(first_login_check.data.getUserbyEmail == null){
+          //no such user
+          this.must_be_valid = false
+          this.invalid_creds = true
+        }else{
           this.first_login = first_login_check.data.getUserbyEmail.firstLogin
           console.log(this.first_login)
 
@@ -88,6 +93,7 @@ export class LoginComponent implements OnInit {
               }
 
             });
+        }
       });
 
       //getAllSOVQuery.refetch gives me issues

@@ -23,12 +23,12 @@ async function setNewPassword(email, password, token_content){
       }
     `;
 
-    const UPDATE_PASSWORD = gql`
-    mutation ($userIdParam: Int!, $email: String!, $password: String!) {
-        updateUser(userIDParam: $userIdParam, email: $email, password: $password) {
-          password
-        }
+    const UPDATE_USER = gql`
+    mutation ($userIdParam: Int!, $email: String!, $password: String!, $firstLogin: Boolean) {
+      updateUser(userIDParam: $userIdParam, email: $email, password: $password, firstLogin: $firstLogin) {
+        password
       }
+    }
     `;
 
     const DESTROY_TOKEN = gql`
@@ -77,11 +77,13 @@ async function setNewPassword(email, password, token_content){
     console.log(password)
     console.log(email)
     //since token matches token_content, update password to new password
+    //and set firstLogin to false
     var update_pass = await BackClient.mutate({
-        mutation: UPDATE_PASSWORD,
+        mutation: UPDATE_USER,
         variables: {userIdParam: parseInt(user_id), 
                     email: email,
-                    password: password, }
+                    password: password, 
+                    firstLogin: false}
     });
     console.log(update_pass)
     //if errors occur

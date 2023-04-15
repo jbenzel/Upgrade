@@ -27,7 +27,7 @@ async function reset_password(email) {
     `;
 
     const upg_email = "mjr076@shsu.edu" //will have to use an shsu.edu email as source for upGrade
-    const reset_url = "http://localhost:4200/#/pass-reset" //link to reset page
+    const reset_url = "http://localhost:4200/pass-reset" //link to reset page
 
     //get userID by email
     var user_id = await BackClient.query({

@@ -65,21 +65,13 @@
               ]
             },
             "development": {
-              "vendorChunk": true,
-              "extractLicenses": false,
-              "namedChunks": true,
-              "buildOptimizer": false,
-              "sourceMap": true,
-              "optimization": {
-                "scripts": true,
-                "styles": {
-                  "minify": false,
-                  "inlineCritical": true
-                },
-                "fonts": true
-              },
-              "outputHashing": "all"
-            }
+            "buildOptimizer": false,
+            "optimization": false,
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "sourceMap": true,
+            "namedChunks": true
+          }
           }
         },
         "serve": {
