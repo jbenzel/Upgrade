@@ -174,8 +174,8 @@ label {
 }
 
 .course-avg-circle {
-  width: 9rem;
-  height: 9rem;
+  width: 9.5rem;
+  height: 9.5rem;
   border-radius: 50%;
   border: 8px solid #F56423;
   background-color: #EFEFEF;
@@ -183,7 +183,7 @@ label {
 
 .course-avg-circle-container {
   width: fit-content;
-  height: fit-content;
+  height: max-content;
 }
 
 .course-header {
