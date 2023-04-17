@@ -129,6 +129,7 @@ const resolvers = {
         },
 
     },
+    
     Mutation: {
         async addUser(root, { email, firstName, lastName, role }, { models }) {
             let inPass = await generateString(16)

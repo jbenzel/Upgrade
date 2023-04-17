@@ -1,6 +1,11 @@
 const { ApolloServer, gql } = require('apollo-server');
 //const { gql} = require("apollo-server")
 
+
+/*
+type tableName {attribute: datatype} (the optional '!' means it is required/not nullable)
+function(parameters: parameterType): table ([table] means return all tuples vs one)
+*/
 const typeDefs = gql`
 
     type User {
@@ -86,7 +91,6 @@ const typeDefs = gql`
         getGradebyGradeID(gradeIDParam: ID!): Grade
         getAllGradesbyUserID(userIDParam: ID!): [Grade]
         getAllGradebyCourseID(courseIDParam: ID!): [Grade]
-   
     }
 
     type Mutation {
@@ -114,12 +118,5 @@ const typeDefs = gql`
         deleteGrade(gradeIDParam: ID!): Grade
     }
 `;
-/*
-        addGrade
-        updateGrade
-        deleteGrade
-        deleteAllGradesByCourse
-        */
-
 
 module.exports = typeDefs
