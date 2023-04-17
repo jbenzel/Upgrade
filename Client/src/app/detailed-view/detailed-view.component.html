@@ -1,140 +1,151 @@
 <div class="main-content">
   <button mat-flat-button class="dashboard-button" [routerLink]="['/student-dashboard']">
-    <mat-icon>arrow_back</mat-icon>Dashboard
+    <mat-icon class="mr-1">arrow_back</mat-icon>Dashboard
   </button>
 
-
-  <header style="height: 5rem; background-color: #F56423; width: 100%; margin-bottom: 1rem; position: relative;">
-    <div
-      style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start; height: 100%; padding-left: 1rem;">
-      <p style="color: #EFEFEF; margin: 0; font-size: 2rem; margin-bottom: 0.5rem;">Software Engineering - 4319</p>
-      <div style="display: flex; align-items: center; margin-left: 1rem;">
-        <p style="color: #EFEFEF; margin: 0; font-size: 1.2rem; margin-right: 1rem;">Goal Course Average:
-          {{expectedCourseAverage}}</p>
+  <article class="mb-4">
+    <header class="h-100 w-75 m-2 m-auto course-header">
+      <div class="h-100 p-2 d-flex align-items-center flex-column">
+        <h2 class="w-100 m-0 mb-05 mt-2 text-center white" style="font-weight: bold;">Software Engineering - 4319</h2>
+        <h3 class="mt-1 mb-2 white text-center" style="font-weight: 600;">Goal Course Average: {{expectedCourseAverage}}</h3>
       </div>
-    </div>
-    <div style="position: absolute; top: 50%; right: 4rem; transform: translateY(-50%);">
-      <div
-        style="background-color: #EFEFEF; width: 6rem; height: 6rem; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 3px solid #F56423;">
-        <span style="color: #F56423; font-weight: bold; font-size: 2rem; margin: 0;">{{courseAverage}}</span>
-      </div>
-    </div>
-  </header>
+    </header>
+  </article>
 
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Start Grade Accordion -->
+      <div class="col-md-8 col-sm-12 order-sm-1 order-md-0">
+        <mat-accordion class="example-headers-container w-100">
 
-  <div class="top-div">
-    <div class="container-fluid left-accord">
-      <mat-accordion class="example-headers-align">
+          <mat-expansion-panel class="grade-panel" hideToggle>
+            <mat-expansion-panel-header class="grade-panel">
+              <mat-panel-title>
+                <h4 class="mt-1 grades-accordion">Past Grades</h4>
+              </mat-panel-title>
+              <mat-panel-description class="grades-accordion">
+                <mat-icon>history</mat-icon>
+                <span class="ml-1">View/Update Previous Grades</span>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
 
-        <mat-expansion-panel hideToggle>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Past Grades
-            </mat-panel-title>
-            <mat-panel-description>
-              View/Update Previous Grades
-              <mat-icon>history</mat-icon>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
+            <table mat-table [dataSource]="gradesHistoryDataSource" class="history-table">
 
-          <table mat-table [dataSource]="gradesHistoryDataSource" class="history-table">
+              <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
 
-            <!--- Note that these columns can be defined in any order.
-                The actual rendered columns are set as a property on the row definition" -->
+              <!-- Category Column -->
+              <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef class="header-cell"> Category </th>
+                <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+              </ng-container>
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef class="header-cell"> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+              </ng-container>
+              <!-- Grade Column -->
+              <ng-container matColumnDef="grade">
+                <th mat-header-cell *matHeaderCellDef class="header-cell"> Grade </th>
+                <td mat-cell *matCellDef="let element"> {{element.grade}} </td>
+              </ng-container>
+              <!-- Due Date Column -->
+              <ng-container matColumnDef="dueDate">
+                <th mat-header-cell *matHeaderCellDef class="header-cell"> Due Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.dueDate}} </td>
+              </ng-container>
 
-            <!-- Category Column -->
-            <ng-container matColumnDef="category">
-              <th mat-header-cell *matHeaderCellDef> Category </th>
-              <td mat-cell *matCellDef="let element"> {{element.category}} </td>
-            </ng-container>
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef> Name </th>
-              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-            </ng-container>
-            <!-- Grade Column -->
-            <ng-container matColumnDef="grade">
-              <th mat-header-cell *matHeaderCellDef> Grade </th>
-              <td mat-cell *matCellDef="let element"> {{element.grade}} </td>
-            </ng-container>
-            <!-- Due Date Column -->
-            <ng-container matColumnDef="dueDate">
-              <th mat-header-cell *matHeaderCellDef> Due Date </th>
-              <td mat-cell *matCellDef="let element"> {{element.dueDate}} </td>
-            </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
+          </mat-expansion-panel>
 
-        </mat-expansion-panel>
+          <!-- Future Grades -->
+          <mat-expansion-panel hideToggle [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h4 class="mt-1 grades-accordion">Future Grades</h4>
+              </mat-panel-title>
+              <mat-panel-description class="grades-accordion">
+                <mat-icon>edit_attributes</mat-icon>
+                <span class="ml-1">View/Project Future Grades</span>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
 
-        <!-- Future Grades -->
-        <mat-expansion-panel hideToggle [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Future Grades
-            </mat-panel-title>
-            <mat-panel-description>
-              View/Project Future Grades
-              <mat-icon>edit_attributes</mat-icon>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-
-          <!-- Sliders -->
-          <div *ngFor="let grade of gradesDataSource; let i = index" class="future-grade">
-            <div class="grade-info-container">
-              <div class="future-grade-info">
-                <div>
-                  <h5>{{grade.name}} - {{grade.category}}</h5>
+            <!-- Sliders -->
+            <div *ngFor="let grade of gradesDataSource; let i = index" class="future-grade container-fluid">
+              <div class="row justify-content-center grade-info-container">
+                <div class="col-12 col-md-8 future-grade-info">
+                  <div>
+                    <h4 class="text-center grade-header">{{grade.name}} - {{grade.category}}</h4>
+                  </div>
+                  <div class="text-center">
+                    <label class="mr-1">Due:</label>
+                    <label> {{grade.dueDate}}</label>
+                  </div>
+                  <div class="slider-box d-flex justify-content-center">
+                    <div class="align-self-center">
+                      <mat-slider max="100" min="{{grade.min}}" step="1" thumbLabel [(ngModel)]="gradesDataSource[i].grade"
+                      (valueChange)="valueChange($event, i)">
+                        <input matSliderThumb>
+                      </mat-slider>
+                    </div>
+                    <div class="align-self-center grade-form-input">
+                      <mat-form-field appearance="outline" class="grade-input">
+                        <mat-label>Grade</mat-label>
+                        <input matInput [(ngModel)]="gradesDataSource[i].grade" style="min-width: 50px;"
+                          (keyup)="textboxChange($event, i)">
+                      </mat-form-field>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label>Due: </label>
-                  <label>{{grade.dueDate}}</label>
+
+                <div class="col-12 col-md-4 future-grade-button-container d-flex align-items-center justify-content-center">
+                  <button mat-fab color="primary" [matTooltip]="gradesDataSource[i].lockedToolTip"
+                    matTooltipPosition="above" matTooltipClass="toolTip" class="future-grade-button"
+                    [style.background-color]="gradesDataSource[i].lockedColor" (click)="toggleLockGrade($event, i)">
+                    <mat-icon>lock</mat-icon>
+                  </button>
+                  <button mat-fab color="primary" matTooltip="Delete Grade" matTooltipPosition="above"
+                    matTooltipClass="toolTip" class="future-grade-button" style="background-color: #EB4D4Bbb;" (click)="deleteGrade($event, i)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <button mat-fab color="primary" matTooltip="Move to Past Grades" matTooltipPosition="above"
+                    matTooltipClass="toolTip" class="future-grade-button" style="background-color: #5da56dbb;" (click)="moveToPastGrades($event, i)">
+                    <mat-icon>history</mat-icon>
+                  </button>
                 </div>
-                <div class="slider-box">
-                  <mat-slider max="100" min="{{grade.min}}" step="1" thumbLabel [(ngModel)]="gradesDataSource[i].grade"
-                    (valueChange)="valueChange($event, i)">
-                    <input matSliderThumb>
-                  </mat-slider>
-                </div>
-              </div>
-              <div class="grade-input">
-                <mat-form-field appearance="fill">
-                  <mat-label>Grade</mat-label>
-                  <input matInput [(ngModel)]="gradesDataSource[i].grade" style="min-width: 50px;"
-                    (keyup)="textboxChange($event, i)">
-                </mat-form-field>
-              </div>
-              <div class="future-grade-button-container">
-                <button mat-fab color="primary" [matTooltip]="gradesDataSource[i].lockedToolTip"
-                  matTooltipPosition="above" matTooltipClass="toolTip" class="future-grade-button"
-                  [style.background-color]="gradesDataSource[i].lockedColor" (click)="toggleLockGrade($event, i)">
-                  <mat-icon>lock</mat-icon>
-                </button>
-                <button mat-fab color="primary" matTooltip="Delete Grade" matTooltipPosition="above"
-                  matTooltipClass="toolTip" class="future-grade-button" style="background-color: #EB4D4Bbb;" (click)="deleteGrade($event, i)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-                <button mat-fab color="primary" matTooltip="Move to Past Grades" matTooltipPosition="above"
-                  matTooltipClass="toolTip" class="future-grade-button" style="background-color: #5da56dbb;" (click)="moveToPastGrades($event, i)">
-                  <mat-icon>history</mat-icon>
-                </button>
               </div>
             </div>
-            <hr>
+          </mat-expansion-panel>
+
+        </mat-accordion>
+
+        <div class="text-center">
+          <button mat-flat-button class="add-grade-button mt-4">
+            <mat-icon>add</mat-icon>Add Grade
+          </button>
+        </div>
+      </div>
+      <!-- End Grade Accordion -->
+
+      <!-- Start Grade Chart -->
+      <div class="row col-md-4 col-sm-12 order-sm-0 order-md-1 mt-0 align-self-start mb-4">
+
+        <div class="mb-3 col-sm-4 col-md-12 align-self-sm-center align-self-start course-avg-circle-container">
+          <div class="mb-0 mr-auto ml-auto course-avg-circle d-flex justify-content-center align-items-center">
+            <span class="orange m-0" style="font-size: 3rem; font-weight: bolder;">{{courseAverage}}</span>
           </div>
-        </mat-expansion-panel>
+        </div>
 
-      </mat-accordion>
+        <div class="col-sm-8 col-md-12 align-self-start chart-container">
+          <canvas id="MyChart">{{ chart }}</canvas>
+        </div>
 
-    </div>
-    <div class="chart-container">
-      <canvas id="MyChart">{{ chart }}</canvas>
+      </div>
+      <!-- End Grade Chart -->
     </div>
   </div>
 
-  <button mat-flat-button class="add-grade-button">
-    <mat-icon>add</mat-icon>Add Grade
-  </button>
 </div>
