@@ -134,7 +134,8 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
             const matchingItem = grades.data.getAllGradesbyUserID.filter((grade) =>course.courseID === grade.courseID);
             return {
               ...course,
-              gradeslist: matchingItem ? [matchingItem] : []
+              gradeslist: matchingItem 
+              // ? [matchingItem] : []
             };
           });
           console.log(this.mergedList);

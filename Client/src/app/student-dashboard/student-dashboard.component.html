@@ -66,15 +66,25 @@
       <!-- Start 2nd row -->
       <div class="row">
         <!-- Start Course's Card -->
-        <div class="col-lg-3 col-sm-6" *ngFor="let course of courseList">
+        <div class="col-lg-3 col-sm-6" *ngFor="let course of mergedList">
           <mat-card class="card course-card p-4">
             <mat-card-title class="card-title text-center mt-2">{{ course.courseCode }}</mat-card-title>
             <mat-card-subtitle class="card-subtitle text-center">{{ course.courseName }}</mat-card-subtitle>
             <mat-card-content class="card-body upcoming-items">
               <h5 class="card-title mb-0">Upcoming:</h5>
-              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #ec2222;"></span></p>
-              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #00c31d;"></span>Exam 2</p>
-              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #ede20d;"></span>Exam 1</p>
+              <p class="mb-1" *ngIf="course.gradeslist.length == 0">No grade available yet</p>
+  
+              <div *ngFor="let grade of course.gradeslist">
+                <p class="mb-1" ><span [ngClass]="{
+                  'fa-solid fa-square mr-1': true,
+                  'fa-urgent-0': grade.urgency === 0,
+                  'fa-urgent-1': grade.urgency === 1,
+                  'fa-urgent-2': grade.urgency === 2,
+                  'fa-urgent-3': grade.urgency === 3,
+                  'fa-urgent-4': grade.urgency === 4
+                }"></span>{{grade.name}}</p>
+              </div>
+
             </mat-card-content>
             <mat-card-actions class="mb-1" align="end">
               <button class="m-1" mat-fab color="true" aria-label="Go to course's specific page">
