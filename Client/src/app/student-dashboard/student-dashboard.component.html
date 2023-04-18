@@ -15,16 +15,13 @@
             <!-- Start Semester Card body -->
             <div class="card-body container">
                 <div class="row no-gutters">
-                  <div class="row col-lg-4 justify-content-center align-items-center">
+                  <div class="row col-lg-4 d-flex justify-content-center align-items-center">
                       <!-- Start User Input -->
                       <div class="col-lg-12 col-md-6 w-100 mb-0">
-                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="CGPA">Current GPA: {{CGPA}}</p>
-                          <!-- <div class="input-border">
-                            <input class="input" id="CGPA" [(ngModel)]="afterCGPA" (change)="updateCurrChartData()" type="text" min="1.5" max="4" placeholder="CGPA" >
-                          </div> -->
+                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center">Current GPA: {{currentUser.cGPA}}</p>
                       </div>
-                      <div class="col-lg-12 col-md-6 w-100 mt-0">
-                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="EGPA">Estimated GPA:</p>
+                      <div class="align-self-baseline col-lg-12 col-md-6 w-100 mt-0">
+                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center">Estimated GPA:</p>
                           <div class="input-border justify-content-center">
                             <input class="input" id="EGPA" [(ngModel)]="afterEGPA" (change)="updateEstmatedChartData()" type="text" min="1.5" max="4" placeholder="EGPA" >
                           </div>
@@ -71,11 +68,12 @@
             <mat-card-title class="card-title text-center mt-2">{{ course.courseCode }}</mat-card-title>
             <mat-card-subtitle class="card-subtitle text-center">{{ course.courseName }}</mat-card-subtitle>
             <mat-card-content class="card-body upcoming-items">
+              <!-- Start upcoming tab -->
               <h5 class="card-title mb-0">Upcoming:</h5>
               <p class="mb-1" *ngIf="course.gradeslist.length == 0">No grade available yet</p>
   
               <div *ngFor="let grade of course.gradeslist">
-                <p class="mb-1" ><span [ngClass]="{
+                <p class="mb-1" ><span matTooltipPosition="above" matTooltip="{{ getUrgencyLevel(grade.urgency) }}" matTooltipClass="urgency-toolTip" [ngClass]="{
                   'fa-solid fa-square mr-1': true,
                   'fa-urgent-0': grade.urgency === 0,
                   'fa-urgent-1': grade.urgency === 1,
@@ -84,7 +82,7 @@
                   'fa-urgent-4': grade.urgency === 4
                 }"></span>{{grade.name}}</p>
               </div>
-
+              <!-- End upcoming tab -->
             </mat-card-content>
             <mat-card-actions class="mb-1" align="end">
               <button class="m-1" mat-fab color="true" aria-label="Go to course's detailed page">
