@@ -114,11 +114,10 @@ async function upcoming_notif(){
             });
             var email = data.getUserbyID.email
             
-
             //send email for each student:
             if(grades_info != []){
                 console.log("sending to "+email)
-                /*var response = client.sendEmailWithTemplate({
+                var response = client.sendEmailWithTemplate({
                     "From": upg_email,
                     "To": email,
                     "TemplateAlias": "upcoming-notification",
@@ -131,7 +130,7 @@ async function upcoming_notif(){
                     }
                 })
                 console.log("Send response: "+(await response).ErrorCode)
-                */
+                
             }
 
         }
