@@ -15,17 +15,13 @@
             <!-- Start Semester Card body -->
             <div class="card-body container">
                 <div class="row no-gutters">
-                  <div class="row col-lg-4 justify-content-center align-items-center">
+                  <div class="row col-lg-4 d-flex justify-content-center align-items-center">
                       <!-- Start User Input -->
-                      <button mat-raised-button color="primary" (click)="queryTest()">Test Query</button>
                       <div class="col-lg-12 col-md-6 w-100 mb-0">
-                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="CGPA">Current GPA: {{CGPA}}</p>
-                          <!-- <div class="input-border">
-                            <input class="input" id="CGPA" [(ngModel)]="afterCGPA" (change)="updateCurrChartData()" type="text" min="1.5" max="4" placeholder="CGPA" >
-                          </div> -->
+                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center">Current GPA: {{currentUser.cGPA}}</p>
                       </div>
-                      <div class="col-lg-12 col-md-6 w-100 mt-0">
-                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center" for="EGPA">Estimated GPA:</p>
+                      <div class="align-self-baseline col-lg-12 col-md-6 w-100 mt-0">
+                          <p style="font-size: large; font-weight: 500;" class="mb-1 text-center">Estimated GPA:</p>
                           <div class="input-border justify-content-center">
                             <input class="input" id="EGPA" [(ngModel)]="afterEGPA" (change)="updateEstmatedChartData()" type="text" min="1.5" max="4" placeholder="EGPA" >
                           </div>
@@ -67,18 +63,29 @@
       <!-- Start 2nd row -->
       <div class="row">
         <!-- Start Course's Card -->
-        <div class="col-lg-3 col-sm-6" *ngFor="let num of [0,1,2,3]">
+        <div class="col-lg-3 col-sm-6" *ngFor="let course of mergedList">
           <mat-card class="card course-card p-4">
-            <mat-card-title class="card-title text-center mt-2">{{ current.currentUser.getAllCourse[num].courseCode }}</mat-card-title>
-            <mat-card-subtitle class="card-subtitle text-center">{{ current.currentUser.getAllCourse[num].courseName }}</mat-card-subtitle>
+            <mat-card-title class="card-title text-center mt-2">{{ course.courseCode }}</mat-card-title>
+            <mat-card-subtitle class="card-subtitle text-center">{{ course.courseName }}</mat-card-subtitle>
             <mat-card-content class="card-body upcoming-items">
+              <!-- Start upcoming tab -->
               <h5 class="card-title mb-0">Upcoming:</h5>
-              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #ec2222;"></span>Assignment 1</p>
-              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #00c31d;"></span>Exam 2</p>
-              <p class="mb-1"><span class="fa-solid fa-square mr-1" style="color: #ede20d;"></span>Exam 1</p>
+              <p class="mb-1" *ngIf="course.gradeslist.length == 0">No grade available yet</p>
+  
+              <div *ngFor="let grade of course.gradeslist">
+                <p class="mb-1" ><span matTooltipPosition="above" matTooltip="{{ getUrgencyLevel(grade.urgency) }}" matTooltipClass="urgency-toolTip" [ngClass]="{
+                  'fa-solid fa-square mr-1': true,
+                  'fa-urgent-0': grade.urgency === 0,
+                  'fa-urgent-1': grade.urgency === 1,
+                  'fa-urgent-2': grade.urgency === 2,
+                  'fa-urgent-3': grade.urgency === 3,
+                  'fa-urgent-4': grade.urgency === 4
+                }"></span>{{grade.name}}</p>
+              </div>
+              <!-- End upcoming tab -->
             </mat-card-content>
             <mat-card-actions class="mb-1" align="end">
-              <button class="m-1" mat-fab color="true" aria-label="Go to course's specific page">
+              <button class="m-1" mat-fab color="true" aria-label="Go to course's detailed page">
                 <mat-icon>keyboard_double_arrow_right</mat-icon>
               </button>
             </mat-card-actions>
