@@ -1,10 +1,9 @@
-const fetch = require('cross-fetch');
 //1,800,000
 async function autoDeleteToken(){
     const { ApolloClient, useMutation, InMemoryCache, createHttpLink, gql } = require("@apollo/client/core");
 	//create the client
     const BackClient = new ApolloClient({
-        link: createHttpLink({ uri: 'http://localhost:4000/graphql', fetch }),
+        link: createHttpLink({ uri: 'http://localhost:4000/graphql' }),
         cache: new InMemoryCache(),
     });
     const getTokenTime = gql`

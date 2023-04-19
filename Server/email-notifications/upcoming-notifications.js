@@ -1,11 +1,11 @@
-const fetch = require('cross-fetch');
+
 async function upcoming_notif(){
     //upcoming grades email notification
     //this should be run automatically 1-2 times a week
     const { ApolloClient, InMemoryCache, createHttpLink, gql } = require("@apollo/client/core");
 
     const BackClient = new ApolloClient({
-        link: createHttpLink({ uri: 'http://localhost:4000/graphql', fetch }),
+        link: createHttpLink({ uri: 'http://localhost:4000/graphql' }),
         cache: new InMemoryCache(),
     });
     
@@ -74,23 +74,20 @@ async function upcoming_notif(){
             //for each grade, produce JSON and store in grades_info
             for(let gra = 0; gra < grades_response.getAllGradesbyUserID.length; gra++){
                 var current_grade = grades_response.getAllGradesbyUserID[gra]
-
+                //still waiting on name attribute for grades
                 var grade_name = current_grade.name
 
+                //dueDate still needs to be redone for final date format
                 var due_date = current_grade.dueDate
-                var currentDate = new Date();
-                var two_weeks_ahead = new Date(Date.now() + 12096e5)
-                console.log(two_weeks_ahead)
-                var month = due_date.slice(0, 2)
-                var day = due_date.slice(3, 5)
-                var year = due_date.slice(6)
-                var dateToCheck = new Date(year+"-"+month+"-"+day);
-                console.log(dateToCheck)
-                
-                if(dateToCheck < currentDate || dateToCheck > two_weeks_ahead){
-                    //if the due date is not within the next 2 weeks, skip it
-                    continue
-                }
+                //var due_date = new Date(parseInt(current_grade.dueDate))
+                //due_date = due_date.toISOString().slice(0, 10)
+                //var month = due_date.slice(5, 7)
+                //var day = due_date.slice(8)
+                //var year = due_date.slice(0, 4)
+                //var due_date = month+"/"+day+"/"+year
+
+                //if due_date later than the next 2 weeks, continue to next iteration
+                //  continue
 
                 //get the name of the course based on course ID
                 var {data} = await BackClient.query({
@@ -113,25 +110,22 @@ async function upcoming_notif(){
                 variables: {userIdParam: current_student}
             });
             var email = data.getUserbyID.email
-            
+            console.log("sending to "+email)
+
             //send email for each student:
-            if(grades_info != []){
-                console.log("sending to "+email)
-                var response = client.sendEmailWithTemplate({
-                    "From": upg_email,
-                    "To": email,
-                    "TemplateAlias": "upcoming-notification",
-                    "TemplateModel": {
-                        "product_url": "",
-                        "product_name": "upGrade",
-                        "Grades": grades_info,
-                        "company_name": "upGrade",
-                        "company_address": ""
-                    }
-                })
-                console.log("Send response: "+(await response).ErrorCode)
-                
-            }
+            var response = client.sendEmailWithTemplate({
+                "From": upg_email,
+                "To": email,
+                "TemplateAlias": "upcoming-notification",
+                "TemplateModel": {
+                    "product_url": "",
+                    "product_name": "upGrade",
+                    "Grades": grades_info,
+                    "company_name": "upGrade",
+                    "company_address": ""
+                }
+            })
+            console.log("Send response: "+(await response).ErrorCode)
 
         }
 
