@@ -1,11 +1,11 @@
-
+const fetch = require('cross-fetch');
 async function upcoming_notif(){
     //upcoming grades email notification
     //this should be run automatically 1-2 times a week
     const { ApolloClient, InMemoryCache, createHttpLink, gql } = require("@apollo/client/core");
 
     const BackClient = new ApolloClient({
-        link: createHttpLink({ uri: 'http://localhost:4000/graphql' }),
+        link: createHttpLink({ uri: 'http://localhost:4000/graphql', fetch }),
         cache: new InMemoryCache(),
     });
     
