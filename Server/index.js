@@ -34,7 +34,7 @@ User.init({
         type: Sequelize.DataTypes.TEXT
     }, 
     role: {
-        type: Sequelize.DataTypes.INTEGER 
+        type: Sequelize.DataTypes.TEXT 
     },
     firstLogin: { 
         type: Sequelize.DataTypes.BOOLEAN
@@ -53,13 +53,13 @@ Student.init({
         autoIncrement: true
     },
     eGPA: {
-        type: Sequelize.DataTypes.FLOAT
+        type: Sequelize.DataTypes.TEXT
     },
     cGPA: {
-        type: Sequelize.DataTypes.FLOAT
+        type: Sequelize.DataTypes.TEXT
     },
     completedCourseCount: {
-        type: Sequelize.DataTypes.INTEGER
+        type: Sequelize.DataTypes.TEXT
     }
 }, { sequelize, timestamps: false })
 //models["Student"] = Student;
@@ -80,10 +80,10 @@ Course.init({
         type: Sequelize.DataTypes.TEXT
     },
     courseNum:{
-        type: Sequelize.DataTypes.INTEGER
+        type: Sequelize.DataTypes.TEXT
     },
-    credits:{
-        type: Sequelize.DataTypes.INTEGER
+    courseCredits:{
+        type: Sequelize.DataTypes.TEXT
     }
 }, { sequelize, timestamps: false })
 //models["Course"] = Course;
@@ -100,13 +100,13 @@ PrevCourse.init({
         type: Sequelize.DataTypes.TEXT
     },
     pCourseNum:{
-        type: Sequelize.DataTypes.INTEGER
+        type: Sequelize.DataTypes.TEXT
     },
     pCourseGrade:{
-        type: Sequelize.DataTypes.FLOAT
+        type: Sequelize.DataTypes.TEXT
     },
     pCourseCredits:{
-        type: Sequelize.DataTypes.INTEGER
+        type: Sequelize.DataTypes.TEXT
     }
 }, { sequelize, timestamps: false })
 
@@ -122,7 +122,7 @@ Token.init({
         type: Sequelize.DataTypes.TEXT
     },
     creationTime: {
-        type: Sequelize.DataTypes.STRING
+        type: Sequelize.DataTypes.TEXT
     }
 }, { sequelize, timestamps: false })
 
@@ -142,22 +142,22 @@ Grade.init({
         type: Sequelize.DataTypes.TEXT
     },
     dueDate:{
-        type: Sequelize.DataTypes.STRING //DATEONLY if time isnt neccesary
+        type: Sequelize.DataTypes.TEXT //DATEONLY if time isnt neccesary
     },
     expectedGrade:{
-        type: Sequelize.DataTypes.FLOAT
+        type: Sequelize.DataTypes.TEXT
     },
     grade:{
-        type: Sequelize.DataTypes.FLOAT
+        type: Sequelize.DataTypes.TEXT
     },
     category:{
         type: Sequelize.DataTypes.TEXT
     },
     weight:{
-        type: Sequelize.DataTypes.FLOAT
+        type: Sequelize.DataTypes.TEXT
     },
     urgency:{
-        type: Sequelize.DataTypes.INTEGER
+        type: Sequelize.DataTypes.TEXT
     },
     locked:{
         type: Sequelize.DataTypes.BOOLEAN

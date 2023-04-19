@@ -220,7 +220,7 @@ const resolvers = {
             return models.Course.create({
                 courseName: courseName,
                 courseCode: courseCode,
-                coursNum: courseNum, 
+                courseNum: courseNum, 
                 courseCredits: courseCredits,
                 userID: userID
             }).catch(err => {
