@@ -166,7 +166,10 @@ Grade.init({
     },
     userID:{
         type: Sequelize.DataTypes.TEXT
-    }
+    },
+    history:{
+        type: Sequelize.DataTypes.BOOLEAN
+    },
 }, { sequelize, timestamps: false })
 //models["Grade"] = Grade;
 

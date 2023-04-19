@@ -369,7 +369,7 @@ const resolvers = {
 
 
         //Grade Mutations
-        addGrade(root, { name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID }, { models }) {
+        addGrade(root, { name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID, history }, { models }) {
             return models.Grade.create({
                 name: name,
                 dueDate: dueDate, 
@@ -380,13 +380,14 @@ const resolvers = {
                 urgency: urgency, 
                 locked: locked, 
                 courseID: courseID, 
-                userID: userID
+                userID: userID,
+                history: history
             }).catch(err => {
                 console.log(userID);
                 return err;
             });
         },
-        updateGrade(root, { gradeIDParam, name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID }, { models }) {
+        updateGrade(root, { gradeIDParam, name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID, history }, { models }) {
             models.Grade.update({
                 name: name,
                 dueDate: dueDate, 
@@ -397,7 +398,8 @@ const resolvers = {
                 urgency: urgency, 
                 locked: locked, 
                 courseID: courseID, 
-                userID: userID
+                userID: userID,
+                history: history
             },
             {
                 where: { gradeID: gradeIDParam }

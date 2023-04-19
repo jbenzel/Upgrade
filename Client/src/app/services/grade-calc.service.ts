@@ -1,10 +1,21 @@
 import { Injectable } from '@angular/core';
 import { UserService } from './user.service';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GradeCalcService {
+  private subject = new Subject<any>();
+
+  sendClickEvent(){
+    this.subject.next("");
+
+  }
+
+  getClickEvent():Observable<any>{
+     return this.subject.asObservable();
+  }
 
   constructor(private user: UserService) { }
 
@@ -131,6 +142,9 @@ export class GradeCalcService {
     //Divide Weighted Sum of Unlocked Grades by The Formula
     newDistributedGrade = newDistributedGrade / unlockedWeightedSum;
 
+
+    newDistributedGrade = Number(newDistributedGrade.toFixed(0));
+
     gradeNum = 0;
     futuregrades.forEach(grade => {
       if(grade.locked == false && gradeNum != changedGrade){
@@ -143,4 +157,6 @@ export class GradeCalcService {
     //console.log(newGradesArray);
     return newGradesArray;
   }
+
+  
 }
