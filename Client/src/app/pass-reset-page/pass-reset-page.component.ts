@@ -73,7 +73,7 @@ export class PassResetPageComponent implements OnInit {
         }
       }).valueChanges.subscribe((reset_response) => {
         //return User if success
-        console.log(reset_response.data)
+        //console.log(reset_response.data)
         if(reset_response.data.setNewPassword != null){
           //route to dashboard
           alert("success")

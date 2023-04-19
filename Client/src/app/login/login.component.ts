@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
           this.clear();
         }else{
           this.first_login = first_login_check.data.getUserbyEmail.firstLogin
-          console.log(this.first_login)
+          //console.log(this.first_login)
 
             //check that credentials are valid
             this.apollo.watchQuery<any>({
@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit {
               }
             }).valueChanges.subscribe(({ data }) => {
 
-              console.log(data.validateUser)
+              //console.log(data.validateUser)
 
               if(data.validateUser != null && !this.first_login){
                 //if both criteria met, route to dashboard upon successful login
