@@ -48,19 +48,21 @@ export class PassResetPageComponent implements OnInit {
   constructor(private apollo: Apollo) { }
 
   submit(){
-    if(this.password.value !== this.conf_password.value){
+    //set all conditionals
+    this.notMatching = false
+    this.syntax_error = false
+    this.invalid_creds = false
 
+    if(this.password.value !== this.conf_password.value){
+      //password and confirm password fields do not match
       this.notMatching = true
       this.syntax_error = false
       this.invalid_creds = false
+      this.clear()
 
     }else if(this.conf_password.valid && this.password.valid 
       && this.token.valid &&this.username.valid){
 
-      //reset all conditionals
-      this.notMatching = false
-      this.syntax_error = false
-      this.invalid_creds = false
       //call setNewPassword to check token is valid, if so destroy it
       this.apollo.watchQuery<any>({
         query: RESET_PROCEDURE,
@@ -79,17 +81,18 @@ export class PassResetPageComponent implements OnInit {
         }else{
           //else fail
           this.invalid_creds = true
+          
         }
+        this.clear()
       })
-
 
     }else{
       this.syntax_error = true
       this.invalid_creds = false
       this.notMatching = false
+      this.clear()
     }
-    //then must reroute to login page
-    this.clear()
+    
   }
 
   validate_user_syntax(){
@@ -138,7 +141,7 @@ export class PassResetPageComponent implements OnInit {
   }
 
   clear(){
-    //clears password fields
+    //clears all fields
     this.username.reset()
     this.token.reset()
     this.conf_password.reset()

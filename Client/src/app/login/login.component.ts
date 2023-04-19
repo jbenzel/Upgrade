@@ -8,7 +8,7 @@ import {
   hasUppercaseValidator } from 'app/custom-validators';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 
-//might have to encapsulate this to hide backend structure
+
 const VALIDATE_USER = gql`
 query ($emailParam: String, $passwordParam: String) {
   validateUser(emailParam: $emailParam, passwordParam: $passwordParam) {
@@ -65,6 +65,7 @@ export class LoginComponent implements OnInit {
           //no such user
           this.must_be_valid = false
           this.invalid_creds = true
+          this.clear();
         }else{
           this.first_login = first_login_check.data.getUserbyEmail.firstLogin
           console.log(this.first_login)
@@ -91,19 +92,18 @@ export class LoginComponent implements OnInit {
                 this.must_be_valid = false
                 this.invalid_creds = true
               }
+              this.clear();
 
             });
         }
       });
 
-      //getAllSOVQuery.refetch gives me issues
-      //this.getAllSOVQuery.refetch();
     }else{
       this.must_be_valid = true
       this.invalid_creds = false
+      this.clear();
     }
 
-    this.clear();
   }
 
   validate_user_syntax(){
@@ -138,9 +138,8 @@ export class LoginComponent implements OnInit {
 
   clear(){
     //clears username and password fields
-    this.username.reset() //how to clear?
+    this.username.reset()
     this.password.reset()
-    //this.valid_login = false;
   }
 
   re_set_password(){
@@ -148,7 +147,6 @@ export class LoginComponent implements OnInit {
     const dialogRef = this.dialog.open(ResetPassDialogComponent, {
       width: '400px'});
     //used for setting password for new users, or resetting if forgotten
-    //must make use of email notifs here
   }
 
   ngOnInit(): void {
