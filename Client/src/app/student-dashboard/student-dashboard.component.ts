@@ -61,7 +61,7 @@ query GetAllGradesbyUserID($userIdParam: ID!) {
   templateUrl: './student-dashboard.component.html',
   styleUrls: ['./student-dashboard.component.scss']
 })
-export class StudentDashboardComponent implements OnInit, AfterViewInit {
+export class StudentDashboardComponent implements OnInit {
 
   getAllSOVQuery!: QueryRef<any>;
 
@@ -139,7 +139,6 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
     }).valueChanges
       .subscribe(({ data }) => {
         this.gradesList = data.getAllGradesbyUserID;
-        // console.log(this.gradesList);
 
         data.getAllGradesbyUserID.forEach(grade => {
           this.newGradesList.push(grade);
@@ -209,10 +208,6 @@ export class StudentDashboardComponent implements OnInit, AfterViewInit {
   public progressChart: any;
   public afterEGPA: number;
   public afterCGPA: number;
-
-  ngAfterViewInit() {
-    this.mappingGrades();
-  }
 
   // start updating Current GPA Donut Chart
   updateCurrChartData() {
