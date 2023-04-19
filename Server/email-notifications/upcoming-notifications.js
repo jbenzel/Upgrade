@@ -21,9 +21,9 @@ async function upcoming_notif(){
     const GET_GRADES = gql`
     query ($userIdParam: ID!) {
         getAllGradesbyUserID(userIDParam: $userIdParam) {
-          urgency
           dueDate
           courseID
+          name
         }
       }
     `;
@@ -52,7 +52,6 @@ async function upcoming_notif(){
     });
     if(data.getAllStudent.length !== 0){
         console.log('Sending to '+data.getAllStudent.length+' students.')
-        //console.log(data)
         var studentIDs = data.getAllStudent
 
         const api_auth_token = "46b03d09-207a-4f2d-9796-4a5f31c642a7"
@@ -71,32 +70,29 @@ async function upcoming_notif(){
             var grades_response = data
 
             var grades_info = [] //array of JSON objects for each upcoming grade within 2 weeks
-            //for each grade
+
+            //for each grade, produce JSON and store in grades_info
             for(let gra = 0; gra < grades_response.getAllGradesbyUserID.length; gra++){
                 var current_grade = grades_response.getAllGradesbyUserID[gra]
-                //still waiting on name attribute for grades
-                var grade_name = current_grade.name
-                var urgency = current_grade.urgency
-                switch(urgency){
-                    case 1: urgency = "GREAT"
-                    break
-                    case 2: urgency = "OK"
-                    break
-                    case 3: urgency = "IMPORTANT"
-                    break
-                    case 4: urgency = "VITAL"
-                    break
-                    case 5: urgency = "URGENT"
-                }
-                var due_date = new Date(parseInt(current_grade.dueDate))
-                due_date = due_date.toISOString().slice(0, 10)
-                var month = due_date.slice(5, 7)
-                var day = due_date.slice(8)
-                var year = due_date.slice(0, 4)
-                var due_date = month+"/"+day+"/"+year
-                //if due_date later than the next 2 weeks, continue to next iteration
-                //  continue
 
+                var grade_name = current_grade.name
+
+                var due_date = current_grade.dueDate
+                var currentDate = new Date();
+                var two_weeks_ahead = new Date(Date.now() + 12096e5)
+                console.log(two_weeks_ahead)
+                var month = due_date.slice(0, 2)
+                var day = due_date.slice(3, 5)
+                var year = due_date.slice(6)
+                var dateToCheck = new Date(year+"-"+month+"-"+day);
+                console.log(dateToCheck)
+                
+                if(dateToCheck < currentDate || dateToCheck > two_weeks_ahead){
+                    //if the due date is not within the next 2 weeks, skip it
+                    continue
+                }
+
+                //get the name of the course based on course ID
                 var {data} = await BackClient.query({
                     query: GET_COURSE,
                     variables: {courseIdParam: current_grade.courseID}
@@ -107,7 +103,6 @@ async function upcoming_notif(){
                     "class": course_name,
                     "name": grade_name,
                     "dueDate": due_date,
-                    "urgency": urgency
                 })
 
             }
@@ -115,30 +110,34 @@ async function upcoming_notif(){
             //lastly, get student email
             var {data} = await BackClient.query({
                 query: GET_EMAIL,
-                variables: {userIdParam: current_grade.courseID}
+                variables: {userIdParam: current_student}
             });
             var email = data.getUserbyID.email
-            console.log(email)
-
+            
             //send email for each student:
-            /*var response = client.sendEmailWithTemplate({
-                "From": upg_email,
-                "To": email,
-                "TemplateAlias": "upcoming-notification",
-                "TemplateModel": {
-                    "product_url": "",
-                    "product_name": "upGrade",
-                    "Grades": grades_info,
-                    "company_name": "upGrade",
-                    "company_address": ""
-                }
-            })
-            console.log("Send response:\n"+response)*/
+            if(grades_info != []){
+                console.log("sending to "+email)
+                var response = client.sendEmailWithTemplate({
+                    "From": upg_email,
+                    "To": email,
+                    "TemplateAlias": "upcoming-notification",
+                    "TemplateModel": {
+                        "product_url": "",
+                        "product_name": "upGrade",
+                        "Grades": grades_info,
+                        "company_name": "upGrade",
+                        "company_address": ""
+                    }
+                })
+                console.log("Send response: "+(await response).ErrorCode)
+                
+            }
 
         }
 
     }else{
-        console.log('No emails to send in database.')
+        //if no grades in database for this student
+        console.log('No grades to send in database.')
     }
 
 };

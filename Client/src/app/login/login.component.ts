@@ -8,11 +8,19 @@ import {
   hasUppercaseValidator } from 'app/custom-validators';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 
-//might have to encapsulate this to hide backend structure
+
 const VALIDATE_USER = gql`
 query ($emailParam: String, $passwordParam: String) {
   validateUser(emailParam: $emailParam, passwordParam: $passwordParam) {
     email
+  }
+}
+`;
+
+const CHECK_LOGIN = gql`
+query ($emailParam: String) {
+  getUserbyEmail(emailParam: $emailParam) {
+    firstLogin
   }
 }
 `;
@@ -24,6 +32,7 @@ query ($emailParam: String, $passwordParam: String) {
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
   getAllSOVQuery!: QueryRef<any>;
   username = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', [
@@ -36,41 +45,65 @@ export class LoginComponent implements OnInit {
   invalid_creds: boolean = false;
   must_be_valid: boolean = false;
   reset_password: boolean = false;
+  first_login: boolean = true;
+
   constructor(public dialog: MatDialog, private apollo: Apollo) { }
 
   submit(){
+
     if(this.username.valid && this.password.valid){
+      //if valid syntax, proceed with backend checks
+      //check that not first login
       this.apollo.watchQuery<any>({
-        query: VALIDATE_USER,
+        query: CHECK_LOGIN,
         variables: {
           "emailParam": this.username.value,
-          "passwordParam": this.password.value
         }
-      }).valueChanges.subscribe(({ data }) => {
-          //console.log(data);
-          if(data.validateUser != null){
-            //valid login, reroute to proper page
-            //pass username and password fields to render dashboard
-            alert('succes')
-            this.must_be_valid = false
-            this.invalid_creds = false
+      }).valueChanges.subscribe((first_login_check) => {
 
-          }else{
-            //invalid creds, alert user
-            alert('invalid creds')
-            this.invalid_creds = true
-            this.must_be_valid = false
-          }
+        if(first_login_check.data.getUserbyEmail == null){
+          //no such user
+          this.must_be_valid = false
+          this.invalid_creds = true
+          this.clear();
+        }else{
+          this.first_login = first_login_check.data.getUserbyEmail.firstLogin
+          //console.log(this.first_login)
+
+            //check that credentials are valid
+            this.apollo.watchQuery<any>({
+              query: VALIDATE_USER,
+              variables: {
+                "emailParam": this.username.value,
+                "passwordParam": this.password.value
+              }
+            }).valueChanges.subscribe(({ data }) => {
+
+              //console.log(data.validateUser)
+
+              if(data.validateUser != null && !this.first_login){
+                //if both criteria met, route to dashboard upon successful login
+                alert('succes')
+                this.must_be_valid = false
+                this.invalid_creds = false
+
+              }else{
+                //invalid creds, alert user
+                this.must_be_valid = false
+                this.invalid_creds = true
+              }
+              this.clear();
+
+            });
+        }
       });
-      
-      //getAllSOVQuery.refetch gives me issues
-      //this.getAllSOVQuery.refetch();
+
     }else{
-      alert('syntax error still present')
       this.must_be_valid = true
       this.invalid_creds = false
+      this.clear();
     }
-    this.clear();
+
   }
 
   validate_user_syntax(){
@@ -105,9 +138,8 @@ export class LoginComponent implements OnInit {
 
   clear(){
     //clears username and password fields
-    this.username.reset() //how to clear?
+    this.username.reset()
     this.password.reset()
-    //this.valid_login = false;
   }
 
   re_set_password(){
@@ -115,7 +147,6 @@ export class LoginComponent implements OnInit {
     const dialogRef = this.dialog.open(ResetPassDialogComponent, {
       width: '400px'});
     //used for setting password for new users, or resetting if forgotten
-    //must make use of email notifs here
   }
 
   ngOnInit(): void {

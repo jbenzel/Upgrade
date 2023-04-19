@@ -1,9 +1,11 @@
+
 const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
 const { Sequelize } = require("sequelize")
 const { ApolloServer, gql } = require("apollo-server");
 const upcoming_notif = require('./email-notifications/upcoming-notifications')
 
+const tokenExpireLoop = require('./tokenAutoDelete')
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -34,7 +36,7 @@ User.init({
         type: Sequelize.DataTypes.TEXT
     }, 
     role: {
-        type: Sequelize.DataTypes.INTEGER //8bit instead of 32
+        type: Sequelize.DataTypes.INTEGER 
     },
     firstLogin: { 
         type: Sequelize.DataTypes.BOOLEAN
@@ -219,3 +221,7 @@ setInterval(() => {
     upcoming_notif()
 }, notif_interval);
 
+
+setInterval(() => {
+    tokenExpireLoop()
+}, (10 * 1000) )

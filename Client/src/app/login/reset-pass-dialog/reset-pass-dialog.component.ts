@@ -1,8 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {FormControl, Validators} from '@angular/forms';
-import { EmailServiceService } from '../reset-email/email-service.service';
-import { HttpClient } from '@angular/common/http';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 
 const VALIDATE_EMAIL = gql`
@@ -40,8 +38,6 @@ export class ResetPassDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ResetPassDialogComponent>,
-    private EmailService: EmailServiceService,
-    private http: HttpClient,
     private apollo: Apollo
   ) {}
 
@@ -68,7 +64,7 @@ export class ResetPassDialogComponent implements OnInit {
             }).valueChanges.subscribe(({ data }) => {
 
               //if successfully sent, confirm to user email sent
-              console.log(data)
+              //console.log(data)
               if(data.sendResetEmail != null){
                 (async () => { 
                   this.email_sent = true
