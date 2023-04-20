@@ -1,4 +1,3 @@
-const fetch = require('cross-fetch');
 async function reset_password(email) {
     //triggered by reset password dialog
     const { ApolloClient, InMemoryCache, createHttpLink, gql } = require("@apollo/client/core");
@@ -6,7 +5,7 @@ async function reset_password(email) {
     var postmark = require("postmark");
     var client = new postmark.ServerClient(api_auth_token);
     const BackClient = new ApolloClient({
-        link: createHttpLink({ uri: 'http://localhost:4000/graphql', fetch }),
+        link: createHttpLink({ uri: 'http://localhost:4000/graphql' }),
         cache: new InMemoryCache(),
     });
 

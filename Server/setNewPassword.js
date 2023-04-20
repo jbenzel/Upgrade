@@ -1,8 +1,7 @@
-const fetch = require('cross-fetch');
 async function setNewPassword(email, password, token_content){
     const { ApolloClient, InMemoryCache, createHttpLink, gql } = require("@apollo/client/core");
     const BackClient = new ApolloClient({
-        link: createHttpLink({ uri: 'http://localhost:4000/graphql', fetch }),
+        link: createHttpLink({ uri: 'http://localhost:4000/graphql'}),
         cache: new InMemoryCache(),
     });
 
