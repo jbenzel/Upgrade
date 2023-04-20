@@ -64,7 +64,7 @@ export class ResetPassDialogComponent implements OnInit {
             }).valueChanges.subscribe(({ data }) => {
 
               //if successfully sent, confirm to user email sent
-              console.log(data)
+              //console.log(data)
               if(data.sendResetEmail != null){
                 (async () => { 
                   this.email_sent = true

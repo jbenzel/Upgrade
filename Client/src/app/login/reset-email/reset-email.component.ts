@@ -20,7 +20,7 @@ export class ResetEmailComponent implements OnInit {
         location.href = 'https://mailthis.to/confirm'
       }, error => {
       console.warn(error.responseText)
-      console.log({ error })
+      //console.log({ error })
     })
   }
 
