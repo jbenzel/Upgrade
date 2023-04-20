@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .popup {
+            padding: 0px;
+            margin: 0px;
+            width: 40vw;
+            min-height: 450px;
+            max-height: 700px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #F56423;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            padding: 5px;
+            border-radius: 3px;
+            border: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .add-grade {
+            background-color: #52b788;
+            color: #EFEFEF;
+            padding: 10px;
+            border-radius: 3px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .close {
+            background-color: #424242bb;
+            color: #EFEFEF;
+            padding: 10px;
+            border-radius: 3px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 30px;
+        }
+
+        .add-grade-input {
+            max-width: 90%;
+            margin: auto;
+        }
+
+        .add-button {
+            background-color: #028090;
+            float: right;
+            margin-right: 60px;
+            font-size: large;
+        }
+
+        .close-button {
+            background-color: #EB4D4Bbb;
+            margin-left: 60px;
+            font-size: large;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="title">Add Grade</div>
+    <div class="popup">
+
+
+        <mat-form-field appearance="fill" class="add-grade-input">
+            <mat-label>Grade Name</mat-label>
+            <input matInput [(ngModel)]="gradeName">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="add-grade-input">
+            <mat-label>Grade Category</mat-label>
+            <mat-select [(value)]="gradeCategory">
+                <mat-option *ngFor="let category of category" [value]="category">
+                    {{category}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="add-grade-input">
+            <mat-label>Grade Date</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="gradeDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker" style="float: right;"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="add-grade-input">
+            <mat-label>Grade Weight</mat-label>
+            <input matInput [(ngModel)]="gradeWeight">
+        </mat-form-field>
+
+
+        <button mat-flat-button mat-dialog-close color="primary" class="close-button">Close</button>
+        <button mat-raised-button mat-dialog-close color="primary" class="add-button" (click)="addGrade()">Add
+            Grade</button>
+    </div>
+</body>
+
+</html>

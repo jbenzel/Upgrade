@@ -1,0 +1,41 @@
+
+<div class="main-content">
+    <div class="container-fluid">
+        <div style="text-align:center;">
+            <div class="dialog-body" >
+                <h5>We'll email you a password reset link</h5>
+                <mat-form-field class="login-input-box" appearance="outline">
+                    <mat-label class="mat-label">
+                      SHSU Email
+                    </mat-label>
+                    <input matInput placeholder="example@shsu.edu"
+                    [formControl]="username" required>
+                    <mat-error *ngIf="username.invalid">
+                        {{validate_user_syntax()}}</mat-error>
+                </mat-form-field>
+                <div style="justify-content: space-evenly;">
+                    <button mat-raised-button [disabled]="email_sent" class="cancel-button" (click)="onNoClick()">
+                        Cancel
+                    </button>
+                    <button mat-raised-button [disabled]="email_sent" class="send-button" (click)="send_email()">
+                        Send
+                    </button>
+                </div>
+                
+                <div *ngIf="must_be_valid">
+                    <br>
+                    <h5 style="color:red">Invalid email</h5>
+                </div>
+                <div *ngIf="failed_to_send">
+                    <br>
+                    <h5 style="color:red">❌Failed to send</h5>
+                </div>
+                <div *ngIf="email_sent">
+                    <br>
+                    <h5 style="color:green">✅Email Sent!</h5>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

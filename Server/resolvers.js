@@ -1,3 +1,5 @@
+const reset_password = require('./email-notifications/password-reset')
+const setNewPassword = require('./setNewPassword')
 const characters ='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
 function generateString(length) {
     let result = '';
@@ -126,6 +128,36 @@ const resolvers = {
             let Grade = await models.Grade.findAll({ where: { courseID: courseIDParam } });
             
             return Grade;
+        },
+
+        //Executions (Marcos added this, remove if it starts breaking stuff)
+        async sendResetEmail(root, { emailParam }, { models }) {
+            let User = await models.User.findOne({ where: { email: emailParam } });
+            if(User != null){
+                //if user exists, execute procedure
+                var success = reset_password(emailParam)
+                console.log(await success)
+                if(await success){
+                    //if no errors while sending
+                    return User;
+                }
+            }
+            return null;
+        },
+
+
+        async setNewPassword(root, { emailParam, password, content }, { models }) {
+            let User = await models.User.findOne({ where: { email: emailParam } });
+            if(User != null){
+                //if user exists, execute
+                var success = setNewPassword(emailParam, password, content)
+                console.log(await success)
+                if(await success){
+                    //if no errors and valid token
+                    return User;
+                }
+            }
+            return null;
         },
 
     },
@@ -338,7 +370,7 @@ const resolvers = {
 
 
         //Grade Mutations
-        addGrade(root, { name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID }, { models }) {
+        addGrade(root, { name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID, history }, { models }) {
             return models.Grade.create({
                 name: name,
                 dueDate: dueDate, 
@@ -349,13 +381,14 @@ const resolvers = {
                 urgency: urgency, 
                 locked: locked, 
                 courseID: courseID, 
-                userID: userID
+                userID: userID,
+                history: history
             }).catch(err => {
                 console.log(userID);
                 return err;
             });
         },
-        updateGrade(root, { gradeIDParam, name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID }, { models }) {
+        updateGrade(root, { gradeIDParam, name, dueDate, expectedGrade, grade, category, weight, urgency, locked, courseID, userID, history }, { models }) {
             models.Grade.update({
                 name: name,
                 dueDate: dueDate, 
@@ -366,7 +399,8 @@ const resolvers = {
                 urgency: urgency, 
                 locked: locked, 
                 courseID: courseID, 
-                userID: userID
+                userID: userID,
+                history: history
             },
             {
                 where: { gradeID: gradeIDParam }

@@ -11,6 +11,7 @@ import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { LoginComponent } from 'app/login/login.component';
 import { StudentDashboardComponent } from 'app/student-dashboard/student-dashboard.component';
 import { DetailedViewComponent } from 'app/detailed-view/detailed-view.component';
+import { PassResetPageComponent } from 'app/pass-reset-page/pass-reset-page.component';
 
 export const AdminLayoutRoutes: Routes = [
     // {
@@ -55,15 +56,16 @@ export const AdminLayoutRoutes: Routes = [
     //         component: UpgradeComponent
     //     }]
     // }
-    { path: 'dashboard',      component: DashboardComponent },
-    { path: 'user-profile',   component: UserProfileComponent },
-    { path: 'table-list',     component: TableListComponent },
-    { path: 'typography',     component: TypographyComponent },
-    { path: 'icons',          component: IconsComponent },
-    { path: 'maps',           component: MapsComponent },
-    { path: 'notifications',  component: NotificationsComponent },
-    { path: 'upgrade',        component: UpgradeComponent },
+    //{ path: 'dashboard',      component: DashboardComponent },
+    //{ path: 'user-profile',   component: UserProfileComponent },
+    //{ path: 'table-list',     component: TableListComponent },
+    //{ path: 'typography',     component: TypographyComponent },
+    //{ path: 'icons',          component: IconsComponent },
+    //{ path: 'maps',           component: MapsComponent },
+    //{ path: 'notifications',  component: NotificationsComponent },
+    //{ path: 'upgrade',        component: UpgradeComponent },
     { path: 'login',          component: LoginComponent },
     { path: 'student-dashboard', component: StudentDashboardComponent },
     { path: 'detailed-view',  component: DetailedViewComponent },
+    { path: 'pass-reset', component: PassResetPageComponent},
 ];

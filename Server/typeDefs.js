@@ -63,6 +63,7 @@ const typeDefs = gql`
         locked: Boolean
         courseID: ID
         userID: ID
+        history: Boolean
     }
 
     type Query {
@@ -91,6 +92,9 @@ const typeDefs = gql`
         getGradebyGradeID(gradeIDParam: ID!): Grade
         getAllGradesbyUserID(userIDParam: ID!): [Grade]
         getAllGradebyCourseID(courseIDParam: ID!): [Grade]
+        sendResetEmail(emailParam: String): User
+        setNewPassword(emailParam: String, password: String, content: String): User
+   
     }
 
     type Mutation {
@@ -113,8 +117,8 @@ const typeDefs = gql`
         deleteToken(tokenIDParam: ID!): Token
         createorUpdateToken(tokenIDParam: ID, content: String, creationTime: String, userID: ID!): Token
 
-        addGrade(name: String, dueDate: String, expectedGrade: String, grade: String, category: String, weight: String, urgency: String, locked: Boolean, courseID: ID!, userID: ID!): Grade
-        updateGrade(gradeIDParam: ID!, name: String, dueDate: String, expectedGrade: String, grade: String, category: String, weight: String, urgency: String, locked: Boolean, courseID: ID!, userID: ID!): Grade
+        addGrade(name: String, dueDate: String, expectedGrade: String, grade: String, category: String, weight: String, urgency: String, locked: Boolean, courseID: ID!, userID: ID!, history: Boolean): Grade
+        updateGrade(gradeIDParam: ID!, name: String, dueDate: String, expectedGrade: String, grade: String, category: String, weight: String, urgency: String, locked: Boolean, courseID: ID!, userID: ID!, history: Boolean): Grade
         deleteGrade(gradeIDParam: ID!): Grade
     }
 `;

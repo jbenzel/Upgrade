@@ -3,6 +3,8 @@ const typeDefs = require('./typeDefs')
 const resolvers = require('./resolvers')
 const { Sequelize } = require("sequelize")
 const { ApolloServer, gql } = require("apollo-server");
+const upcoming_notif = require('./email-notifications/upcoming-notifications')
+
 const tokenExpireLoop = require('./tokenAutoDelete')
 
 const sequelize = new Sequelize({
@@ -164,7 +166,10 @@ Grade.init({
     },
     userID:{
         type: Sequelize.DataTypes.TEXT
-    }
+    },
+    history:{
+        type: Sequelize.DataTypes.BOOLEAN
+    },
 }, { sequelize, timestamps: false })
 //models["Grade"] = Grade;
 
@@ -210,9 +215,16 @@ const server = new ApolloServer({
 
 server.listen().then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
-  });
+});
 
 
-  setInterval(() => {
+const notif_interval = 3.5 * 24 * 60 * 60 * 1000 //sleeps for 3.5 days
+//will see if there's an alternative to this than milisecond sleep
+setInterval(() => {
+    upcoming_notif()
+}, notif_interval);
+
+
+setInterval(() => {
     tokenExpireLoop()
-  }, (10 * 1000) )
+}, (10 * 1000) )
