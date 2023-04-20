@@ -13,7 +13,7 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { LoginComponent } from 'app/login/login.component';
 import { StudentDashboardComponent } from 'app/student-dashboard/student-dashboard.component';
-import { DetailedViewComponent } from 'app/detailed-view/detailed-view.component';
+import { AddGradePopup, DetailedViewComponent } from 'app/detailed-view/detailed-view.component';
 import { ResetPassDialogComponent } from 'app/login/reset-pass-dialog/reset-pass-dialog.component';
 import { ResetEmailComponent } from 'app/login/reset-email/reset-email.component';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
@@ -24,7 +24,7 @@ import { InMemoryCache } from '@apollo/client/core';
 
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
-import {MatRippleModule} from '@angular/material/core';
+import {MatNativeDateModule, MatRippleModule} from '@angular/material/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
@@ -62,7 +62,8 @@ import {NgChartsModule} from 'ng2-charts';
     MatIconModule,
     MatDatepickerModule,
     MatTableModule,
-    MatSliderModule
+    MatSliderModule,
+    MatNativeDateModule
   ],
   declarations: [
     DashboardComponent,
@@ -78,6 +79,7 @@ import {NgChartsModule} from 'ng2-charts';
     DetailedViewComponent,
     ResetPassDialogComponent,
     PassResetPageComponent,
+    AddGradePopup
   ],
   providers: [
     {

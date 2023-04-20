@@ -1,4 +1,3 @@
-
 async function reset_password(email) {
     //triggered by reset password dialog
     const { ApolloClient, InMemoryCache, createHttpLink, gql } = require("@apollo/client/core");

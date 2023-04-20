@@ -58,6 +58,7 @@ const typeDefs = gql`
         locked: Boolean
         courseID: ID!
         userID: ID
+        history: Boolean
     }
 
     type Query {
@@ -111,8 +112,8 @@ const typeDefs = gql`
         deleteToken(tokenIDParam: ID!): Token
         createorUpdateToken(tokenIDParam: ID, content: String, creationTime: String, userID: ID!): Token
 
-        addGrade(name: String, dueDate: String, expectedGrade: Float, grade: Float, category: String, weight: Float, urgency: Int, locked: Boolean, courseID: ID!, userID: ID!): Grade
-        updateGrade(gradeIDParam: ID!, name: String, dueDate: String, expectedGrade: Float, grade: Float, category: String, weight: Float, urgency: Int, locked: Boolean, courseID: ID!, userID: ID!): Grade
+        addGrade(name: String, dueDate: String, expectedGrade: Float, grade: Float, category: String, weight: Float, urgency: Int, locked: Boolean, courseID: ID!, userID: ID!, history: Boolean): Grade
+        updateGrade(gradeIDParam: ID!, name: String, dueDate: String, expectedGrade: Float, grade: Float, category: String, weight: Float, urgency: Int, locked: Boolean, courseID: ID!, userID: ID!, history: Boolean): Grade
         deleteGrade(gradeIDParam: ID!): Grade
     }
 `;

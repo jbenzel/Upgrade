@@ -5,6 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class UserService {
   currentGPA = 3.28;
+  userID = "1";
+  courseID = "1";
+
 
   constructor() { }
 }

@@ -3,7 +3,7 @@ async function autoDeleteToken(){
     const { ApolloClient, useMutation, InMemoryCache, createHttpLink, gql } = require("@apollo/client/core");
 	//create the client
     const BackClient = new ApolloClient({
-        link: createHttpLink({ uri: 'http://localhost:4000/graphql' }),
+        link: createHttpLink({ uri: 'http://localhost:4000/graphql'}),
         cache: new InMemoryCache(),
     });
     const getTokenTime = gql`
