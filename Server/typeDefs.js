@@ -31,7 +31,7 @@ const typeDefs = gql`
         courseName: String
         courseCode: String
         courseNum: String
-        courseCredits: String
+        credits: String
         userID: ID
     }
 

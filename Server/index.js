@@ -84,7 +84,7 @@ Course.init({
     courseNum:{
         type: Sequelize.DataTypes.TEXT
     },
-    courseCredits:{
+    credits:{
         type: Sequelize.DataTypes.TEXT
     }
 }, { sequelize, timestamps: false })
