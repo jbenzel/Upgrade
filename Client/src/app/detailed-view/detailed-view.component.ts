@@ -198,11 +198,15 @@ export class DetailedViewComponent implements OnInit {
           lockedColor = "#D1D1D1";
           lockedToolTip = "Lock Grade";
         }
-        if (grade.history) {
-          this.gradesHistoryDataSource.push({ "id": grade.gradeID, "category": grade.category, "weight": grade.weight, "name": grade.name, "grade": grade.grade, "dueDate": grade.dueDate });
-        }
-        else {
-          this.gradesDataSource.push({ "id": grade.gradeID, "category": grade.category, "weight": grade.weight, "name": grade.name, "grade": grade.expectedGrade, "dueDate": grade.dueDate, "locked": grade.locked, "lockedColor": lockedColor, "lockedToolTip": lockedToolTip });
+        if (grade.courseID == this.user.courseID) {
+          console.log(grade)
+          console.log(grade.courseID)
+          if (grade.history) {
+            this.gradesHistoryDataSource.push({ "id": grade.gradeID, "category": grade.category, "weight": grade.weight, "name": grade.name, "grade": grade.grade, "dueDate": grade.dueDate });
+          }
+          else {
+            this.gradesDataSource.push({ "id": grade.gradeID, "category": grade.category, "weight": grade.weight, "name": grade.name, "grade": grade.expectedGrade, "dueDate": grade.dueDate, "locked": grade.locked, "lockedColor": lockedColor, "lockedToolTip": lockedToolTip });
+          }
         }
       });
       this.table.renderRows();

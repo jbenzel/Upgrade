@@ -1,8 +1,9 @@
-import { Component, OnInit, OnChanges, SimpleChanges, Input,HostListener, ViewChild, ViewChildren, ChangeDetectorRef, QueryList, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, Input, HostListener, ViewChild, ViewChildren, ChangeDetectorRef, QueryList, AfterViewInit, ElementRef } from '@angular/core';
 import { Chart, ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
 import * as userInfo from './student-info.json';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { CONNREFUSED } from 'dns';
+import { UserService } from 'app/services/user.service';
 
 const GET_ALL_USERS = gql`
 query GetAllUser {
@@ -74,8 +75,8 @@ export class StudentDashboardComponent implements OnInit {
   public mergedList: any;
   public CGPA: number;
   public EGPA: number;
-  
-  constructor(private apollo: Apollo) { }
+
+  constructor(private apollo: Apollo, private user: UserService) { }
   ngOnInit(): void {
     this.getAllSOVQuery = this.apollo.watchQuery<any>({
       query: GET_ALL_USERS,
@@ -88,26 +89,30 @@ export class StudentDashboardComponent implements OnInit {
     this.mappingGrades();
   }
 
-    // start querying student
-    getStudent() {
-      this.apollo.watchQuery<any>({
-        query: GET_A_STUDENT,
-        variables: {
-          "userIdParam": this.userID
-        }
-      }).valueChanges
-        .subscribe(({ data }) => {
-          this.currentUser = data.getStudentbyUserID;
-          console.log(this.currentUser);
+  goToCourse(course){
+    this.user.courseID = course;
+  }
 
-          this.createCGPAChart('current');
-          this.createEGPAChart('estm');
-        });
-  
-      this.getAllSOVQuery.refetch();
-    }
+  // start querying student
+  getStudent() {
+    this.apollo.watchQuery<any>({
+      query: GET_A_STUDENT,
+      variables: {
+        "userIdParam": this.userID
+      }
+    }).valueChanges
+      .subscribe(({ data }) => {
+        this.currentUser = data.getStudentbyUserID;
+        console.log(this.currentUser);
+
+        this.createCGPAChart('current');
+        this.createEGPAChart('estm');
+      });
+
+    this.getAllSOVQuery.refetch();
+  }
   // end querying student
-  
+
   // start querying all course
   getCourses() {
     this.apollo.watchQuery<any>({
@@ -168,10 +173,10 @@ export class StudentDashboardComponent implements OnInit {
 
           // Merging two arrays
           this.mergedList = courses.data.getAllCoursesbyUserID.map(course => {
-            const matchingItem = grades.data.getAllGradesbyUserID.filter((grade) =>course.courseID === grade.courseID);
+            const matchingItem = grades.data.getAllGradesbyUserID.filter((grade) => course.courseID === grade.courseID);
             return {
               ...course,
-              gradeslist: matchingItem 
+              gradeslist: matchingItem
               // ? [matchingItem] : []
             };
           });
@@ -187,21 +192,21 @@ export class StudentDashboardComponent implements OnInit {
   // end mapping grades to corresponsing course
 
   // start urgency level for tooltip
-  getUrgencyLevel(urgency: number): string {
-    if (urgency === 4) {
+  getUrgencyLevel(urgency: string): string {
+    if (urgency === "4") {
       return "Urgent";
-    } else if (urgency === 3) {
+    } else if (urgency === "3") {
       return "Critical";
-    } else if (urgency === 2) {
+    } else if (urgency === "2") {
       return "Alarming";
-    } else if (urgency === 1) {
+    } else if (urgency === "1") {
       return "Act soon";
     } else {
       return "Low";
     }
   }
   // end urgency level for tooltip
-  
+
   // chart variables
   public EGPAchart: any;
   public CGPAchart: any;
@@ -282,15 +287,15 @@ export class StudentDashboardComponent implements OnInit {
   // end creating Current GPA Donut Chart
 
   // start creating Progress Line Chart
-  createProgressChart(chartId){
+  createProgressChart(chartId) {
     this.progressChart = new Chart(chartId, {
       type: 'line', //this denotes tha type of chart
       data: {// values on X-Axis
-        labels: ['0', '4', '8', '12', '16 (weeks)' ], 
-	       datasets: [
+        labels: ['0', '4', '8', '12', '16 (weeks)'],
+        datasets: [
           {
             label: this.mergedList[0].courseCode,
-            data: ['72','78', '83', '75', '92',],
+            data: ['72', '78', '83', '75', '92',],
             backgroundColor: '#F56423',
             borderColor: '#F56423',
             pointBackgroundColor: '#F56423',
@@ -308,7 +313,7 @@ export class StudentDashboardComponent implements OnInit {
           },
           {
             label: this.mergedList[2].courseCode,
-            data: ['90','70', '94', '97', '100',],
+            data: ['90', '70', '94', '97', '100',],
             backgroundColor: '#707070',
             borderColor: '#707070',
             pointBackgroundColor: '#707070',

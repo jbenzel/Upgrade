@@ -7,12 +7,20 @@ import {
   hasLowercaseValidator, 
   hasUppercaseValidator } from 'app/custom-validators';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
+import { Router } from '@angular/router';
+import { UserService } from 'app/services/user.service';
 
 
 const VALIDATE_USER = gql`
-query ($emailParam: String, $passwordParam: String) {
+query Query($emailParam: String, $passwordParam: String) {
   validateUser(emailParam: $emailParam, passwordParam: $passwordParam) {
     email
+    firstLogin
+    firstName
+    lastName
+    password
+    role
+    userID
   }
 }
 `;
@@ -47,7 +55,7 @@ export class LoginComponent implements OnInit {
   reset_password: boolean = false;
   first_login: boolean = true;
 
-  constructor(public dialog: MatDialog, private apollo: Apollo) { }
+  constructor(public dialog: MatDialog, private apollo: Apollo, private router: Router, private user: UserService) { }
 
   submit(){
 
@@ -79,11 +87,12 @@ export class LoginComponent implements OnInit {
               }
             }).valueChanges.subscribe(({ data }) => {
 
-              //console.log(data.validateUser)
+              //console.log("VALIDATE_USER",data)
 
               if(data.validateUser != null && !this.first_login){
                 //if both criteria met, route to dashboard upon successful login
-                alert('succes')
+                this.router.navigate(['/', 'student-dashboard']);
+                this.user.userID = data["validateUser"].userID;
                 this.must_be_valid = false
                 this.invalid_creds = false
 
