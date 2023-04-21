@@ -6,6 +6,7 @@ import {
   hasUppercaseValidator } from 'app/custom-validators';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { UserService } from 'app/services/user.service';
+import { AESEncryptDecryptServiceService } from 'app/services/aesencrypt-decrypt-service.service';
 
 
 const RESET_PROCEDURE = gql`
@@ -54,7 +55,11 @@ export class PassResetPageComponent implements OnInit {
   syntax_error = false
   invalid_creds = false
 
-  constructor(private apollo: Apollo, private user: UserService) { }
+  constructor(
+    private apollo: Apollo, 
+    private user: UserService,
+    private AES: AESEncryptDecryptServiceService
+  ) { }
 
   submit(){
     //set all conditionals
@@ -72,12 +77,17 @@ export class PassResetPageComponent implements OnInit {
     }else if(this.conf_password.valid && this.password.valid 
       && this.token.valid &&this.username.valid){
 
+      //will tokens be encrypted?
+      var encrypted_user = this.AES.encrypt(this.username.value)
+      var encrypted_pass = this.AES.encrypt(this.conf_password.value)
+      //var encrypted_token
+
       //call setNewPassword to check token is valid, if so destroy it
       this.apollo.watchQuery<any>({
         query: RESET_PROCEDURE,
         variables: {
-          "emailParam": this.username.value,
-          "password": this.conf_password.value,
+          "emailParam": encrypted_user,
+          "password": encrypted_pass,
           "content": this.token.value
         }
       }).valueChanges.subscribe((reset_response) => {
@@ -87,7 +97,7 @@ export class PassResetPageComponent implements OnInit {
           //get user ID
           this.apollo.watchQuery<any>({
             query: GET_USER,
-            variables: {"emailParam": this.username.value}
+            variables: {"emailParam": encrypted_user}
           }).valueChanges.subscribe((user_resp) => {
 
             //set userID data

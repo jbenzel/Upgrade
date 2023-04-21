@@ -2,6 +2,7 @@ async function upcoming_notif(){
     //upcoming grades email notification
     //this should be run automatically 1-2 times a week
     const { ApolloClient, InMemoryCache, createHttpLink, gql } = require("@apollo/client/core");
+    const {AESmodule} = require("../AESmodule")
 
     const BackClient = new ApolloClient({
         link: createHttpLink({ uri: 'http://localhost:4000/graphql'}),

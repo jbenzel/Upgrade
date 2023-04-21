@@ -8,6 +8,7 @@ import {
   hasUppercaseValidator } from 'app/custom-validators';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { UserService } from 'app/services/user.service';
+import { AESEncryptDecryptServiceService } from 'app/services/aesencrypt-decrypt-service.service';
 
 
 const VALIDATE_USER = gql`
@@ -48,17 +49,27 @@ export class LoginComponent implements OnInit {
   reset_password: boolean = false;
   first_login: boolean = true;
 
-  constructor(public dialog: MatDialog, private apollo: Apollo, private user: UserService) { }
+  constructor(
+    public dialog: MatDialog, 
+    private apollo: Apollo,
+    private user: UserService, 
+    private AES: AESEncryptDecryptServiceService
+  ) { }
 
   submit(){
 
     if(this.username.valid && this.password.valid){
       //if valid syntax, proceed with backend checks
       //check that not first login
+      var encrypted_user = this.AES.encrypt(this.username.value)
+      //console.log(temp)
+      //console.log(this.AES.decrypt(temp))
+
+      //check if it's user's first login
       this.apollo.watchQuery<any>({
         query: CHECK_LOGIN,
         variables: {
-          "emailParam": this.username.value,
+          "emailParam": encrypted_user,
         }
       }).valueChanges.subscribe((first_login_check) => {
 
@@ -70,12 +81,13 @@ export class LoginComponent implements OnInit {
         }else{
           this.first_login = first_login_check.data.getUserbyEmail.firstLogin
 
+            var encrypted_pass = this.AES.encrypt(this.password.value)
             //check that credentials are valid
             this.apollo.watchQuery<any>({
               query: VALIDATE_USER,
               variables: {
-                "emailParam": this.username.value,
-                "passwordParam": this.password.value
+                "emailParam": encrypted_user,
+                "passwordParam": encrypted_pass
               }
             }).valueChanges.subscribe(({ data }) => {
 
