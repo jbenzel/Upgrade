@@ -9,11 +9,18 @@ import {
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { UserService } from 'app/services/user.service';
 import { AESEncryptDecryptServiceService } from 'app/services/aesencrypt-decrypt-service.service';
+import { Router } from '@angular/router';
 
 
 const VALIDATE_USER = gql`
-query ($emailParam: String, $passwordParam: String) {
+query Query($emailParam: String, $passwordParam: String) {
   validateUser(emailParam: $emailParam, passwordParam: $passwordParam) {
+    email
+    firstLogin
+    firstName
+    lastName
+    password
+    role
     userID
   }
 }
@@ -53,7 +60,8 @@ export class LoginComponent implements OnInit {
     public dialog: MatDialog, 
     private apollo: Apollo,
     private user: UserService, 
-    private AES: AESEncryptDecryptServiceService
+    private AES: AESEncryptDecryptServiceService,
+    private router: Router
   ) { }
 
   submit(){
@@ -91,10 +99,12 @@ export class LoginComponent implements OnInit {
               }
             }).valueChanges.subscribe(({ data }) => {
 
+              //console.log("VALIDATE_USER",data)
+
               if(data.validateUser != null && !this.first_login){
-                this.user.userID = data.validateUser.userID
                 //if both criteria met, route to dashboard upon successful login
-                alert('succes')
+                this.router.navigate(['/', 'student-dashboard']);
+                this.user.userID = data["validateUser"].userID;
                 this.must_be_valid = false
                 this.invalid_creds = false
 

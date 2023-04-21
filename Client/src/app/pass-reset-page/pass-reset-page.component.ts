@@ -7,24 +7,22 @@ import {
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { UserService } from 'app/services/user.service';
 import { AESEncryptDecryptServiceService } from 'app/services/aesencrypt-decrypt-service.service';
+import { Router } from '@angular/router';
 
 
 const RESET_PROCEDURE = gql`
-query ($emailParam: String, $password: String, $content: String) {
-  setNewPassword(emailParam: $emailParam, password: $password, content: $content) {
+query Query($emailParam: String, $content: String, $password: String) {
+  setNewPassword(emailParam: $emailParam, content: $content, password: $password) {
     email
-  }
-}
-`;
-
-const GET_USER = gql`
-query ($emailParam: String) {
-  getUserbyEmail(emailParam: $emailParam) {
+    firstLogin
+    firstName
+    lastName
+    password
+    role
     userID
   }
 }
 `;
-
 
 @Component({
   selector: 'app-pass-reset-page',
@@ -58,7 +56,8 @@ export class PassResetPageComponent implements OnInit {
   constructor(
     private apollo: Apollo, 
     private user: UserService,
-    private AES: AESEncryptDecryptServiceService
+    private AES: AESEncryptDecryptServiceService,
+    private router: Router
   ) { }
 
   submit(){
@@ -92,19 +91,9 @@ export class PassResetPageComponent implements OnInit {
       }).valueChanges.subscribe((reset_response) => {
         //return User if success
         if(reset_response.data.setNewPassword != null){
-          
-          //get user ID
-          this.apollo.watchQuery<any>({
-            query: GET_USER,
-            variables: {"emailParam": encrypted_user}
-          }).valueChanges.subscribe((user_resp) => {
-
-            //set userID data
-            this.user.userID = user_resp.data.getUserbyEmail.userID
-            alert("success")
-            //route to dashboard
-          })
-
+          //route to dashboard
+          this.router.navigate(['/', 'student-dashboard']);
+          this.user.userID = reset_response.data["setNewPassword"].userID;
 
         }else{
           //else fail
