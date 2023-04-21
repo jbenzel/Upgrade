@@ -161,6 +161,7 @@ const resolvers = {
         },
 
     },
+    
     Mutation: {
         async addUser(root, { email, firstName, lastName, role }, { models }) {
             let inPass = await generateString(16)
@@ -251,7 +252,7 @@ const resolvers = {
             return models.Course.create({
                 courseName: courseName,
                 courseCode: courseCode,
-                coursNum: courseNum, 
+                courseNum: courseNum, 
                 courseCredits: courseCredits,
                 userID: userID
             }).catch(err => {
