@@ -1,8 +1,10 @@
 
-import CryptoJS from "crypto-js";
+const CryptoJS = require("crypto-js");
 
 class AESmodule{
     encryptKey = "YourSecretKeyForEncryption&Descryption";
+
+    constructor(){}
 
     encrypt(value){
         return CryptoJS.AES.encrypt(value, this.encryptKey.trim()).toString();
@@ -14,4 +16,4 @@ class AESmodule{
 
 }
 
-export default AESmodule;
+exports.AESmodule = AESmodule;

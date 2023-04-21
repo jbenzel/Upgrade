@@ -2,6 +2,7 @@ async function reset_password(email) {
     //triggered by reset password dialog
     const { ApolloClient, InMemoryCache, createHttpLink, gql } = require("@apollo/client/core");
     const {AESmodule} = require("../AESmodule")
+    const AES = new AESmodule()
 
     const api_auth_token = "46b03d09-207a-4f2d-9796-4a5f31c642a7"
     var postmark = require("postmark");

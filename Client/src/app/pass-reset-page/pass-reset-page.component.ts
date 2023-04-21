@@ -80,7 +80,7 @@ export class PassResetPageComponent implements OnInit {
       //will tokens be encrypted?
       var encrypted_user = this.AES.encrypt(this.username.value)
       var encrypted_pass = this.AES.encrypt(this.conf_password.value)
-      //var encrypted_token
+      //var encrypted_token?
 
       //call setNewPassword to check token is valid, if so destroy it
       this.apollo.watchQuery<any>({

@@ -3,6 +3,7 @@ async function upcoming_notif(){
     //this should be run automatically 1-2 times a week
     const { ApolloClient, InMemoryCache, createHttpLink, gql } = require("@apollo/client/core");
     const {AESmodule} = require("../AESmodule")
+    const AES = new AESmodule()
 
     const BackClient = new ApolloClient({
         link: createHttpLink({ uri: 'http://localhost:4000/graphql'}),
