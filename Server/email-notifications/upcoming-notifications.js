@@ -78,7 +78,7 @@ async function upcoming_notif(){
 
                 var grade_name = current_grade.name
 
-                var due_date = current_grade.dueDate
+                var due_date = AES.decrypt(current_grade.dueDate)
                 var currentDate = new Date();
                 var two_weeks_ahead = new Date(Date.now() + 12096e5)
                 console.log(two_weeks_ahead)
@@ -101,8 +101,8 @@ async function upcoming_notif(){
                 var course_name = data.getCoursebyCourseID.courseName
 
                 grades_info.push({
-                    "class": course_name,
-                    "name": grade_name,
+                    "class": AES.decrypt(course_name),
+                    "name": AES.decrypt(grade_name),
                     "dueDate": due_date,
                 })
 
@@ -113,7 +113,7 @@ async function upcoming_notif(){
                 query: GET_EMAIL,
                 variables: {userIdParam: current_student}
             });
-            var email = data.getUserbyID.email
+            var email = AES.decrypt(data.getUserbyID.email)
             
             //send email for each student:
             if(grades_info != []){

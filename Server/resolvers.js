@@ -1,6 +1,9 @@
 const reset_password = require('./email-notifications/password-reset')
 const setNewPassword = require('./setNewPassword')
 const characters ='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
+const {AESmodule} = require("./AESmodule")
+const AES = new AESmodule()
+
 function generateString(length) {
     let result = '';
     const charLength = characters.length;
@@ -343,7 +346,8 @@ const resolvers = {
             let Token = await models.Token.findOne({ where: {userID: userID} });
             let date = Date.now();
             date = date.toString();
-            let inPass = await generateString(8)
+            let inPass = await generateString(6)
+            inPass = AES.encrypt(inPass)
             if(Token != null){
                 models.Token.update({
                     content: inPass, 
@@ -358,7 +362,7 @@ const resolvers = {
             }
             else{
                 models.Token.create({
-                    content: generateString(6), 
+                    content: inPass, 
                     creationTime: date,
                     userID: userID
                 }).catch(err => {

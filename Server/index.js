@@ -228,3 +228,7 @@ setInterval(() => {
 setInterval(() => {
     tokenExpireLoop()
 }, (10 * 1000) )
+
+const {AESmodule} = require("./AESmodule")
+const AES = new AESmodule()
+console.log(AES.encrypt("mjr076@shsu.edu"))

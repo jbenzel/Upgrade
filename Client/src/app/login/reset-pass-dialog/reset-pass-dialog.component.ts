@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {FormControl, Validators} from '@angular/forms';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
+import { AESEncryptDecryptServiceService } from 'app/services/aesencrypt-decrypt-service.service';
 
 const VALIDATE_EMAIL = gql`
 query ($emailParam: String) {
@@ -38,19 +39,23 @@ export class ResetPassDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ResetPassDialogComponent>,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private AES: AESEncryptDecryptServiceService
   ) {}
 
   send_email(){
     if(this.username.valid){
       //once username has been matched in backend
+      console.log(this.username.value)
+      var encrypted_user = this.AES.encrypt(this.username.value)
+      console.log(encrypted_user)
       this.apollo.watchQuery<any>({
         query: VALIDATE_EMAIL,
         variables: {
-          "emailParam": this.username.value
+          "emailParam": encrypted_user
         }
       }).valueChanges.subscribe(({ data }) => {
-          //console.log(data);
+          console.log(data);
           if(data.getUserbyEmail != null){
 
             //email matched, send email
@@ -59,7 +64,7 @@ export class ResetPassDialogComponent implements OnInit {
             this.apollo.watchQuery<any>({
               query: SEND_EMAIL,
               variables: {
-                "emailParam": this.username.value
+                "emailParam": encrypted_user
               }
             }).valueChanges.subscribe(({ data }) => {
 

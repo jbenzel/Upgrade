@@ -77,10 +77,9 @@ export class PassResetPageComponent implements OnInit {
     }else if(this.conf_password.valid && this.password.valid 
       && this.token.valid &&this.username.valid){
 
-      //will tokens be encrypted?
       var encrypted_user = this.AES.encrypt(this.username.value)
       var encrypted_pass = this.AES.encrypt(this.conf_password.value)
-      //var encrypted_token?
+      var encrypted_token = this.AES.encrypt(this.token.value)
 
       //call setNewPassword to check token is valid, if so destroy it
       this.apollo.watchQuery<any>({
@@ -88,7 +87,7 @@ export class PassResetPageComponent implements OnInit {
         variables: {
           "emailParam": encrypted_user,
           "password": encrypted_pass,
-          "content": this.token.value
+          "content": encrypted_token
         }
       }).valueChanges.subscribe((reset_response) => {
         //return User if success

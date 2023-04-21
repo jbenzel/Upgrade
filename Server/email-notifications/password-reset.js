@@ -50,8 +50,9 @@ async function reset_password(email) {
     }
 
     var user_token = token_data.data.createorUpdateToken.content
+    user_token = AES.decrypt(user_token)
     console.log(user_token)
-
+    email = AES.decrypt(email)
     console.log('Sending reset link to '+email)
 
     //to send email:
