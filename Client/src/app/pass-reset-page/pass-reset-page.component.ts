@@ -5,12 +5,20 @@ import {
   hasLowercaseValidator, 
   hasUppercaseValidator } from 'app/custom-validators';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
+import { UserService } from 'app/services/user.service';
+import { Router } from '@angular/router';
 
 
 const RESET_PROCEDURE = gql`
-query ($emailParam: String, $password: String, $content: String) {
-  setNewPassword(emailParam: $emailParam, password: $password, content: $content) {
+query Query($emailParam: String, $content: String, $password: String) {
+  setNewPassword(emailParam: $emailParam, content: $content, password: $password) {
     email
+    firstLogin
+    firstName
+    lastName
+    password
+    role
+    userID
   }
 }
 `;
@@ -45,7 +53,7 @@ export class PassResetPageComponent implements OnInit {
   syntax_error = false
   invalid_creds = false
 
-  constructor(private apollo: Apollo) { }
+  constructor(private apollo: Apollo, private user: UserService, private router: Router) { }
 
   submit(){
     //set all conditionals
@@ -76,7 +84,8 @@ export class PassResetPageComponent implements OnInit {
         //console.log(reset_response.data)
         if(reset_response.data.setNewPassword != null){
           //route to dashboard
-          alert("success")
+          this.router.navigate(['/', 'student-dashboard']);
+          this.user.userID = reset_response.data["setNewPassword"].userID;
 
         }else{
           //else fail
