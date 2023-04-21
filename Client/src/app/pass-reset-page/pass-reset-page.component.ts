@@ -5,12 +5,21 @@ import {
   hasLowercaseValidator, 
   hasUppercaseValidator } from 'app/custom-validators';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
+import { UserService } from 'app/services/user.service';
 
 
 const RESET_PROCEDURE = gql`
 query ($emailParam: String, $password: String, $content: String) {
   setNewPassword(emailParam: $emailParam, password: $password, content: $content) {
     email
+  }
+}
+`;
+
+const GET_USER = gql`
+query ($emailParam: String) {
+  getUserbyEmail(emailParam: $emailParam) {
+    userID
   }
 }
 `;
@@ -45,7 +54,7 @@ export class PassResetPageComponent implements OnInit {
   syntax_error = false
   invalid_creds = false
 
-  constructor(private apollo: Apollo) { }
+  constructor(private apollo: Apollo, private user: UserService) { }
 
   submit(){
     //set all conditionals
@@ -73,10 +82,20 @@ export class PassResetPageComponent implements OnInit {
         }
       }).valueChanges.subscribe((reset_response) => {
         //return User if success
-        //console.log(reset_response.data)
         if(reset_response.data.setNewPassword != null){
-          //route to dashboard
-          alert("success")
+          
+          //get user ID
+          this.apollo.watchQuery<any>({
+            query: GET_USER,
+            variables: {"emailParam": this.username.value}
+          }).valueChanges.subscribe((user_resp) => {
+
+            //set userID data
+            this.user.userID = user_resp.data.getUserbyEmail.userID
+            alert("success")
+            //route to dashboard
+          })
+
 
         }else{
           //else fail
