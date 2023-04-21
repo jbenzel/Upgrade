@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Apollo, QueryRef, gql } from 'apollo-angular';
 import { UserService } from 'app/services/user.service';
 import { Subscription } from 'rxjs';
+import { AESEncryptDecryptServiceService } from 'app/services/aesencrypt-decrypt-service.service';
 
 const GET_COURSE_BY_COURSE_ID = gql`
 query Query($courseIdParam: ID!) {
@@ -40,39 +41,39 @@ query GetAllGradesbyUserID($userIdParam: ID!) {
 `;
 
 const ADD_GRADE = gql`
-mutation Mutation($name: String, $dueDate: String, $expectedGrade: Float, $grade: Float, $category: String, $weight: Float, $urgency: Int, $locked: Boolean, $courseId: ID!, $userId: ID!, $history: Boolean) {
+mutation Mutation($name: String, $dueDate: String, $expectedGrade: String, $grade: String, $category: String, $weight: String, $urgency: String, $locked: Boolean, $courseId: ID!, $userId: ID!, $history: Boolean) {
   addGrade(name: $name, dueDate: $dueDate, expectedGrade: $expectedGrade, grade: $grade, category: $category, weight: $weight, urgency: $urgency, locked: $locked, courseID: $courseId, userID: $userId, history: $history) {
-    weight
-    userID
-    urgency
-    name
-    locked
-    history
-    gradeID
-    grade
-    expectedGrade
-    dueDate
-    courseID
     category
+    courseID
+    dueDate
+    expectedGrade
+    grade
+    gradeID
+    history
+    locked
+    name
+    urgency
+    userID
+    weight
   }
 }
 `;
 
 const UPDATE_GRADE = gql`
-mutation Mutation($expectedGrade: Float, $gradeIdParam: ID!, $courseId: ID!, $userId: ID!, $locked: Boolean, $grade: Float, $history: Boolean) {
-  updateGrade(expectedGrade: $expectedGrade, gradeIDParam: $gradeIdParam, courseID: $courseId, userID: $userId, locked: $locked, grade: $grade, history: $history) {
-    expectedGrade
+mutation Mutation($gradeIdParam: ID!, $name: String, $dueDate: String, $expectedGrade: String, $grade: String, $category: String, $weight: String, $urgency: String, $locked: Boolean, $courseId: ID!, $userId: ID!, $history: Boolean) {
+  updateGrade(gradeIDParam: $gradeIdParam, name: $name, dueDate: $dueDate, expectedGrade: $expectedGrade, grade: $grade, category: $category, weight: $weight, urgency: $urgency, locked: $locked, courseID: $courseId, userID: $userId, history: $history) {
     category
     courseID
     dueDate
+    expectedGrade
     grade
     gradeID
+    history
     locked
     name
     urgency
     userID
     weight
-    history
   }
 }
 `;
@@ -124,7 +125,7 @@ export class DetailedViewComponent implements OnInit {
   courseName;
   courseNum;
 
-  constructor(private calc: GradeCalcService, private user: UserService, public dialog: MatDialog, private apollo: Apollo) {
+  constructor(private calc: GradeCalcService, private user: UserService, public dialog: MatDialog, private apollo: Apollo, private aes: AESEncryptDecryptServiceService) {
     this.clickEventSubscription = this.calc.getClickEvent().subscribe(() => {
       this.addGradeTrigger();
     })
@@ -139,8 +140,8 @@ export class DetailedViewComponent implements OnInit {
       }
     }).valueChanges.subscribe(({ data }) => {
       //console.log(data)
-      this.courseName = data["getCoursebyCourseID"].courseName;
-      this.courseNum = data["getCoursebyCourseID"].courseCode;
+      this.courseName = this.aes.decrypt(data["getCoursebyCourseID"].courseName);
+      this.courseNum = this.aes.decrypt(data["getCoursebyCourseID"].courseCode);
     });
 
     this.getAllGradesQuery = this.apollo.watchQuery<any>({
@@ -187,7 +188,6 @@ export class DetailedViewComponent implements OnInit {
       this.gradesHistoryDataSource = [];
       this.gradesDataSource = [];
       data["getAllGradesbyUserID"].forEach(grade => {
-        //console.log(grade);
         let lockedColor;
         let lockedToolTip;
         if (grade.locked) {
@@ -199,10 +199,10 @@ export class DetailedViewComponent implements OnInit {
           lockedToolTip = "Lock Grade";
         }
         if (grade.history) {
-          this.gradesHistoryDataSource.push({ "id": grade.gradeID, "category": grade.category, "weight": grade.weight, "name": grade.name, "grade": grade.grade, "dueDate": grade.dueDate });
+          this.gradesHistoryDataSource.push({ "id": grade.gradeID, "category": this.aes.decrypt(grade.category), "weight": (Number)(this.aes.decrypt(grade.weight)), "name": this.aes.decrypt(grade.name), "grade": (Number)(this.aes.decrypt(grade.grade)), "dueDate": this.aes.decrypt(grade.dueDate) });
         }
         else {
-          this.gradesDataSource.push({ "id": grade.gradeID, "category": grade.category, "weight": grade.weight, "name": grade.name, "grade": grade.expectedGrade, "dueDate": grade.dueDate, "locked": grade.locked, "lockedColor": lockedColor, "lockedToolTip": lockedToolTip });
+          this.gradesDataSource.push({ "id": grade.gradeID, "category": this.aes.decrypt(grade.category), "weight": (Number)(this.aes.decrypt(grade.weight)), "name": this.aes.decrypt(grade.name), "grade": (Number)(this.aes.decrypt(grade.expectedGrade)), "dueDate": this.aes.decrypt(grade.dueDate), "locked": grade.locked, "lockedColor": lockedColor, "lockedToolTip": lockedToolTip });
         }
       });
       this.table.renderRows();
@@ -216,10 +216,10 @@ export class DetailedViewComponent implements OnInit {
       this.apollo.mutate({
         mutation: UPDATE_GRADE,
         variables: {
-          "expectedGrade": grade.grade,
+          "expectedGrade": this.aes.encrypt(grade.grade.toString()),
           "gradeIdParam": grade.id,
-          "courseId": 1,
-          "userId": 1,
+          "courseId": this.user.courseID,
+          "userId": this.user.userID,
         },
       }).subscribe(({ data }) => {
       });
@@ -332,7 +332,7 @@ export class DetailedViewComponent implements OnInit {
         "gradeIdParam": this.gradesDataSource[i].id,
         "courseId": 1,
         "userId": 1,
-        "grade": this.gradesDataSource[i].grade
+        "grade": this.aes.encrypt(this.gradesDataSource[i].grade.toString())
       },
     }).subscribe(({ data }) => {
     });
@@ -424,7 +424,7 @@ export class AddGradePopup implements OnInit {
   gradeDate;
   gradeWeight;
 
-  constructor(private user: UserService, private calc: GradeCalcService, private apollo: Apollo) { }
+  constructor(private user: UserService, private calc: GradeCalcService, private apollo: Apollo, private aes: AESEncryptDecryptServiceService) { }
 
   ngOnInit(): void {
   }
@@ -487,13 +487,13 @@ export class AddGradePopup implements OnInit {
           "userId": (this.user.userID).toString(),
           "courseId": (this.user.courseID).toString(),
           "locked": false,
-          "urgency": 0,
-          "weight": Number(this.gradeWeight),
-          "category": (this.gradeCategory).toString(),
-          "grade": null,
-          "expectedGrade": 0,
-          "dueDate": (formattedDate).toString(),
-          "name": (this.gradeName).toString(),
+          "urgency": this.aes.encrypt("0"),
+          "weight": this.aes.encrypt(this.gradeWeight.toString()),
+          "category": this.aes.encrypt((this.gradeCategory).toString()),
+          "grade": this.aes.encrypt("0"),
+          "expectedGrade": this.aes.encrypt("0"),
+          "dueDate": this.aes.encrypt((formattedDate).toString()),
+          "name": this.aes.encrypt((this.gradeName).toString()),
           "history": false
         },
       }).subscribe(({ data }) => {
