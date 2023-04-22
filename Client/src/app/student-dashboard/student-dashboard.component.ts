@@ -192,14 +192,14 @@ export class StudentDashboardComponent implements OnInit {
   // end mapping grades to corresponsing course
 
   // start urgency level for tooltip
-  getUrgencyLevel(urgency: string): string {
-    if (urgency === "4") {
+  getUrgencyLevel(urgency: number): string {
+    if (urgency === 4) {
       return "Urgent";
-    } else if (urgency === "3") {
+    } else if (urgency === 3) {
       return "Critical";
-    } else if (urgency === "2") {
+    } else if (urgency === 2) {
       return "Alarming";
-    } else if (urgency === "1") {
+    } else if (urgency === 1) {
       return "Act soon";
     } else {
       return "Low";

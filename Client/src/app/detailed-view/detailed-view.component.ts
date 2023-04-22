@@ -223,8 +223,8 @@ export class DetailedViewComponent implements OnInit {
         variables: {
           "expectedGrade": grade.grade,
           "gradeIdParam": grade.id,
-          "courseId": 1,
-          "userId": 1,
+          "courseId": this.user.courseID,
+          "userId": this.user.userID,
         },
       }).subscribe(({ data }) => {
       });
@@ -334,8 +334,8 @@ export class DetailedViewComponent implements OnInit {
       variables: {
         "locked": this.gradesDataSource[i].locked,
         "gradeIdParam": this.gradesDataSource[i].id,
-        "courseId": 1,
-        "userId": 1,
+        "courseId": this.user.courseID,
+        "userId": this.user.userID,
       },
     }).subscribe(({ data }) => {
     });
@@ -362,8 +362,8 @@ export class DetailedViewComponent implements OnInit {
       variables: {
         "history": true,
         "gradeIdParam": this.gradesDataSource[i].id,
-        "courseId": 1,
-        "userId": 1,
+        "courseId": this.user.courseID,
+        "userId": this.user.userID,
         "grade": this.gradesDataSource[i].grade
       },
     }).subscribe(({ data }) => {

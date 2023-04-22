@@ -75,11 +75,11 @@
               <div *ngFor="let grade of course.gradeslist">
                 <p class="mb-1" ><span matTooltipPosition="above" matTooltip="{{ getUrgencyLevel(grade.urgency) }}" matTooltipClass="urgency-toolTip" [ngClass]="{
                   'fa-solid fa-square mr-1': true,
-                  'fa-urgent-0': grade.urgency === '0',
-                  'fa-urgent-1': grade.urgency === '1',
-                  'fa-urgent-2': grade.urgency === '2',
-                  'fa-urgent-3': grade.urgency === '3',
-                  'fa-urgent-4': grade.urgency === '4'
+                  'fa-urgent-0': grade.urgency === 0,
+                  'fa-urgent-1': grade.urgency === 1,
+                  'fa-urgent-2': grade.urgency === 2,
+                  'fa-urgent-3': grade.urgency === 3,
+                  'fa-urgent-4': grade.urgency === 4
                 }"></span>{{grade.name}}</p>
               </div>
               <!-- End upcoming tab -->
