@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Apollo, QueryRef, gql } from 'apollo-angular';
 import { UserService } from 'app/services/user.service';
 import { Subscription } from 'rxjs';
+import Notify from 'simple-notify'
 
 const GET_COURSE_BY_COURSE_ID = gql`
 query Query($courseIdParam: ID!) {
@@ -109,7 +110,7 @@ export class DetailedViewComponent implements OnInit {
   timeout: any = null;
   displayedColumns: string[] = ['category', 'name', 'grade', 'dueDate'];
   gradesHistoryDataSource = [];
-  gradesDataSource = [];
+  gradesDataSource: any = [];
   oldGradesDataSource = [];
   courseAverage;
   expectedCourseAverage;
@@ -251,9 +252,28 @@ export class DetailedViewComponent implements OnInit {
     //console.log(this.expectedCourseAverage)
   }
 
+  notify(){
+    new Notify ({
+      status: 'error',
+      title: 'Notify Title',
+      text: 'Value Entered was Too Low',
+      effect: 'fade',
+      speed: 300,
+      customClass: '',
+      customIcon: '',
+      showIcon: true,
+      showCloseButton: true,
+      autoclose: true,
+      autotimeout: 3000,
+      gap: 20,
+      distance: 20,
+      type: 1,
+      position: 'right top'
+    })
+  }
+
   //Triggered on Slider Value Change
   valueChange($event, i) {
-    this.oldGradesDataSource = JSON.parse(JSON.stringify(this.gradesDataSource));
     //console.log("Value Change")
     //console.log($event, i);
     //If Changed Grade, Lock Grade
@@ -262,9 +282,17 @@ export class DetailedViewComponent implements OnInit {
     }
 
     //Refreshes Future Grades with Even Distribution
-    this.gradesDataSource = this.calc.disributeCourseGrades(this.gradesHistoryDataSource, this.gradesDataSource, i);
+    let updatedTable: any = this.calc.disributeCourseGrades(this.gradesHistoryDataSource, this.gradesDataSource, i);
+    if (updatedTable == "Error") {
+      this.gradesDataSource = this.oldGradesDataSource;
+      this.notify();
+    }
+    else {
+      this.gradesDataSource = updatedTable;
+    }
     this.updateAverages();
     this.updateGrades();
+    this.oldGradesDataSource = JSON.parse(JSON.stringify(this.gradesDataSource));
   }
 
   textboxChange($event, i) {

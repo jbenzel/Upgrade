@@ -63,7 +63,7 @@ import {NgChartsModule} from 'ng2-charts';
     MatDatepickerModule,
     MatTableModule,
     MatSliderModule,
-    MatNativeDateModule
+    MatNativeDateModule,
   ],
   declarations: [
     DashboardComponent,

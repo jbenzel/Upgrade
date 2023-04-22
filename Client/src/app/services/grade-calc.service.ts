@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UserService } from './user.service';
-import {Observable, Subject} from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,13 +8,13 @@ import {Observable, Subject} from 'rxjs';
 export class GradeCalcService {
   private subject = new Subject<any>();
 
-  sendClickEvent(){
+  sendClickEvent() {
     this.subject.next("");
 
   }
 
-  getClickEvent():Observable<any>{
-     return this.subject.asObservable();
+  getClickEvent(): Observable<any> {
+    return this.subject.asObservable();
   }
 
   constructor(private user: UserService) { }
@@ -104,13 +104,13 @@ export class GradeCalcService {
     //Seperate Grades (Locked/Unlocked)
     gradeNum = 0;
     futuregrades.forEach(grade => {
-      if(grade.locked == false && gradeNum != changedGrade){
+      if (grade.locked == false && gradeNum != changedGrade) {
         unlockedFutureGradeArray.push(grade);
         unlockedWeightedSum += grade.weight;
         totalWeightedSum += grade.weight;
         unlockedGradeNum++;
       }
-      else{
+      else {
         lockedGradeArray.push(grade);
         lockedGradeNum++;
       }
@@ -147,7 +147,7 @@ export class GradeCalcService {
 
     gradeNum = 0;
     futuregrades.forEach(grade => {
-      if(grade.locked == false && gradeNum != changedGrade){
+      if (grade.locked == false && gradeNum != changedGrade) {
         grade.grade = newDistributedGrade
       }
       newGradesArray.push(grade);
@@ -155,8 +155,13 @@ export class GradeCalcService {
     });
 
     //console.log(newGradesArray);
-    return newGradesArray;
+    if (newDistributedGrade > 100) {
+      return "Error";
+    }
+    else {
+      return newGradesArray;
+    }
   }
 
-  
+
 }
