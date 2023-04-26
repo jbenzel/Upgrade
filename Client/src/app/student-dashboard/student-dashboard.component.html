@@ -23,7 +23,7 @@
                       <div class="align-self-baseline col-lg-12 col-md-6 w-100 mt-0">
                           <p style="font-size: large; font-weight: 500;" class="mb-1 text-center">Estimated GPA:</p>
                           <div class="input-border justify-content-center">
-                            <input class="input" id="EGPA" [(ngModel)]="afterEGPA" (change)="updateEstmatedChartData()" type="text" min="1.5" max="4" placeholder="EGPA" >
+                            <input class="input" id="EGPA" [(ngModel)]="afterEGPA" (change)="updateEstmatedChartData()" (change)="updateEGPA()" type="text" min="1.5" max="4" placeholder="EGPA" >
                           </div>
                       </div>
                       <!-- End User Input -->
@@ -75,17 +75,17 @@
               <div *ngFor="let grade of course.gradeslist">
                 <p class="mb-1" ><span matTooltipPosition="above" matTooltip="{{ getUrgencyLevel(grade.urgency) }}" matTooltipClass="urgency-toolTip" [ngClass]="{
                   'fa-solid fa-square mr-1': true,
-                  'fa-urgent-0': grade.urgency === 0,
-                  'fa-urgent-1': grade.urgency === 1,
-                  'fa-urgent-2': grade.urgency === 2,
-                  'fa-urgent-3': grade.urgency === 3,
-                  'fa-urgent-4': grade.urgency === 4
+                  'fa-urgent-0': grade.urgency === '0',
+                  'fa-urgent-1': grade.urgency === '1',
+                  'fa-urgent-2': grade.urgency === '2',
+                  'fa-urgent-3': grade.urgency === '3',
+                  'fa-urgent-4': grade.urgency === '4'
                 }"></span>{{grade.name}}</p>
               </div>
               <!-- End upcoming tab -->
             </mat-card-content>
             <mat-card-actions class="mb-1" align="end">
-              <button class="m-1" mat-fab color="true" aria-label="Go to course's detailed page">
+              <button (click)="goToCourse(course.courseID)" [routerLink]="['/detailed-view']" class="m-1" mat-fab color="true" aria-label="Go to course's detailed page">
                 <mat-icon>keyboard_double_arrow_right</mat-icon>
               </button>
             </mat-card-actions>

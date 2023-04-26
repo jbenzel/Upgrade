@@ -3,6 +3,8 @@ import { Chart, ChartConfiguration, ChartData, ChartEvent, ChartType } from 'cha
 import * as userInfo from './student-info.json';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { CONNREFUSED } from 'dns';
+import { UserService } from 'app/services/user.service';
+import { AESEncryptDecryptServiceService } from 'app/services/aesencrypt-decrypt-service.service';
 
 const GET_ALL_USERS = gql`
 query GetAllUser {
@@ -17,7 +19,7 @@ query GetAllUser {
 }
 `;
 const GET_A_STUDENT = gql`
-query GetStudentbyUserID($userIdParam: Int) {
+query GetStudentbyUserID($userIdParam: ID!) {
   getStudentbyUserID(userIDParam: $userIdParam) {
     studentID
     eGPA
@@ -56,6 +58,17 @@ query GetAllGradesbyUserID($userIdParam: ID!) {
   }
 }
 `;
+const UPDATE_EGPA = gql`
+mutation UpdateStudent($userId: ID!, $eGpa: String, $studentIdParam: ID!) {
+  updateStudent(userID: $userId, eGPA: $eGpa, studentIDParam: $studentIdParam) {
+    studentID
+    eGPA
+    cGPA
+    completedCourseCount
+    userID
+  }
+}
+`;
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
@@ -65,7 +78,7 @@ export class StudentDashboardComponent implements OnInit {
 
   getAllSOVQuery!: QueryRef<any>;
 
-  public userID: number = 1;
+  // public userID: number = 1;
   public currentUser: any;
   public courseList: any;
   public gradesList: any;
@@ -74,8 +87,14 @@ export class StudentDashboardComponent implements OnInit {
   public mergedList: any;
   public CGPA: number;
   public EGPA: number;
+  // chart variables
+  public EGPAchart: any;
+  public CGPAchart: any;
+  public progressChart: any;
+  public afterEGPA: number;
+  public afterCGPA: number;
   
-  constructor(private apollo: Apollo) { }
+  constructor(private apollo: Apollo, private user: UserService, private aes: AESEncryptDecryptServiceService) { }
   ngOnInit(): void {
     this.getAllSOVQuery = this.apollo.watchQuery<any>({
       query: GET_ALL_USERS,
@@ -88,32 +107,55 @@ export class StudentDashboardComponent implements OnInit {
     this.mappingGrades();
   }
 
-    // start querying student
-    getStudent() {
-      this.apollo.watchQuery<any>({
-        query: GET_A_STUDENT,
-        variables: {
-          "userIdParam": this.userID
-        }
-      }).valueChanges
-        .subscribe(({ data }) => {
-          this.currentUser = data.getStudentbyUserID;
-          console.log(this.currentUser);
+  // routing to course view
+  goToCourse(course) {
+    this.user.courseID = course;
+  }
 
-          this.createCGPAChart('current');
-          this.createEGPAChart('estm');
-        });
-  
-      this.getAllSOVQuery.refetch();
-    }
+  // start querying student
+  getStudent() {
+    this.apollo.watchQuery<any>({
+      query: GET_A_STUDENT,
+      variables: {
+        "userIdParam": this.user.userID
+      }
+    }).valueChanges
+      .subscribe(({ data }) => {
+        console.log(data);
+        this.currentUser = data.getStudentbyUserID;
+        let eGPA:any = data.getStudentbyUserID.eGPA;
+        console.log("1",eGPA);
+        eGPA = this.aes.decrypt(eGPA);
+        console.log("2",eGPA);
+
+        this.createCGPAChart('current');
+        this.createEGPAChart('estm', eGPA);
+      });
+    this.getAllSOVQuery.refetch();
+  }
   // end querying student
+
+  // start updating estimated GPA
+  updateEGPA() {
+    this.apollo.mutate({
+      mutation: UPDATE_EGPA,
+      variables: {
+        "userId": this.user.userID,
+        "studentIdParam": this.user.userID,
+        "eGpa": this.aes.encrypt( String(this.afterEGPA))
+      },
+    }).subscribe(({ data }) => {
+    });
+    this.getAllSOVQuery.refetch();
+  }
+  // end updating estimated GPA
   
   // start querying all course
   getCourses() {
     this.apollo.watchQuery<any>({
       query: GET_ALL_COURSES,
       variables: {
-        "userIdParam": this.userID
+        "userIdParam": this.user.userID
       }
     }).valueChanges
       .subscribe(({ data }) => {
@@ -134,7 +176,7 @@ export class StudentDashboardComponent implements OnInit {
     this.apollo.watchQuery<any>({
       query: GET_ALL_GRADES,
       variables: {
-        "userIdParam": this.userID
+        "userIdParam": this.user.userID
       }
     }).valueChanges
       .subscribe(({ data }) => {
@@ -154,7 +196,7 @@ export class StudentDashboardComponent implements OnInit {
     this.apollo.watchQuery<any>({
       query: GET_ALL_COURSES,
       variables: {
-        "userIdParam": this.userID
+        "userIdParam": this.user.userID
       }
     }).valueChanges
       .subscribe((courses) => {
@@ -162,7 +204,7 @@ export class StudentDashboardComponent implements OnInit {
         this.apollo.watchQuery<any>({
           query: GET_ALL_GRADES,
           variables: {
-            "userIdParam": this.userID
+            "userIdParam": this.user.userID
           }
         }).valueChanges.subscribe((grades) => {
 
@@ -176,7 +218,7 @@ export class StudentDashboardComponent implements OnInit {
             };
           });
           console.log(this.mergedList);
-          console.log(this.currentUser);
+          // console.log(this.currentUser);
 
           this.createProgressChart('progressChart');
         });
@@ -187,48 +229,25 @@ export class StudentDashboardComponent implements OnInit {
   // end mapping grades to corresponsing course
 
   // start urgency level for tooltip
-  getUrgencyLevel(urgency: number): string {
-    if (urgency === 4) {
+  getUrgencyLevel(urgency: string): string {
+    if (urgency === "4") {
       return "Urgent";
-    } else if (urgency === 3) {
+    } else if (urgency === "3") {
       return "Critical";
-    } else if (urgency === 2) {
+    } else if (urgency === "2") {
       return "Alarming";
-    } else if (urgency === 1) {
+    } else if (urgency === "1") {
       return "Act soon";
     } else {
       return "Low";
     }
   }
   // end urgency level for tooltip
-  
-  // chart variables
-  public EGPAchart: any;
-  public CGPAchart: any;
-  public progressChart: any;
-  public afterEGPA: number;
-  public afterCGPA: number;
-
-  // start updating Current GPA Donut Chart
-  updateCurrChartData() {
-    // Update the chart data with the new value
-    const newGPA = [Number(this.afterCGPA), 4 - this.afterCGPA];
-
-    console.log(this.CGPAchart);
-    this.CGPAchart.data.datasets[0].data = newGPA;
-
-    // Update the chart properties with the modified data
-    this.CGPAchart.update();
-    this.CGPAchart.render();
-  }
-  // end updating Current GPA Donut Chart
 
   // start updating Estimated GPA Donut Chart
   updateEstmatedChartData() {
     // Update the chart data with the new value
     const newGPA = [Number(this.afterEGPA), 4 - this.afterEGPA];
-
-    console.log(this.EGPAchart);
     this.EGPAchart.data.datasets[0].data = newGPA;
 
     // Update the chart properties with the modified data
@@ -238,14 +257,14 @@ export class StudentDashboardComponent implements OnInit {
   // end updating Estimated GPA Donut Chart
 
   // start creating Estimated GPA Donut Chart
-  createEGPAChart(chartId) {
+  createEGPAChart(chartId, eGPA) {
     this.EGPAchart = new Chart(chartId, {
       type: 'doughnut',
       data: {
         labels: ['EGPA', ''],
         datasets: [
           {
-            data: [this.currentUser.eGPA, 4 - this.currentUser.eGPA],
+            data: [eGPA, 4 - eGPA],
             backgroundColor: ['#F56423', '#707070'],
             hoverBackgroundColor: ['#F56423', '#707070']
           }
@@ -267,7 +286,7 @@ export class StudentDashboardComponent implements OnInit {
         labels: ['CGPA', ''],
         datasets: [
           {
-            data: [this.currentUser.cGPA, 4 - this.currentUser.cGPA],
+            data: [ Number(this.currentUser.cGPA), 4 - Number(this.currentUser.cGPA)],
             backgroundColor: ['#F56423', '#707070'],
             hoverBackgroundColor: ['#F56423', '#707070']
           }
