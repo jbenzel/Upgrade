@@ -85,7 +85,7 @@ export class PassResetPageComponent implements OnInit {
         if(reset_response.data.setNewPassword != null){
           //route to dashboard
           this.router.navigate(['/', 'student-dashboard']);
-          this.user.userID = reset_response.data["setNewPassword"].userID;
+          this.user.userID = (Number)(reset_response.data["setNewPassword"].userID);
 
         }else{
           //else fail
