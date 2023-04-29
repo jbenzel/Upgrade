@@ -92,7 +92,7 @@ export class LoginComponent implements OnInit {
               if(data.validateUser != null && !this.first_login){
                 //if both criteria met, route to dashboard upon successful login
                 this.router.navigate(['/', 'student-dashboard']);
-                this.user.userID = data["validateUser"].userID;
+                this.user.userID = (Number)(data["validateUser"].userID);
                 this.must_be_valid = false
                 this.invalid_creds = false
 

@@ -54,6 +54,7 @@ query GetAllGradesbyUserID($userIdParam: ID!) {
     locked
     courseID
     userID
+    history
   }
 }
 `;
@@ -75,8 +76,11 @@ export class StudentDashboardComponent implements OnInit {
 
   getAllSOVQuery!: QueryRef<any>;
 
-  public userID: number = 1;
-  public currentUser: any;
+  public currentUser: any = {
+    //TEMP Values - (Is updated to users values)
+    "eGPA":0,
+    "cGPA":0
+  };
   public courseList: any;
   public gradesList: any;
   public newCourseList: any[] = [];
@@ -107,12 +111,13 @@ export class StudentDashboardComponent implements OnInit {
     this.apollo.watchQuery<any>({
       query: GET_A_STUDENT,
       variables: {
-        "userIdParam": this.userID
+        "userIdParam": (Number)(this.user.userID)
       }
     }).valueChanges
       .subscribe(({ data }) => {
         this.currentUser = data.getStudentbyUserID;
-        console.log(this.currentUser);
+        this.user.currentGPA = data.getStudentbyUserID.cGPA;
+        this.user.estimatedGPA = data.getStudentbyUserID.eGPA;
 
         this.createCGPAChart('current');
         this.createEGPAChart('estm');
@@ -127,7 +132,7 @@ export class StudentDashboardComponent implements OnInit {
     this.apollo.watchQuery<any>({
       query: GET_ALL_COURSES,
       variables: {
-        "userIdParam": this.userID
+        "userIdParam": this.user.userID
       }
     }).valueChanges
       .subscribe(({ data }) => {
@@ -148,7 +153,7 @@ export class StudentDashboardComponent implements OnInit {
     this.apollo.watchQuery<any>({
       query: GET_ALL_GRADES,
       variables: {
-        "userIdParam": this.userID
+        "userIdParam": this.user.userID
       }
     }).valueChanges
       .subscribe(({ data }) => {
@@ -168,7 +173,7 @@ export class StudentDashboardComponent implements OnInit {
     this.apollo.watchQuery<any>({
       query: GET_ALL_COURSES,
       variables: {
-        "userIdParam": this.userID
+        "userIdParam": this.user.userID
       }
     }).valueChanges
       .subscribe((courses) => {
@@ -176,7 +181,7 @@ export class StudentDashboardComponent implements OnInit {
         this.apollo.watchQuery<any>({
           query: GET_ALL_GRADES,
           variables: {
-            "userIdParam": this.userID
+            "userIdParam": this.user.userID
           }
         }).valueChanges.subscribe((grades) => {
 
@@ -189,8 +194,8 @@ export class StudentDashboardComponent implements OnInit {
               // ? [matchingItem] : []
             };
           });
-          console.log(this.mergedList);
-          console.log(this.currentUser);
+          //console.log(this.mergedList);
+          //console.log(this.currentUser);
 
           this.createProgressChart('progressChart');
         });
@@ -228,7 +233,7 @@ export class StudentDashboardComponent implements OnInit {
     // Update the chart data with the new value
     const newGPA = [Number(this.afterEGPA), 4 - this.afterEGPA];
 
-    console.log(this.EGPAchart);
+    //console.log(this.EGPAchart);
     this.EGPAchart.data.datasets[0].data = newGPA;
 
     // Update the chart properties with the modified data

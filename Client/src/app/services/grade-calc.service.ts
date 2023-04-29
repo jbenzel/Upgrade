@@ -19,44 +19,6 @@ export class GradeCalcService {
 
   constructor(private user: UserService) { }
 
-  //  disributeCourseGrades(grades: any, changedGrade: any){
-  //    let newGrades;
-  //    let unlockedGradeArray;
-  //    let courseGpa = this.user.currentGPA * 25;
-  //    let sumOfGrades = 0;
-  //    let sumOfUnlockedGrades = 0;
-  //    let gradeTotalDifference = 0;
-  //    let gradesNum = 0;
-  //    let unlockedGradesNum = 0;
-  //    let percentageOfTotalArray;
-  //    
-  //    //Gets Sum of Grades and New Unlocked Grades Array
-  //    grades.forEach(grade => {
-  //      gradesNum++;
-  //      sumOfGrades += grade.grade;
-  //      if(!grade.locked && !changedGrade){
-  //        unlockedGradeArray.push(grade);
-  //        unlockedGradesNum++;
-  //      }
-  //    });
-  //
-  //    //Sum of All Unlocked Grades
-  //    unlockedGradeArray.forEach(grade => {
-  //      sumOfUnlockedGrades += grade;
-  //    });
-  //
-  //    //Difference of Grades Sum - (All - Unl)
-  //    gradeTotalDifference = sumOfGrades - (sumOfGrades - sumOfUnlockedGrades);
-  //
-  //    //Creates Percentages of Grades to Total
-  //    unlockedGradeArray.forEach(grade => {
-  //      percentageOfTotalArray.push(grade/sumOfUnlockedGrades);
-  //    });
-  //
-  //
-  //    return newGrades;
-  //  }
-
   //Generates Average from Past Grades 
   courseGrade(grades: any) {
     let weightedSum = 0;

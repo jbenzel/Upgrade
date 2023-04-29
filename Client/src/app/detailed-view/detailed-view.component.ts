@@ -174,7 +174,7 @@ export class DetailedViewComponent implements OnInit {
         maintainAspectRatio: false
       }
     });
-
+    
   }
 
   populateDataSource() {
@@ -373,6 +373,7 @@ export class DetailedViewComponent implements OnInit {
     this.table.renderRows();
     this.updateAverages();
     this.updateDonughtChart();
+    this.getAllGradesQuery.refetch();
   }
 
   //Refreshes Donught Chart
