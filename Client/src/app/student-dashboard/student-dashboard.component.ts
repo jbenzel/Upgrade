@@ -57,6 +57,15 @@ query GetAllGradesbyUserID($userIdParam: ID!) {
   }
 }
 `;
+const UPDATE_EGPA = gql`
+mutation Mutation($studentIdParam: ID!, $userId: Int!, $eGpa: Float) {
+  updateStudent(studentIDParam: $studentIdParam, userID: $userId, eGPA: $eGpa) {
+    userID
+    studentID
+    eGPA
+  }
+}
+`;
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
@@ -214,20 +223,6 @@ export class StudentDashboardComponent implements OnInit {
   public afterEGPA: number;
   public afterCGPA: number;
 
-  // start updating Current GPA Donut Chart
-  updateCurrChartData() {
-    // Update the chart data with the new value
-    const newGPA = [Number(this.afterCGPA), 4 - this.afterCGPA];
-
-    console.log(this.CGPAchart);
-    this.CGPAchart.data.datasets[0].data = newGPA;
-
-    // Update the chart properties with the modified data
-    this.CGPAchart.update();
-    this.CGPAchart.render();
-  }
-  // end updating Current GPA Donut Chart
-
   // start updating Estimated GPA Donut Chart
   updateEstmatedChartData() {
     // Update the chart data with the new value
@@ -239,6 +234,18 @@ export class StudentDashboardComponent implements OnInit {
     // Update the chart properties with the modified data
     this.EGPAchart.update();
     this.EGPAchart.render();
+
+    // updating EGPA in database after user input
+    this.apollo.mutate({
+      mutation: UPDATE_EGPA,
+      variables: {
+        "userId": this.user.userID,
+        "studentIdParam": this.user.userID,
+        "eGpa": Number(this.afterEGPA)
+      },
+    }).subscribe(({ data }) => {
+    });
+
   }
   // end updating Estimated GPA Donut Chart
 
@@ -319,16 +326,15 @@ export class StudentDashboardComponent implements OnInit {
             pointBackgroundColor: '#707070',
             pointHoverBackgroundColor: '#707070',
             pointRadius: 5
-          }
-          // ,{
-          //   label: this.mergedList[3].courseCode,
-          //   data: ['80','74', '85', '72', '96',],
-          //   backgroundColor: '#004990',
-          //   borderColor: '#004990',
-          //   pointBackgroundColor: '#004990',
-          //   pointHoverBackgroundColor: '#004990',
-          //   pointRadius: 5
-          // } 
+          },{
+            label: this.mergedList[3].courseCode,
+            data: ['80','74', '85', '72', '96',],
+            backgroundColor: '#004990',
+            borderColor: '#004990',
+            pointBackgroundColor: '#004990',
+            pointHoverBackgroundColor: '#004990',
+            pointRadius: 5
+          } 
         ]
       },
       options: {
