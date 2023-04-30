@@ -22,7 +22,8 @@
                     {{currentUser.cGPA}}</p>
                 </div>
                 <div class="align-self-baseline col-lg-12 col-md-6 w-100 mt-0">
-                  <p style="font-size: large; font-weight: 500;" class="mb-1 text-center">Estimated GPA:</p>
+                  <p style="font-size: large; font-weight: 500;" class="mb-1 text-center">Your Goal GPA:</p>
+                  <p style="font-size: small; font-weight: 400;" class="mb-1 text-center">Maximum: {{maxGPA}}</p>
                   <div class="input-border justify-content-center">
                     <input class="input" id="EGPA" [(ngModel)]="afterEGPA" (change)="updateEstmatedChartData()"
                       type="text" min="1.5" max="4" placeholder="EGPA">

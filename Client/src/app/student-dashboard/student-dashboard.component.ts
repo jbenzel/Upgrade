@@ -4,6 +4,7 @@ import * as userInfo from './student-info.json';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { CONNREFUSED } from 'dns';
 import { UserService } from 'app/services/user.service';
+import { GradeCalcService } from 'app/services/grade-calc.service';
 
 const GET_ALL_USERS = gql`
 query GetAllUser {
@@ -40,6 +41,18 @@ query GetAllCoursesbyUserID($userIdParam: ID!) {
   }
 }
 `;
+const GET_ALL_PREV_COURSES = gql`
+query Query($userIdParam: ID!) {
+  getAllPrevCoursebyUserID(userIDParam: $userIdParam) {
+    pCourseCredits
+    pCourseGrade
+    pCourseName
+    pCourseNum
+    prevCourseID
+    userID
+  }
+}
+`;
 const GET_ALL_GRADES = gql`
 query GetAllGradesbyUserID($userIdParam: ID!) {
   getAllGradesbyUserID(userIDParam: $userIdParam) {
@@ -67,6 +80,15 @@ mutation Mutation($studentIdParam: ID!, $userId: Int!, $eGpa: Float) {
   }
 }
 `;
+const UPDATE_CGPA = gql`
+mutation Mutation($studentIdParam: ID!, $userId: Int!, $cGpa: Float) {
+  updateStudent(studentIDParam: $studentIdParam, userID: $userId, cGPA: $cGpa) {
+    userID
+    studentID
+    cGPA
+  }
+}
+`;
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
@@ -75,6 +97,7 @@ mutation Mutation($studentIdParam: ID!, $userId: Int!, $eGpa: Float) {
 export class StudentDashboardComponent implements OnInit {
 
   getAllSOVQuery!: QueryRef<any>;
+  getStudentQuery!: QueryRef<any>;
 
   public currentUser: any = {
     //TEMP Values - (Is updated to users values)
@@ -88,15 +111,25 @@ export class StudentDashboardComponent implements OnInit {
   public mergedList: any;
   public CGPA: number;
   public EGPA: number;
+  prevCourses = [];
+  maxGPA;
 
-  constructor(private apollo: Apollo, private user: UserService) { }
+  constructor(private apollo: Apollo, private user: UserService, private calc: GradeCalcService) { }
   ngOnInit(): void {
     this.getAllSOVQuery = this.apollo.watchQuery<any>({
       query: GET_ALL_USERS,
     });
 
+    this.getStudentQuery = this.apollo.watchQuery<any>({
+      query: GET_A_STUDENT,
+      variables: {
+        "userIdParam": (Number)(this.user.userID)
+      }
+    });
+
     this.getStudent();
     this.getCourses();
+    this.getPrevCourses();
     this.getGrades();
 
     this.mappingGrades();
@@ -116,8 +149,8 @@ export class StudentDashboardComponent implements OnInit {
     }).valueChanges
       .subscribe(({ data }) => {
         this.currentUser = data.getStudentbyUserID;
-        this.user.currentGPA = data.getStudentbyUserID.cGPA;
-        this.user.estimatedGPA = data.getStudentbyUserID.eGPA;
+        this.user.currentGPA = Number(data.getStudentbyUserID.cGPA);
+        this.user.estimatedGPA = Number(data.getStudentbyUserID.eGPA);
 
         this.createCGPAChart('current');
         this.createEGPAChart('estm');
@@ -146,7 +179,35 @@ export class StudentDashboardComponent implements OnInit {
 
     this.getAllSOVQuery.refetch();
   }
+
+  getPrevCourses(){
+    this.apollo.watchQuery<any>({
+      query: GET_ALL_PREV_COURSES,
+      variables: {
+        "userIdParam": this.user.userID
+      }
+    }).valueChanges
+      .subscribe(({ data }) => {
+        //console.log("getPrevCourses",data.getAllPrevCoursebyUserID);
+        this.prevCourses = data.getAllPrevCoursebyUserID;
+        this.updateCurrentGPA(this.calc.getCurrentGPA(data.getAllPrevCoursebyUserID));
+      });
+  }
   // end querying all course
+
+  updateCurrentGPA(cGpa){
+    this.apollo.mutate({
+      mutation: UPDATE_CGPA,
+      variables: {
+        "userId": this.user.userID,
+        "studentIdParam": this.user.userID,
+        "cGpa": Number(cGpa)
+      },
+    }).subscribe(({ data }) => {
+      this.user.currentGPA = Number(cGpa);
+    });
+    this.getStudentQuery.refetch();
+  }
 
   // start querying all grades
   getGrades() {
@@ -162,11 +223,45 @@ export class StudentDashboardComponent implements OnInit {
         data.getAllGradesbyUserID.forEach(grade => {
           this.newGradesList.push(grade);
         });
+        //console.log("Grade List",this.newGradesList);
+        setTimeout (() => {
+          this.getGPAMax(data);
+        }, 1000);
       });
 
     this.getAllSOVQuery.refetch();
   }
   // end querying all grades
+
+  getGPAMax(data){
+    //Orders Grades Into a List of Grades by Users Course
+    let tempGradeList = [];
+    let tempCourseGradeList = [];
+    let courseGradeID = data.getAllGradesbyUserID[0].courseID;
+    this.newGradesList.forEach(grade => {
+      if(courseGradeID == grade.courseID){
+        tempCourseGradeList.push(grade);
+      }
+      else{
+        //console.log(tempCourseGradeList);
+        tempGradeList.push(tempCourseGradeList);
+        tempCourseGradeList = [];
+        tempCourseGradeList.push(grade);
+      }
+      if(this.newGradesList[this.newGradesList.length-1] == grade){
+        //console.log(tempCourseGradeList);
+        tempGradeList.push(tempCourseGradeList);
+      }
+      courseGradeID = grade.courseID;
+    });
+
+    let maxAverageCoursesAndPrevCourses = [];
+    maxAverageCoursesAndPrevCourses = this.calc.getMaxAverage(tempGradeList, this.courseList);
+    maxAverageCoursesAndPrevCourses = maxAverageCoursesAndPrevCourses.concat(this.prevCourses);
+    //console.log("maxAverageCoursesAndPrevCourses",maxAverageCoursesAndPrevCourses);
+    this.maxGPA = (Math.trunc((this.calc.getCurrentGPA(maxAverageCoursesAndPrevCourses))*100)/100)
+    //console.log(this.maxGPA)
+  }
 
   // start mapping grades to corresponsing course
   mappingGrades() {
