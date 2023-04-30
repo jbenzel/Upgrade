@@ -53,7 +53,7 @@ export class GradeCalcService {
     let unlockedFutureGradeArray = [];
     let lockedGradeNum = grades.length;
     let unlockedGradeNum = 0;
-    let courseExpectedGpa = this.user.currentGPA;
+    let courseExpectedGpa = this.user.estimatedGPA;
     let courseExpectedGrade = courseExpectedGpa * 25;
     let unlockedWeightedSum = 0;
     let totalWeightedSum = 0;
@@ -125,5 +125,51 @@ export class GradeCalcService {
     }
   }
 
+  //Returns Current GPA
+  getCurrentGPA(previousCourses){
+    if(previousCourses.length == 0){
+      return 4;
+    }
+    let totalGPA = 0;
+    let totalCredits = 0;
+    //console.log(previousCourses)
+    previousCourses.forEach(course => {
+      totalGPA += (course.pCourseGrade/25)*course.pCourseCredits;
+      totalCredits += course.pCourseCredits
+    });
+    return totalGPA/totalCredits;
+  }
+
+  // Gets Maximum Average of Current Semseter if The Rest of Grades Were Perfect
+  getMaxAverage(gradeList, courseList){
+    //console.log("courseList",courseList)
+    let currentCourseMaxGpa = [];
+    gradeList.forEach(courseGrades => {
+      let credits;
+      courseList.forEach(course => {
+        if(course.courseID == courseGrades[0].courseID){
+          credits = course.credits
+        }
+      });
+      let pastGrades = [];
+      let futureGrades = [];
+      //courseList.forEach(element => {
+      //  
+      //});
+
+      courseGrades.forEach(grade => {
+        if(grade.history == true){
+          pastGrades.push(grade);
+        }
+        else{
+          grade.grade = 100;
+          futureGrades.push(grade);
+        }
+      });
+      currentCourseMaxGpa.push({"pCourseGrade":Math.floor(this.courseExpectedGrade(pastGrades, futureGrades)), "pCourseCredits":credits})
+    });
+    //console.log("currentCourseMaxGpa",currentCourseMaxGpa);
+    return currentCourseMaxGpa;
+  }
 
 }
