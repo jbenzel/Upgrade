@@ -177,6 +177,11 @@ export class DetailedViewComponent implements OnInit {
     
   }
 
+  navigateToDashboard(){
+    //Save all Changes
+    this.getAllGradesQuery.refetch();
+  }
+
   populateDataSource() {
     this.apollo.watchQuery<any>({
       query: GET_ALL_GRADES_BY_USER_ID,
@@ -200,8 +205,8 @@ export class DetailedViewComponent implements OnInit {
           lockedToolTip = "Lock Grade";
         }
         if (grade.courseID == this.user.courseID) {
-          console.log(grade)
-          console.log(grade.courseID)
+          //console.log(grade)
+          //console.log(grade.courseID)
           if (grade.history) {
             this.gradesHistoryDataSource.push({ "id": grade.gradeID, "category": grade.category, "weight": grade.weight, "name": grade.name, "grade": grade.grade, "dueDate": grade.dueDate });
           }
@@ -221,7 +226,7 @@ export class DetailedViewComponent implements OnInit {
       this.apollo.mutate({
         mutation: UPDATE_GRADE,
         variables: {
-          "expectedGrade": grade.grade,
+          "expectedGrade": Number(grade.grade),
           "gradeIdParam": grade.id,
           "courseId": this.user.courseID,
           "userId": this.user.userID,
@@ -364,7 +369,7 @@ export class DetailedViewComponent implements OnInit {
         "gradeIdParam": this.gradesDataSource[i].id,
         "courseId": this.user.courseID,
         "userId": this.user.userID,
-        "grade": this.gradesDataSource[i].grade
+        "grade": Number(this.gradesDataSource[i].grade)
       },
     }).subscribe(({ data }) => {
     });
