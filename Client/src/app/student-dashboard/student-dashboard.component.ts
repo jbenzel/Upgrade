@@ -344,6 +344,7 @@ export class StudentDashboardComponent implements OnInit {
         "eGpa": Number(this.afterEGPA)
       },
     }).subscribe(({ data }) => {
+      this.getStudentQuery.refetch();
     });
 
   }
