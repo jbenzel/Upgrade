@@ -139,11 +139,6 @@ export class StudentDashboardComponent implements OnInit {
     this.user.courseID = course;
   }
 
-  refreshEGPAWidgit(){
-    this.currentUser.eGPA = this.user.estimatedGPA;
-    this.afterEGPA = this.user.estimatedGPA;
-  }
-
   // start querying student
   getStudent() {
     this.apollo.watchQuery<any>({
@@ -156,7 +151,6 @@ export class StudentDashboardComponent implements OnInit {
         this.currentUser = data.getStudentbyUserID;
         this.user.currentGPA = Number(data.getStudentbyUserID.cGPA);
         this.user.estimatedGPA = Number(data.getStudentbyUserID.eGPA);
-        this.refreshEGPAWidgit();
 
         this.createCGPAChart('current');
         this.createEGPAChart('estm');
@@ -347,7 +341,7 @@ export class StudentDashboardComponent implements OnInit {
       variables: {
         "userId": this.user.userID,
         "studentIdParam": this.user.userID,
-        "eGpa": Number(this.currentUser.eGPA)
+        "eGpa": Number(this.afterEGPA)
       },
     }).subscribe(({ data }) => {
     });
