@@ -95,6 +95,8 @@ export class StudentDashboardComponent implements OnInit {
       query: GET_ALL_USERS,
     });
 
+    this.afterEGPA = this.user.estimatedGPA;
+
     this.getStudent();
     this.getCourses();
     this.getGrades();
@@ -118,6 +120,7 @@ export class StudentDashboardComponent implements OnInit {
         this.currentUser = data.getStudentbyUserID;
         this.user.currentGPA = data.getStudentbyUserID.cGPA;
         this.user.estimatedGPA = data.getStudentbyUserID.eGPA;
+        this.afterEGPA = data.getStudentbyUserID.eGPA;
 
         this.createCGPAChart('current');
         this.createEGPAChart('estm');
@@ -225,7 +228,7 @@ export class StudentDashboardComponent implements OnInit {
   public EGPAchart: any;
   public CGPAchart: any;
   public progressChart: any;
-  public afterEGPA: number;
+  afterEGPA: number;
   public afterCGPA: number;
 
   // start updating Estimated GPA Donut Chart
